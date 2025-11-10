@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -ExecutionPolicy Bypass -File \"E:\\Sabeel\\add_emulator_path.ps1\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
