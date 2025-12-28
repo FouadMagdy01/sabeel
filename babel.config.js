@@ -8,17 +8,37 @@ module.exports = function (api) {
     // or for Expo
     presets: ["babel-preset-expo"],
 
-    // other config
     plugins: [
-      // other plugins
+      // Module resolver for path aliases
+      [
+        "module-resolver",
+        {
+          root: ["./"],
+          alias: {
+            "@": "./src",
+            "~": "./app",
+          },
+          extensions: [
+            ".ios.ts",
+            ".android.ts",
+            ".ts",
+            ".ios.tsx",
+            ".android.tsx",
+            ".tsx",
+            ".jsx",
+            ".js",
+            ".json",
+          ],
+        },
+      ],
+
+      // Unistyles plugin
       [
         "react-native-unistyles/plugin",
         {
-          // pass root folder of your application
-          // all files under this folder will be processed by the Babel plugin
-          // if you need to include more folders, or customize discovery process
-          // check available babel options
-          root: "src",
+          // all files under this folder will be processed
+          // including both app and src directories
+          root: ".",
         },
       ],
     ],
