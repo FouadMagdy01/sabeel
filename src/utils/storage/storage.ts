@@ -333,3 +333,45 @@ export function importData(data: ExportedStorageData): StorageResult<void> {
     };
   }
 }
+
+/**
+ * Get approximate storage size in bytes
+ * (MMKV does not expose real size)
+ */
+export function getStorageSize(): number {
+  try {
+    const storage = getStorage();
+    let totalSize = 0;
+
+    const keys = storage.getAllKeys();
+
+    for (const key of keys) {
+      // key size (UTF-16 approximation)
+      totalSize += key.length * 2;
+
+      const stringValue = storage.getString(key);
+      if (stringValue !== undefined) {
+        // value size (UTF-16 approximation)
+        totalSize += stringValue.length * 2;
+        continue;
+      }
+
+      const numberValue = storage.getNumber(key);
+      if (numberValue !== undefined) {
+        // numbers are stored as 64-bit
+        totalSize += 8;
+        continue;
+      }
+
+      const booleanValue = storage.getBoolean(key);
+      if (booleanValue !== undefined) {
+        // booleans are stored as 1 byte (approx)
+        totalSize += 1;
+      }
+    }
+
+    return totalSize;
+  } catch {
+    return 0;
+  }
+}
