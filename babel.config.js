@@ -37,8 +37,7 @@ module.exports = function (api) {
         "react-native-unistyles/plugin",
         {
           // all files under this folder will be processed
-          // including both app and src directories
-          root: ".",
+          root: "./src",
         },
       ],
     ],

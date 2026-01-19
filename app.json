@@ -40,6 +40,21 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Cairo-Regular.ttf",
+            "./assets/fonts/Cairo-Bold.ttf",
+            "./assets/fonts/Cairo-SemiBold.ttf",
+            "./assets/fonts/Cairo-Light.ttf",
+            "./assets/fonts/Cairo-ExtraLight.ttf",
+            "./assets/fonts/Cairo-Medium.ttf",
+            "./assets/fonts/Cairo-ExtraBold.ttf",
+            "./assets/fonts/Cairo-Black.ttf"
+          ]
+        }
       ]
     ],
     "experiments": {
