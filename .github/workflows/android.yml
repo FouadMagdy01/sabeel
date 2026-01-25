@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'ios/**'
+      - 'android/**'
       - 'src/**'
       - 'app/**'
       - 'package.json'
@@ -130,6 +130,6 @@ jobs:
         run: npm ci
 
       - name: Build Android with EAS
-        run: eas build --platform android --non-interactive
+        run: eas build --platform android --non-interactive --no-wait
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
