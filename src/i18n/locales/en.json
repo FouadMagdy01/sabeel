@@ -1,0 +1,30 @@
+{
+  "tabs": {
+    "home": "Home",
+    "quran": "Quran",
+    "prayers": "Prayers",
+    "library": "Library",
+    "settings": "Settings"
+  },
+  "screens": {
+    "home": {
+      "title": "Home",
+      "testButton": "Test"
+    },
+    "quran": {
+      "test": "Test",
+      "pause": "Pause",
+      "playerReady": "Player is ready!",
+      "settingUp": "Setting up player..."
+    },
+    "prayers": {
+      "title": "Prayers"
+    },
+    "library": {
+      "title": "Library"
+    },
+    "settings": {
+      "title": "Settings"
+    }
+  }
+}

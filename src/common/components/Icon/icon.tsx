@@ -1,7 +1,6 @@
-import React from "react";
-import { ICON_FAMILIES } from "./icon.constants";
-import { IconProps } from "./icon.types";
-
+import { ICON_FAMILIES } from '@/common/components/Icon/icon.constants';
+import { IconProps } from '@/common/components/Icon/icon.types';
+import React from 'react';
 const Icon = <T extends keyof typeof ICON_FAMILIES>({
   familyName,
   iconName,

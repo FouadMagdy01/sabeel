@@ -1,0 +1,30 @@
+{
+  "tabs": {
+    "home": "الرئيسية",
+    "quran": "القرآن",
+    "prayers": "الصلوات",
+    "library": "المكتبة",
+    "settings": "الإعدادات"
+  },
+  "screens": {
+    "home": {
+      "title": "الرئيسية",
+      "testButton": "اختبار"
+    },
+    "quran": {
+      "test": "تشغيل",
+      "pause": "إيقاف",
+      "playerReady": "المشغل جاهز!",
+      "settingUp": "جاري إعداد المشغل..."
+    },
+    "prayers": {
+      "title": "الصلوات"
+    },
+    "library": {
+      "title": "المكتبة"
+    },
+    "settings": {
+      "title": "الإعدادات"
+    }
+  }
+}

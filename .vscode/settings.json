@@ -1,7 +1,138 @@
 {
+  // ========================================
+  // Code Actions on Save
+  // ========================================
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
-    "source.sortMembers": "explicit"
+    "source.fixAll.eslint": "explicit", // Fix all ESLint errors on save
+    "source.organizeImports": "explicit", // Organize imports on save
+    "source.removeUnusedImports": "explicit" // Remove unused imports on save
+  },
+
+  // ========================================
+  // Editor Settings
+  // ========================================
+  "editor.formatOnSave": true, // Format code on save
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // Use Prettier as default formatter
+  "editor.formatOnPaste": true, // Format on paste
+  "editor.formatOnType": false, // Don't format while typing (can be distracting)
+  "editor.tabSize": 2, // Use 2 spaces for indentation
+  "editor.insertSpaces": true, // Use spaces instead of tabs
+  "editor.detectIndentation": false, // Don't auto-detect indentation
+  "editor.trimAutoWhitespace": true, // Trim trailing whitespace
+
+  // ========================================
+  // TypeScript Settings
+  // ========================================
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.suggest.autoImports": true, // Auto-import suggestions
+  "typescript.updateImportsOnFileMove.enabled": "always", // Update imports on file move
+  "typescript.preferences.quoteStyle": "single", // Use single quotes
+  "typescript.format.semicolons": "insert", // Always add semicolons
+
+  // ========================================
+  // JavaScript Settings
+  // ========================================
+  "javascript.suggest.autoImports": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.format.semicolons": "insert",
+
+  // ========================================
+  // ESLint Settings
+  // ========================================
+  "eslint.enable": true, // Enable ESLint
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.run": "onSave", // Run ESLint on save
+  "eslint.format.enable": true, // Enable ESLint formatting
+
+  // ========================================
+  // Prettier Settings
+  // ========================================
+  "prettier.enable": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.tabWidth": 2,
+  "prettier.semi": true,
+  "prettier.printWidth": 100,
+
+  // ========================================
+  // File Associations
+  // ========================================
+  "files.associations": {
+    "*.css": "css",
+    "*.json": "jsonc"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.expo": true,
+    "**/.expo-shared": true,
+    "**/dist": true,
+    "**/build": true
+  },
+
+  // ========================================
+  // Search Settings
+  // ========================================
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.expo": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/ios": true,
+    "**/android": true,
+    "**/.vscode": true
+  },
+
+  // ========================================
+  // Auto-Save Settings
+  // ========================================
+  "files.autoSave": "onFocusChange", // Auto-save on focus change
+  "files.trimTrailingWhitespace": true, // Trim trailing whitespace on save
+  "files.insertFinalNewline": true, // Insert final newline on save
+  "files.trimFinalNewlines": true, // Trim final newlines on save
+
+  // ========================================
+  // Git Settings
+  // ========================================
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+
+  // ========================================
+  // Language-Specific Settings
+  // ========================================
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on"
   }
 }

@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
-import { getItem, setItem, removeItem, addListener } from "./storage";
-import type { StorageKey, StorageValue, StorageResult } from "./types";
+import { useEffect, useState, useCallback } from 'react';
+import { getItem, setItem, removeItem, addListener } from './storage';
+import type { StorageKey, StorageValue } from './types';
 
 /**
  * Hook options
@@ -87,7 +87,7 @@ export function useStorage<T extends StorageValue = StorageValue>(
     const result = getItem<T>(key);
 
     if (!result.success) {
-      setError(result.error || new Error("Failed to get item"));
+      setError(result.error || new Error('Failed to get item'));
       setStateValue(defaultValue ?? null);
       setLoading(false);
       return;
@@ -99,7 +99,7 @@ export function useStorage<T extends StorageValue = StorageValue>(
       if (setResult.success) {
         setStateValue(defaultValue);
       } else {
-        setError(setResult.error || new Error("Failed to set default value"));
+        setError(setResult.error || new Error('Failed to set default value'));
         setStateValue(defaultValue);
       }
     } else {
@@ -129,7 +129,7 @@ export function useStorage<T extends StorageValue = StorageValue>(
       const result = setItem(key, newValue);
 
       if (!result.success) {
-        setError(result.error || new Error("Failed to set item"));
+        setError(result.error || new Error('Failed to set item'));
       } else {
         setError(null);
         setStateValue(newValue ?? defaultValue ?? null);
@@ -143,7 +143,7 @@ export function useStorage<T extends StorageValue = StorageValue>(
     const result = removeItem(key);
 
     if (!result.success) {
-      setError(result.error || new Error("Failed to remove item"));
+      setError(result.error || new Error('Failed to remove item'));
     } else {
       setError(null);
       setStateValue(defaultValue ?? null);

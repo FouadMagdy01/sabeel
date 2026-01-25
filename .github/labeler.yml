@@ -1,0 +1,61 @@
+# Auto-labeling configuration for PRs based on changed files
+
+# Documentation changes
+documentation:
+  - '**/*.md'
+  - 'docs/**/*'
+
+# Theme/Design changes
+theme:
+  - 'src/theme/**/*'
+
+# Component changes
+components:
+  - 'src/common/components/**/*'
+
+# Screen/Page changes
+screens:
+  - 'app/**/*'
+
+# Configuration changes
+config:
+  - '*.json'
+  - '*.js'
+  - '*.config.*'
+  - '.github/**/*'
+
+# CI/CD changes
+ci/cd:
+  - '.github/workflows/**/*'
+  - '.husky/**/*'
+
+# Dependencies
+dependencies:
+  - 'package.json'
+  - 'package-lock.json'
+  - 'yarn.lock'
+
+# Android
+android:
+  - 'android/**/*'
+
+# iOS
+ios:
+  - 'ios/**/*'
+
+# Testing
+tests:
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/*.spec.ts'
+  - '**/*.spec.tsx'
+  - '__tests__/**/*'
+
+# Types
+types:
+  - '**/*.types.ts'
+  - 'src/types/**/*'
+
+# Assets
+assets:
+  - 'assets/**/*'
