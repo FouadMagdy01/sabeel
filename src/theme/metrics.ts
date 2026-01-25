@@ -1,6 +1,6 @@
-import { Dimensions, PixelRatio } from "react-native";
+import { Dimensions, PixelRatio } from 'react-native';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export const breakpoints = {
   xs: 0, // Extra small devices (phones < 576px)
@@ -76,7 +76,7 @@ export function vs(size: number): number {
  */
 export function responsiveWidth(width: number | string): number {
   // For percentage-based width calculation
-  if (typeof width === "string" && width.includes("%")) {
+  if (typeof width === 'string' && width.includes('%')) {
     const percentage = parseFloat(width) / 100;
     return Math.round(SCREEN_WIDTH * percentage);
   }
@@ -91,7 +91,7 @@ export function responsiveWidth(width: number | string): number {
  */
 export function responsiveHeight(height: number | string): number {
   // For percentage-based height calculation
-  if (typeof height === "string" && height.includes("%")) {
+  if (typeof height === 'string' && height.includes('%')) {
     const percentage = parseFloat(height) / 100;
     return Math.round(SCREEN_HEIGHT * percentage);
   }
@@ -186,16 +186,16 @@ export const fontSize = {
   md: rf(16),
   lg: rf(18),
   xl: rf(20),
-  "2xl": rf(24),
-  "3xl": rf(30),
-  "4xl": rf(36),
-  "5xl": rf(48),
-  "6xl": rf(60),
+  '2xl': rf(24),
+  '3xl': rf(30),
+  '4xl': rf(36),
+  '5xl': rf(48),
+  '6xl': rf(60),
 };
 
 // Automatically update dimensions and breakpoint metrics on orientation change
-Dimensions.addEventListener("change", () => {
-  const { width, height } = Dimensions.get("window");
+Dimensions.addEventListener('change', () => {
+  const { width, height } = Dimensions.get('window');
   metrics.screenWidth = width;
   metrics.screenHeight = height;
 

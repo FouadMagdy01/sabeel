@@ -169,6 +169,7 @@ npm run format
    - Code formatted ✅
 
 4. **Push and create PR**
+
    ```bash
    git push origin feat/my-feature
    ```

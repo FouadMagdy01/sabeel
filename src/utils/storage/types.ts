@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from "./constants";
+import { STORAGE_KEYS } from './constants';
 
 /**
  * Storage value types that can be stored
@@ -42,8 +42,8 @@ type ExtractStorageKeys<T> = T extends object
       [K in keyof T]: T[K] extends string
         ? T[K]
         : T[K] extends object
-        ? ExtractStorageKeys<T[K]>
-        : never;
+          ? ExtractStorageKeys<T[K]>
+          : never;
     }[keyof T]
   : never;
 

@@ -1,57 +1,60 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const authHeader = req.headers.get("Authorization");
+    const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: "Missing authorization header" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: 'Missing authorization header' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    const token = authHeader.replace("Bearer ", "");
+    const token = authHeader.replace('Bearer ', '');
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
       { global: { headers: { Authorization: `Bearer ${token}` } } }
     );
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: "Invalid token" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const url = new URL(req.url);
-    const date = url.searchParams.get("date") || new Date().toISOString().split("T")[0];
-    const groupId = url.searchParams.get("groupId");
-    const startDate = url.searchParams.get("startDate");
-    const endDate = url.searchParams.get("endDate");
+    const date = url.searchParams.get('date') || new Date().toISOString().split('T')[0];
+    const groupId = url.searchParams.get('groupId');
+    const startDate = url.searchParams.get('startDate');
+    const endDate = url.searchParams.get('endDate');
 
     // User todo completions
     let userCompletionsQuery = supabase
-      .from("user_todo_completions")
-      .select("id, todo_id, completion_date, points_earned, completed_at")
-      .eq("user_id", user.id);
+      .from('user_todo_completions')
+      .select('id, todo_id, completion_date, points_earned, completed_at')
+      .eq('user_id', user.id);
 
     if (startDate && endDate) {
       userCompletionsQuery = userCompletionsQuery
-        .gte("completion_date", startDate)
-        .lte("completion_date", endDate);
+        .gte('completion_date', startDate)
+        .lte('completion_date', endDate);
     } else {
-      userCompletionsQuery = userCompletionsQuery.eq("completion_date", date);
+      userCompletionsQuery = userCompletionsQuery.eq('completion_date', date);
     }
 
     const { data: userCompletions } = await userCompletionsQuery;
@@ -60,17 +63,17 @@ Deno.serve(async (req) => {
     let groupCompletions: any[] = [];
     if (groupId) {
       let groupCompletionsQuery = supabase
-        .from("group_todo_completions")
-        .select("id, todo_id, group_id, completion_date, points_earned, completed_at")
-        .eq("user_id", user.id)
-        .eq("group_id", groupId);
+        .from('group_todo_completions')
+        .select('id, todo_id, group_id, completion_date, points_earned, completed_at')
+        .eq('user_id', user.id)
+        .eq('group_id', groupId);
 
       if (startDate && endDate) {
         groupCompletionsQuery = groupCompletionsQuery
-          .gte("completion_date", startDate)
-          .lte("completion_date", endDate);
+          .gte('completion_date', startDate)
+          .lte('completion_date', endDate);
       } else {
-        groupCompletionsQuery = groupCompletionsQuery.eq("completion_date", date);
+        groupCompletionsQuery = groupCompletionsQuery.eq('completion_date', date);
       }
 
       const { data } = await groupCompletionsQuery;
@@ -91,13 +94,13 @@ Deno.serve(async (req) => {
         total_group_points: totalGroupPoints,
         total_points: totalUserPoints + totalGroupPoints,
       }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error("Unexpected error:", error);
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    console.error('Unexpected error:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

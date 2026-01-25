@@ -6,38 +6,38 @@ module.exports = function (api) {
     // presets: ['module:@react-native/babel-preset'],
 
     // or for Expo
-    presets: ["babel-preset-expo"],
+    presets: ['babel-preset-expo'],
 
     plugins: [
       // Module resolver for path aliases
       [
-        "module-resolver",
+        'module-resolver',
         {
-          root: ["./"],
+          root: ['./'],
           alias: {
-            "@": "./src",
-            "~": "./app",
+            '@': './src',
+            '~': './app',
           },
           extensions: [
-            ".ios.ts",
-            ".android.ts",
-            ".ts",
-            ".ios.tsx",
-            ".android.tsx",
-            ".tsx",
-            ".jsx",
-            ".js",
-            ".json",
+            '.ios.ts',
+            '.android.ts',
+            '.ts',
+            '.ios.tsx',
+            '.android.tsx',
+            '.tsx',
+            '.jsx',
+            '.js',
+            '.json',
           ],
         },
       ],
 
       // Unistyles plugin
       [
-        "react-native-unistyles/plugin",
+        'react-native-unistyles/plugin',
         {
           // all files under this folder will be processed
-          root: "./src",
+          root: './src',
         },
       ],
     ],

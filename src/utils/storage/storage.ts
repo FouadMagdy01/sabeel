@@ -1,12 +1,12 @@
-import { createMMKV, MMKV } from "react-native-mmkv";
-import { STORAGE_KEYS } from "./constants";
+import { createMMKV, MMKV } from 'react-native-mmkv';
+import { STORAGE_KEYS } from './constants';
 import type {
   StorageKey,
   StorageListener,
   StorageOptions,
   StorageResult,
   StorageValue,
-} from "./types";
+} from './types';
 
 /**
  * Build a nested export shape from STORAGE_KEYS
@@ -16,8 +16,8 @@ type StorageExportShape<T> = {
   [K in keyof T]?: T[K] extends string
     ? StorageValue
     : T[K] extends object
-    ? StorageExportShape<T[K]>
-    : never;
+      ? StorageExportShape<T[K]>
+      : never;
 };
 
 export type ExportedStorageData = StorageExportShape<typeof STORAGE_KEYS>;
@@ -37,7 +37,7 @@ const listeners = new Map<StorageKey, Set<StorageListener>>();
  */
 export function initializeStorage(options?: StorageOptions): void {
   storageInstance = createMMKV({
-    id: options?.id ?? "default",
+    id: options?.id ?? 'default',
     encryptionKey: options?.encryptionKey,
   });
 }
@@ -55,10 +55,7 @@ function getStorage(): MMKV {
 /**
  * Set a value in storage
  */
-export function setItem<T extends StorageValue>(
-  key: StorageKey,
-  value: T
-): StorageResult<T> {
+export function setItem<T extends StorageValue>(key: StorageKey, value: T): StorageResult<T> {
   try {
     const storage = getStorage();
 
@@ -69,12 +66,12 @@ export function setItem<T extends StorageValue>(
     }
 
     switch (typeof value) {
-      case "string":
-      case "number":
-      case "boolean":
+      case 'string':
+      case 'number':
+      case 'boolean':
         storage.set(key, value);
         break;
-      case "object":
+      case 'object':
         storage.set(key, JSON.stringify(value));
         break;
     }
@@ -220,9 +217,7 @@ export function setMultipleItems(
   }
 }
 
-export function removeMultipleItems(
-  keys: readonly StorageKey[]
-): StorageResult<void> {
+export function removeMultipleItems(keys: readonly StorageKey[]): StorageResult<void> {
   try {
     for (const key of keys) {
       const res = removeItem(key);
@@ -282,16 +277,12 @@ export function exportData(): StorageResult<ExportedStorageData> {
     const result: ExportedStorageData = {};
 
     for (const [groupKey, groupValue] of Object.entries(STORAGE_KEYS)) {
-      if (typeof groupValue !== "object") continue;
+      if (typeof groupValue !== 'object') continue;
 
       for (const [subKey, storageKey] of Object.entries(groupValue)) {
         const value = getItem(storageKey as StorageKey).data;
         if (value !== null && value !== undefined) {
-          setNestedValue(
-            result as Record<string, unknown>,
-            [groupKey, subKey],
-            value
-          );
+          setNestedValue(result as Record<string, unknown>, [groupKey, subKey], value);
         }
       }
     }
@@ -311,12 +302,12 @@ export function exportData(): StorageResult<ExportedStorageData> {
 export function importData(data: ExportedStorageData): StorageResult<void> {
   try {
     for (const [groupKey, groupValue] of Object.entries(data)) {
-      if (typeof groupValue !== "object" || !groupValue) continue;
+      if (typeof groupValue !== 'object' || !groupValue) continue;
 
       for (const [subKey, value] of Object.entries(groupValue)) {
-        const storageKey = (STORAGE_KEYS as Record<string, any>)[groupKey]?.[
-          subKey
-        ] as StorageKey | undefined;
+        const storageKey = (STORAGE_KEYS as Record<string, any>)[groupKey]?.[subKey] as
+          | StorageKey
+          | undefined;
 
         if (storageKey && value !== undefined) {
           const res = setItem(storageKey, value as StorageValue);

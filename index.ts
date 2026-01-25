@@ -1,8 +1,8 @@
-import { PlaybackService } from "@/services/PlaybackService";
-import "expo-router/entry";
-import TrackPlayer, { Capability } from "react-native-track-player";
+import { PlaybackService } from '@/services/PlaybackService';
+import 'expo-router/entry';
+import TrackPlayer, { Capability } from 'react-native-track-player';
 
-import "./src/theme/unistyles"; // <-- file that initializes Unistyles
+import './src/theme/unistyles'; // <-- file that initializes Unistyles
 async function setupPlayer() {
   try {
     // Register the playback service
@@ -22,7 +22,7 @@ async function setupPlayer() {
       notificationCapabilities: [Capability.Play, Capability.Pause],
     });
   } catch (e) {
-    console.error("Failed to setup TrackPlayer:", e);
+    console.error('Failed to setup TrackPlayer:', e);
   }
 }
 
