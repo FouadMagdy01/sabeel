@@ -4,13 +4,15 @@ name: Android Build
 on:
   push:
     branches: [main]
+    tags:
+      - 'v*'
     paths:
       - 'android/**'
       - 'src/**'
       - 'app/**'
       - 'package.json'
       - 'app.json'
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
 
 # Cancel in-progress runs
 concurrency:
@@ -105,7 +107,7 @@ jobs:
     name: EAS Build Android (Production)
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: build-android
 
     steps:
@@ -124,11 +126,12 @@ jobs:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
+          packager: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build Android with EAS
-        run: eas build --platform android --non-interactive --no-wait
+        run: eas build --platform android --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
