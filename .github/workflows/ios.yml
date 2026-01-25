@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
     paths:
+      - '.github/workflows/**'
       - 'ios/**'
       - 'src/**'
       - 'app/**'
@@ -127,6 +128,6 @@ jobs:
         run: npm ci
 
       - name: Build iOS with EAS
-        run: eas build --platform ios --non-interactive --no-wait
+        run: eas build --platform ios --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
