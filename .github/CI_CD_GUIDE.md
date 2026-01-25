@@ -200,19 +200,53 @@ Labels PR based on changed files:
 
 ## 🔐 Required Secrets
 
-Configure these in GitHub Settings → Secrets:
+Configure these in **GitHub Settings → Secrets and Variables → Actions → New repository secret**
 
-### Required for Basic CI/CD
+### EXPO_TOKEN
 
+**What is it?**
+
+- Authentication token for Expo services
+- Required for EAS builds, publishing, and Expo services
+- Optional for basic local builds (prebuild)
+
+**Do you need it?**
+
+- ✅ **YES** - If using EAS Build for production apps
+- ✅ **YES** - If publishing OTA updates
+- ⚠️ **OPTIONAL** - For basic CI/CD with local builds (our iOS/Android workflows)
+
+**Will builds fail without it?**
+
+- ❌ NO - Local builds (`expo prebuild`) will work fine
+- ⚠️ YES - EAS builds will fail
+- ⚠️ YES - Expo publishing will fail
+- ℹ️ You may see a warning in logs, but it won't stop the build
+
+**How to get it:**
+
+```bash
+# Step 1: Login to Expo (create account if needed)
+npx expo login
+
+# Step 2: Generate access token
+# Visit: https://expo.dev/accounts/[username]/settings/access-tokens
+# OR get from state file:
+cat ~/.expo/state.json
 ```
-EXPO_TOKEN
-```
 
-Get from: `npx expo login && cat ~/.expo/state.json`
+**How to configure it:**
+
+1. Go to your GitHub repository
+2. Settings → Secrets and Variables → Actions
+3. Click "New repository secret"
+4. Name: `EXPO_TOKEN`
+5. Value: Paste your token
+6. Click "Add secret"
 
 ### Optional - Code Coverage
 
-```
+```text
 CODECOV_TOKEN
 ```
 
@@ -220,7 +254,7 @@ Get from: [codecov.io](https://codecov.io)
 
 ### Optional - Android Release Signing
 
-```
+```text
 ANDROID_KEYSTORE_BASE64
 ANDROID_KEYSTORE_PASSWORD
 ANDROID_KEY_ALIAS

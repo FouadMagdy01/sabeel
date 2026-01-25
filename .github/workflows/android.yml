@@ -39,6 +39,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: npm
+
       - name: Install dependencies
         run: npm ci
 
