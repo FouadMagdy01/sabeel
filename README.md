@@ -2,9 +2,9 @@
 
 **A comprehensive Islamic mobile application built with React Native and Expo, featuring prayer times, Quran reader, tasbih counter, and more.**
 
-[![CI](https://github.com/yourusername/sabeel/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/sabeel/actions/workflows/ci.yml)
-[![Android Build](https://github.com/yourusername/sabeel/actions/workflows/android.yml/badge.svg)](https://github.com/yourusername/sabeel/actions/workflows/android.yml)
-[![iOS Build](https://github.com/yourusername/sabeel/actions/workflows/ios.yml/badge.svg)](https://github.com/yourusername/sabeel/actions/workflows/ios.yml)
+[![CI](https://github.com/FouadMagdy01/sabeel/actions/workflows/ci.yml/badge.svg)](https://github.com/FouadMagdy01/sabeel/actions/workflows/ci.yml)
+[![Android Build](https://github.com/FouadMagdy01/sabeel/actions/workflows/android.yml/badge.svg)](https://github.com/FouadMagdy01/sabeel/actions/workflows/android.yml)
+[![iOS Build](https://github.com/FouadMagdy01/sabeel/actions/workflows/ios.yml/badge.svg)](https://github.com/FouadMagdy01/sabeel/actions/workflows/ios.yml)
 [![React Native](https://img.shields.io/badge/React%20Native-0.73-blue.svg)](https://reactnative.dev/)
 [![Expo](https://img.shields.io/badge/Expo-~50.0-black.svg)](https://expo.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
