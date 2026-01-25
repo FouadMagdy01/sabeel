@@ -5,8 +5,6 @@ name: iOS Build
 on:
   push:
     branches: [main]
-    tags:
-      - 'v*'
     paths:
       - 'ios/**'
       - 'src/**'
