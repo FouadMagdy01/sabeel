@@ -116,8 +116,10 @@ module.exports = defineConfig([
       'i18next/no-literal-string': [
         'error',
         {
-          mode: 'jsx-only',
-          // skip: ['testID', 'key', 'style'], // Common attributes to skip
+          mode: 'jsx-text-only',
+          'jsx-components': {
+            exclude: ['Trans'],
+          },
         },
       ],
     },
