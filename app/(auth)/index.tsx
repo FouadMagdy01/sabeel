@@ -4,6 +4,10 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Text>Log In</Text>
+      <Text>Log In</Text>
+      <Text>Log In</Text>
+      <Text>Log In</Text>
+      <Text>Log In</Text>
     </View>
   );
 }

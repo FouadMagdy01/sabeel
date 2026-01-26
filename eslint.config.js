@@ -6,6 +6,8 @@ const tsPlugin = require('@typescript-eslint/eslint-plugin');
 const unusedImportsPlugin = require('eslint-plugin-unused-imports');
 const reactNativePlugin = require('eslint-plugin-react-native');
 
+const i18nextPlugin = require('eslint-plugin-i18next');
+
 module.exports = defineConfig([
   expoConfig,
   {
@@ -41,6 +43,7 @@ module.exports = defineConfig([
       '@typescript-eslint': tsPlugin,
       'unused-imports': unusedImportsPlugin,
       'react-native': reactNativePlugin,
+      i18next: i18nextPlugin,
     },
     rules: {
       // ========================================
@@ -102,17 +105,21 @@ module.exports = defineConfig([
       // ========================================
       'react-native/no-inline-styles': 'error', // Prevent inline styles
       'react-native/no-color-literals': 'warn', // Warn on color literals (use theme)
-      'react-native/no-raw-text': [
-        'error',
-        {
-          // Prevent hardcoded strings - enforce i18n usage
-          // Allow specific exceptions (numbers, single chars, etc.)
-          skip: ['Button'], // Can configure components to skip if needed
-        },
-      ],
+      // 'react-native/no-raw-text': 'error', // usage of eslint-plugin-i18next is preferred
       'react-native/no-single-element-style-arrays': 'error', // Prevent single-element style arrays
       'react-native/no-unused-styles': 'error', // Remove unused styles
       'react-native/split-platform-components': 'warn', // Warn on platform-specific components
+
+      // ========================================
+      // i18n
+      // ========================================
+      'i18next/no-literal-string': [
+        'error',
+        {
+          mode: 'jsx-only',
+          // skip: ['testID', 'key', 'style'], // Common attributes to skip
+        },
+      ],
     },
   },
 ]);
