@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
+
 export default function LoginScreen() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text>Log In</Text>
-      <Text>Log In</Text>
-      <Text>Log In</Text>
-      <Text>Log In</Text>
-      <Text>Log In</Text>
+      <Text>{t('screens.auth.login')}</Text>
+      <Text>{t('screens.auth.login')}</Text>
+      <Text>{t('screens.auth.login')}</Text>
+      <Text>{t('screens.auth.login')}</Text>
+      <Text>{t('screens.auth.login')}</Text>
     </View>
   );
 }
