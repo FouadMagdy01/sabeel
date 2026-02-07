@@ -45,6 +45,15 @@ module.exports = defineConfig([
       'react-native': reactNativePlugin,
       i18next: i18nextPlugin,
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+        node: true,
+      },
+    },
     rules: {
       // ========================================
       // TypeScript: Prevent 'any' types
@@ -88,7 +97,14 @@ module.exports = defineConfig([
       '@typescript-eslint/prefer-optional-chain': 'error', // Use ?. for optional chaining
       '@typescript-eslint/no-floating-promises': 'error', // Await or handle promises
       '@typescript-eslint/await-thenable': 'error', // Only await promises
-      '@typescript-eslint/no-misused-promises': 'error', // Prevent promise misuse
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          checksVoidReturn: {
+            attributes: false, // <-- THIS is the key
+          },
+        },
+      ],
 
       // ========================================
       // Best Practices

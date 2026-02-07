@@ -1,7 +1,7 @@
 import { PlaybackService } from '@/services/PlaybackService';
 import 'expo-router/entry';
 import TrackPlayer, { Capability } from 'react-native-track-player';
-
+import './src/i18n/config';
 import './src/theme/unistyles'; // <-- file that initializes Unistyles
 async function setupPlayer() {
   try {

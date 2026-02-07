@@ -1,4 +1,90 @@
 {
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to continue your journey",
+      "emailPlaceholder": "Enter your email",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot Password?",
+      "loginButton": "Log In",
+      "or": "Or",
+      "continueAsGuest": "Continue as Guest",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create Account"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join us on your spiritual journey",
+      "firstNamePlaceholder": "First name",
+      "lastNamePlaceholder": "Last name",
+      "emailPlaceholder": "Enter your email",
+      "passwordPlaceholder": "Create a password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "countryPlaceholder": "Select your country",
+      "dateOfBirthPlaceholder": "Select date of birth",
+      "signupButton": "Sign Up",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Log In"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "nameMinLength": "Name must be at least 2 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "countryRequired": "Country is required",
+      "dateOfBirthRequired": "Date of birth is required"
+    },
+    "labels": {
+      "email": "Email",
+      "password": "Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "confirmPassword": "Confirm Password",
+      "country": "Country",
+      "dateOfBirth": "Date of Birth"
+    },
+    "calendar": {
+      "selectDate": "Select Date",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      },
+      "weekdays": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      }
+    }
+  },
+  "errors": {
+    "title": "Error",
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "notFound": "The requested resource was not found.",
+    "serverError": "Server error. Please try again later."
+  },
   "tabs": {
     "home": "Home",
     "quran": "Quran",
