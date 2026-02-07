@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(powershell -ExecutionPolicy Bypass -File \"E:\\Sabeel\\add_emulator_path.ps1\")",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

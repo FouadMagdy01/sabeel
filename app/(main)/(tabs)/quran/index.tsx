@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, Text, View } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import { StyleSheet } from 'react-native-unistyles';
-import { useTranslation } from 'react-i18next';
 
 export default function Index() {
   const { t } = useTranslation();
