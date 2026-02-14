@@ -27,6 +27,7 @@ export default function LibraryScreen() {
           options={options}
           value={selectedTab}
           onChange={(value) => setSelectedTab(value as 'explore' | 'favorites' | 'downloads')}
+          fullWidth
         />
       </View>
 
