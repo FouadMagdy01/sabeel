@@ -223,4 +223,24 @@ export const styles = StyleSheet.create((theme) => ({
       },
     },
   },
+  requiredIndicator: {
+    color: theme.colors.state.error,
+    marginLeft: 2,
+  },
+  charCount: {
+    fontSize: 11,
+    fontFamily: theme.fonts.regular,
+    color: theme.colors.text.muted,
+    marginTop: theme.metrics.spacingV.p4,
+  },
+  helperTextRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: theme.metrics.spacing.p8,
+  },
+  clearButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));

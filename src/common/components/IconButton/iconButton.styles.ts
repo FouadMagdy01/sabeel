@@ -18,6 +18,9 @@ export const styles = StyleSheet.create((theme) => ({
         ghost: {
           backgroundColor: 'transparent',
         },
+        tinted: {
+          backgroundColor: theme.colors.state.successBg,
+        },
       },
       size: {
         small: {
@@ -32,6 +35,13 @@ export const styles = StyleSheet.create((theme) => ({
           width: 48,
           height: 48,
         },
+      },
+      color: {
+        primary: {},
+        success: {},
+        error: {},
+        warning: {},
+        info: {},
       },
       disabled: {
         true: {
@@ -55,6 +65,41 @@ export const styles = StyleSheet.create((theme) => ({
           borderColor: theme.colors.border.disabled,
         },
       },
+      {
+        variant: 'tinted',
+        color: 'primary',
+        styles: {
+          backgroundColor: theme.colors.state.infoBg,
+        },
+      },
+      {
+        variant: 'tinted',
+        color: 'success',
+        styles: {
+          backgroundColor: theme.colors.state.successBg,
+        },
+      },
+      {
+        variant: 'tinted',
+        color: 'error',
+        styles: {
+          backgroundColor: theme.colors.state.errorBg,
+        },
+      },
+      {
+        variant: 'tinted',
+        color: 'warning',
+        styles: {
+          backgroundColor: theme.colors.state.warningBg,
+        },
+      },
+      {
+        variant: 'tinted',
+        color: 'info',
+        styles: {
+          backgroundColor: theme.colors.state.infoBg,
+        },
+      },
     ],
   },
   androidWrapper: {
@@ -64,7 +109,7 @@ export const styles = StyleSheet.create((theme) => ({
 }));
 
 export const ICON_SIZES: Record<'small' | 'medium' | 'large', number> = {
-  small: 16,
-  medium: 20,
-  large: 24,
+  small: 18,
+  medium: 22,
+  large: 28,
 };

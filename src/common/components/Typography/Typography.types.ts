@@ -15,6 +15,7 @@ export type TypographyColor =
   | 'accent'
   | 'error'
   | 'success'
+  | 'disabled'
   | 'brandPrimary'
   | 'brandSecondary'
   | 'brandTertiary';
@@ -35,6 +36,10 @@ export type TypographyAlign = 'left' | 'center' | 'right';
  * @default false
  * @param italic - Whether to italicize the text
  * @default false
+ * @param strikethrough - Whether to add strikethrough decoration
+ * @default false
+ * @param underline - Whether to add underline decoration
+ * @default false
  * @param style - Style overrides (e.g. lineHeight, writingDirection, letterSpacing)
  */
 export interface TypographyProps extends Omit<RNTextProps, 'style'> {
@@ -45,5 +50,7 @@ export interface TypographyProps extends Omit<RNTextProps, 'style'> {
   align?: TypographyAlign;
   uppercase?: boolean;
   italic?: boolean;
+  strikethrough?: boolean;
+  underline?: boolean;
   style?: StyleProp<TextStyle>;
 }

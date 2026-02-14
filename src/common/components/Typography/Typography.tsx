@@ -21,6 +21,8 @@ export function Typography({
   align,
   uppercase = false,
   italic = false,
+  strikethrough = false,
+  underline = false,
   style,
   children,
   ...textProps
@@ -33,6 +35,8 @@ export function Typography({
     ...(align !== undefined && { align }),
     uppercase: uppercase as true | false,
     italic: italic as true | false,
+    strikethrough: strikethrough as true | false,
+    underline: underline as true | false,
   });
 
   return (

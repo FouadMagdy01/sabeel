@@ -59,6 +59,7 @@ export const styles = StyleSheet.create((theme) => ({
         accent: { color: theme.colors.text.accent },
         error: { color: theme.colors.state.error },
         success: { color: theme.colors.state.success },
+        disabled: { color: theme.colors.state.disabled },
         brandPrimary: { color: theme.colors.brand.primary },
         brandSecondary: { color: theme.colors.brand.secondary },
         brandTertiary: { color: theme.colors.brand.tertiary },
@@ -74,6 +75,14 @@ export const styles = StyleSheet.create((theme) => ({
       },
       italic: {
         true: { fontStyle: 'italic' },
+        false: {},
+      },
+      strikethrough: {
+        true: { textDecorationLine: 'line-through' },
+        false: {},
+      },
+      underline: {
+        true: { textDecorationLine: 'underline' },
         false: {},
       },
     },

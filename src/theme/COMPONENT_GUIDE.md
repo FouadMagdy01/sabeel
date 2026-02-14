@@ -168,7 +168,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.islamic.prayerActive,
+  backgroundColor: colors.brand.primary,
   titleText: colors.text.inverse,
   timeText: colors.text.inverse,
   icon: colors.icon.inverse,
@@ -180,10 +180,10 @@ Quick reference for which colors to use when building common UI components.
 ```tsx
 {
   backgroundColor: colors.background.surface,
-  accentColor: colors.islamic.prayerUpcoming, // Border or highlight
+  accentColor: colors.text.muted, // Border or highlight
   titleText: colors.text.primary,
-  timeText: colors.islamic.prayerUpcoming,
-  icon: colors.islamic.prayerUpcoming,
+  timeText: colors.text.muted,
+  icon: colors.icon.muted,
 }
 ```
 
@@ -193,7 +193,7 @@ Quick reference for which colors to use when building common UI components.
 {
   backgroundColor: colors.background.section,
   titleText: colors.text.muted,
-  timeText: colors.islamic.prayerPassed,
+  timeText: colors.state.disabled,
   icon: colors.icon.muted,
 }
 ```
@@ -272,7 +272,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  color: colors.islamic.sacredTextAccent,
+  color: colors.text.accent,
 }
 ```
 
@@ -366,8 +366,8 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  trackColor: colors.component.switchTrackOff,
-  thumbColor: colors.component.switchThumb,
+  trackColor: colors.state.disabled,
+  thumbColor: colors.background.elevated,
 }
 ```
 
@@ -375,8 +375,8 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  trackColor: colors.component.switchTrackOn,
-  thumbColor: colors.component.switchThumb,
+  trackColor: colors.brand.primary,
+  thumbColor: colors.background.elevated,
 }
 ```
 
@@ -386,7 +386,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  borderColor: colors.component.checkboxBorder,
+  borderColor: colors.border.default,
   backgroundColor: 'transparent',
 }
 ```
@@ -395,7 +395,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.component.checkboxChecked,
+  backgroundColor: colors.brand.primary,
   checkmarkColor: colors.text.inverse,
 }
 ```
@@ -406,7 +406,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.component.divider,
+  backgroundColor: colors.border.default,
   // or
   borderBottomColor: colors.border.subtle,
 }
@@ -434,8 +434,8 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.component.badgeBackground,
-  text: colors.component.badgeText,
+  backgroundColor: colors.state.error,
+  text: colors.background.elevated,
 }
 ```
 
@@ -443,8 +443,8 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.component.chipBackground,
-  text: colors.component.chipText,
+  backgroundColor: colors.background.input,
+  text: colors.text.secondary,
 }
 ```
 
@@ -506,8 +506,8 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.component.tabBarBackground,
-  borderTopColor: colors.component.tabBarBorder,
+  backgroundColor: colors.background.elevated,
+  borderTopColor: colors.border.default,
 }
 ```
 
@@ -536,10 +536,10 @@ Quick reference for which colors to use when building common UI components.
 ```tsx
 {
   // Background track
-  trackColor: colors.component.progressTrack,
+  trackColor: colors.border.default,
 
   // Filled portion
-  fillColor: colors.component.progressFill,
+  fillColor: colors.brand.primary,
 }
 ```
 
@@ -548,13 +548,13 @@ Quick reference for which colors to use when building common UI components.
 ```tsx
 {
   // Inactive portion
-  trackInactive: colors.component.sliderTrackInactive,
+  trackInactive: colors.state.disabled,
 
   // Active portion
-  trackActive: colors.component.sliderTrackActive,
+  trackActive: colors.brand.primary,
 
   // Thumb/handle
-  thumb: colors.component.sliderThumb,
+  thumb: colors.background.elevated,
 }
 ```
 
@@ -564,17 +564,17 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.islamic.quranBackground,
+  backgroundColor: colors.background.section,
 
   // Arabic text
-  quranText: colors.islamic.quranText,
+  quranText: colors.text.primary,
 
   // Verse number badge
-  verseNumberBg: colors.islamic.verseNumber,
+  verseNumberBg: colors.brand.tertiary,
   verseNumberText: colors.text.inverse,
 
   // Highlighted/selected verse
-  highlightBg: colors.islamic.verseHighlight,
+  highlightBg: colors.overlay.focus,
 }
 ```
 
@@ -582,8 +582,8 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.islamic.tasbihBackground,
-  countText: colors.islamic.tasbihText,
+  backgroundColor: colors.background.section,
+  countText: colors.brand.secondary,
   labelText: colors.text.secondary,
 }
 ```
@@ -592,7 +592,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  backgroundColor: colors.islamic.hadithBackground,
+  backgroundColor: colors.background.surfaceAlt,
   arabicText: colors.text.primary,
   translationText: colors.text.secondary,
 }
@@ -602,7 +602,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  directionIndicator: colors.islamic.qiblaIndicator,
+  directionIndicator: colors.brand.primary,
   compassRing: colors.border.default,
   labelText: colors.text.secondary,
 }
@@ -612,7 +612,7 @@ Quick reference for which colors to use when building common UI components.
 
 ```tsx
 {
-  dateText: colors.islamic.hijriDate,
+  dateText: colors.brand.secondary,
   labelText: colors.text.tertiary,
 }
 ```
@@ -627,7 +627,7 @@ Quick reference for which colors to use when building common UI components.
   titleText: colors.text.primary,
   subtitleText: colors.text.secondary,
   icon: colors.icon.secondary,
-  divider: colors.component.divider,
+  divider: colors.border.default,
 }
 ```
 
@@ -672,7 +672,7 @@ Quick reference for which colors to use when building common UI components.
 5. **Card background?**
    - Standard card → `colors.background.surface`
    - Nested card → `colors.background.surfaceAlt`
-   - Special card (prayer) → `colors.islamic.prayer*`
+   - Special card (prayer) → `colors.brand.primary` with `colors.text.inverse`
 
 6. **Icon color?**
    - On colored background → `colors.icon.inverse`

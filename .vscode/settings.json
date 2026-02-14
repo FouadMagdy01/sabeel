@@ -43,8 +43,9 @@
   // ESLint Settings
   // ========================================
   "eslint.enable": true, // Enable ESLint
+  "eslint.useFlatConfig": true, // Use flat config (eslint.config.js)
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-  "eslint.run": "onSave", // Run ESLint on save
+  "eslint.run": "onType", // Run ESLint on type for real-time feedback
   "eslint.format.enable": true, // Enable ESLint formatting
 
   // ========================================

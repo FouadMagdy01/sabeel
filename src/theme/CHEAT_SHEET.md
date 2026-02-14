@@ -65,17 +65,17 @@ colors.text.muted;
 
 ## Component Patterns
 
-| What are you building? | Use this                                        |
-| ---------------------- | ----------------------------------------------- |
-| Primary button         | `brand.primary` + `text.inverse`                |
-| Secondary button       | `brand.secondary` + `text.inverse`              |
-| Input field            | `background.input` + `text.primary`             |
-| Card                   | `background.surface` + `text.primary`           |
-| Screen                 | `background.app`                                |
-| Success message        | `state.successBg` + `state.success`             |
-| Error message          | `state.errorBg` + `state.error`                 |
-| Prayer time (active)   | `islamic.prayerActive` + `text.inverse`         |
-| Quran reader           | `islamic.quranBackground` + `islamic.quranText` |
+| What are you building? | Use this                              |
+| ---------------------- | ------------------------------------- |
+| Primary button         | `brand.primary` + `text.inverse`      |
+| Secondary button       | `brand.secondary` + `text.inverse`    |
+| Input field            | `background.input` + `text.primary`   |
+| Card                   | `background.surface` + `text.primary` |
+| Screen                 | `background.app`                      |
+| Success message        | `state.successBg` + `state.success`   |
+| Error message          | `state.errorBg` + `state.error`       |
+| Prayer time (active)   | `brand.primary` + `text.inverse`      |
+| Quran reader           | `background.section` + `text.primary` |
 
 ---
 
@@ -157,7 +157,7 @@ colors.text.muted;
 ```tsx
 <View
   style={{
-    backgroundColor: colors.islamic.prayerActive,
+    backgroundColor: colors.brand.primary,
   }}
 >
   <Text style={{ color: colors.text.inverse }}>Dhuhr</Text>
@@ -171,12 +171,12 @@ colors.text.muted;
 <View
   style={{
     backgroundColor: colors.background.surface,
-    borderLeftColor: colors.islamic.prayerUpcoming,
+    borderLeftColor: colors.text.muted,
     borderLeftWidth: 4,
   }}
 >
   <Text style={{ color: colors.text.primary }}>Asr</Text>
-  <Text style={{ color: colors.islamic.prayerUpcoming }}>3:45 PM</Text>
+  <Text style={{ color: colors.text.muted }}>3:45 PM</Text>
 </View>
 ```
 
@@ -185,13 +185,13 @@ colors.text.muted;
 ```tsx
 <View
   style={{
-    backgroundColor: colors.islamic.quranBackground,
+    backgroundColor: colors.background.section,
     padding: 20,
   }}
 >
   <Text
     style={{
-      color: colors.islamic.quranText,
+      color: colors.text.primary,
       fontSize: 24,
       textAlign: 'right',
     }}

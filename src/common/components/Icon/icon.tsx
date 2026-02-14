@@ -1,5 +1,5 @@
-import { ICON_FAMILIES } from '@/common/components/Icon/icon.constants';
-import { IconProps, IconColorVariant } from '@/common/components/Icon/icon.types';
+import { ICON_FAMILIES } from '@/common/components/Icon/Icon.constants';
+import { IconColorVariant, IconProps } from '@/common/components/Icon/Icon.types';
 import React from 'react';
 import { useUnistyles } from 'react-native-unistyles';
 
@@ -26,7 +26,6 @@ const Icon = <T extends keyof typeof ICON_FAMILIES>({
   ...rest
 }: IconProps<T>) => {
   const { theme } = useUnistyles();
-
   // Map variant to theme icon color
   const getColorFromVariant = (v: IconColorVariant): string => {
     const colorMap: Record<IconColorVariant, string> = {
@@ -47,4 +46,4 @@ const Icon = <T extends keyof typeof ICON_FAMILIES>({
   return <IconComponent name={iconName} color={finalColor} {...rest} />;
 };
 
-export default Icon;
+export { Icon };

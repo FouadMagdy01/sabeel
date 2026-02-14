@@ -1,5 +1,5 @@
-import { ICON_FAMILIES } from './icon.constants';
 import { ComponentProps } from 'react';
+import { ICON_FAMILIES } from './Icon.constants';
 
 /**
  * Icon color variants that map to theme colors

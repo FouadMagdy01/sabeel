@@ -33,6 +33,17 @@ export const styles = StyleSheet.create((theme) => ({
       color: {
         primary: {},
         secondary: {},
+        success: {},
+        error: {},
+        warning: {},
+        info: {},
+      },
+      fullWidth: {
+        true: {
+          width: '100%',
+          alignSelf: 'stretch',
+        },
+        false: {},
       },
       size: {
         small: {
@@ -113,6 +124,66 @@ export const styles = StyleSheet.create((theme) => ({
           borderColor: theme.colors.border.disabled,
         },
       },
+      // Success color variants
+      {
+        variant: 'contained',
+        color: 'success',
+        styles: {
+          backgroundColor: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'outlined',
+        color: 'success',
+        styles: {
+          borderColor: theme.colors.state.success,
+        },
+      },
+      // Error color variants
+      {
+        variant: 'contained',
+        color: 'error',
+        styles: {
+          backgroundColor: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'outlined',
+        color: 'error',
+        styles: {
+          borderColor: theme.colors.state.error,
+        },
+      },
+      // Warning color variants
+      {
+        variant: 'contained',
+        color: 'warning',
+        styles: {
+          backgroundColor: theme.colors.state.warning,
+        },
+      },
+      {
+        variant: 'outlined',
+        color: 'warning',
+        styles: {
+          borderColor: theme.colors.state.warning,
+        },
+      },
+      // Info color variants
+      {
+        variant: 'contained',
+        color: 'info',
+        styles: {
+          backgroundColor: theme.colors.state.info,
+        },
+      },
+      {
+        variant: 'outlined',
+        color: 'info',
+        styles: {
+          borderColor: theme.colors.state.info,
+        },
+      },
     ],
   },
   text: {
@@ -130,6 +201,10 @@ export const styles = StyleSheet.create((theme) => ({
       color: {
         primary: {},
         secondary: {},
+        success: {},
+        error: {},
+        warning: {},
+        info: {},
       },
       size: {
         small: {
@@ -204,6 +279,122 @@ export const styles = StyleSheet.create((theme) => ({
         color: 'secondary',
         styles: {
           color: theme.colors.brand.secondary,
+        },
+      },
+      // Success text color variants
+      {
+        variant: 'outlined',
+        color: 'success',
+        styles: {
+          color: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'text',
+        color: 'success',
+        styles: {
+          color: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'elevated',
+        color: 'success',
+        styles: {
+          color: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'transparent',
+        color: 'success',
+        styles: {
+          color: theme.colors.state.success,
+        },
+      },
+      // Error text color variants
+      {
+        variant: 'outlined',
+        color: 'error',
+        styles: {
+          color: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'text',
+        color: 'error',
+        styles: {
+          color: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'elevated',
+        color: 'error',
+        styles: {
+          color: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'transparent',
+        color: 'error',
+        styles: {
+          color: theme.colors.state.error,
+        },
+      },
+      // Warning text color variants
+      {
+        variant: 'outlined',
+        color: 'warning',
+        styles: {
+          color: theme.colors.state.warning,
+        },
+      },
+      {
+        variant: 'text',
+        color: 'warning',
+        styles: {
+          color: theme.colors.state.warning,
+        },
+      },
+      {
+        variant: 'elevated',
+        color: 'warning',
+        styles: {
+          color: theme.colors.state.warning,
+        },
+      },
+      {
+        variant: 'transparent',
+        color: 'warning',
+        styles: {
+          color: theme.colors.state.warning,
+        },
+      },
+      // Info text color variants
+      {
+        variant: 'outlined',
+        color: 'info',
+        styles: {
+          color: theme.colors.state.info,
+        },
+      },
+      {
+        variant: 'text',
+        color: 'info',
+        styles: {
+          color: theme.colors.state.info,
+        },
+      },
+      {
+        variant: 'elevated',
+        color: 'info',
+        styles: {
+          color: theme.colors.state.info,
+        },
+      },
+      {
+        variant: 'transparent',
+        color: 'info',
+        styles: {
+          color: theme.colors.state.info,
         },
       },
     ],

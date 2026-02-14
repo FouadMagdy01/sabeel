@@ -1,6 +1,6 @@
 import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
-import Icon from '@/common/components/Icon';
+import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

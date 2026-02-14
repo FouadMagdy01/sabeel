@@ -19,6 +19,9 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
  * @default { x: 0, y: 0 }
  * @param gradientEnd - Gradient end point (only used with variant="gradient")
  * @default { x: 1, y: 1 }
+ * @param onPress - Callback when card is pressed (makes card pressable)
+ * @param loading - Whether the card is in loading state
+ * @default false
  * @param style - Style overrides for layout (e.g. flexDirection, gap)
  * @param children - Card content
  */
@@ -29,6 +32,8 @@ export interface CardProps {
   gradientColors?: [string, string];
   gradientStart?: { x: number; y: number };
   gradientEnd?: { x: number; y: number };
+  onPress?: () => void;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
 }

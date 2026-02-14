@@ -272,7 +272,7 @@ export function ActivePrayerCard({ name, time }: any) {
   return (
     <View
       style={{
-        backgroundColor: colors.islamic.prayerActive, // ← Active prayer
+        backgroundColor: colors.brand.primary, // ← Active prayer
         borderRadius: 12,
         padding: 16,
         marginBottom: 12,
@@ -298,13 +298,11 @@ export function UpcomingPrayerCard({ name, time }: any) {
         padding: 16,
         marginBottom: 12,
         borderLeftWidth: 4,
-        borderLeftColor: colors.islamic.prayerUpcoming, // ← Upcoming accent
+        borderLeftColor: colors.text.muted, // ← Upcoming accent
       }}
     >
       <Text style={{ color: colors.text.primary, fontSize: 18, fontWeight: '600' }}>{name}</Text>
-      <Text style={{ color: colors.islamic.prayerUpcoming, fontSize: 16, marginTop: 4 }}>
-        {time}
-      </Text>
+      <Text style={{ color: colors.text.muted, fontSize: 16, marginTop: 4 }}>{time}</Text>
       <Text style={{ color: colors.text.tertiary, fontSize: 12, marginTop: 4 }}>Next Prayer</Text>
     </View>
   );
@@ -323,7 +321,7 @@ export function PassedPrayerCard({ name, time }: any) {
       }}
     >
       <Text style={{ color: colors.text.muted, fontSize: 18, fontWeight: '600' }}>{name}</Text>
-      <Text style={{ color: colors.islamic.prayerPassed, fontSize: 16, marginTop: 4 }}>{time}</Text>
+      <Text style={{ color: colors.state.disabled, fontSize: 16, marginTop: 4 }}>{time}</Text>
     </View>
   );
 }
@@ -334,20 +332,20 @@ export function QuranVerseCard({ arabicText, verseNumber, isHighlighted }: any) 
   return (
     <View
       style={{
-        backgroundColor: colors.islamic.quranBackground, // ← Quran background
+        backgroundColor: colors.background.section, // ← Quran background
         borderRadius: 12,
         padding: 20,
         marginBottom: 12,
         // Highlight background if selected
         ...(isHighlighted && {
-          backgroundColor: colors.islamic.verseHighlight,
+          backgroundColor: colors.overlay.focus,
         }),
       }}
     >
       {/* Arabic text */}
       <Text
         style={{
-          color: colors.islamic.quranText, // ← Quran text
+          color: colors.text.primary, // ← Quran text
           fontSize: 24,
           textAlign: 'right',
           lineHeight: 40,
@@ -359,7 +357,7 @@ export function QuranVerseCard({ arabicText, verseNumber, isHighlighted }: any) 
       {/* Verse number badge */}
       <View
         style={{
-          backgroundColor: colors.islamic.verseNumber, // ← Verse number
+          backgroundColor: colors.brand.tertiary, // ← Verse number
           alignSelf: 'flex-end',
           paddingHorizontal: 12,
           paddingVertical: 6,
@@ -379,7 +377,7 @@ export function TasbihCounter({ count, targetCount }: any) {
   return (
     <View
       style={{
-        backgroundColor: colors.islamic.tasbihBackground, // ← Tasbih background
+        backgroundColor: colors.background.section, // ← Tasbih background
         borderRadius: 20,
         padding: 32,
         alignItems: 'center',
@@ -388,7 +386,7 @@ export function TasbihCounter({ count, targetCount }: any) {
       {/* Count */}
       <Text
         style={{
-          color: colors.islamic.tasbihText, // ← Counter text
+          color: colors.brand.secondary, // ← Counter text
           fontSize: 64,
           fontWeight: 'bold',
         }}
@@ -420,7 +418,7 @@ export function ListItem({ title, subtitle, icon, onPress }: any) {
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 1,
-        borderBottomColor: colors.component.divider, // ← Divider
+        borderBottomColor: colors.border.default, // ← Divider
       }}
       onPress={onPress}
     >
@@ -459,7 +457,7 @@ export function NotificationBadge({ count }: any) {
   return (
     <View
       style={{
-        backgroundColor: colors.component.badgeBackground, // ← Badge background
+        backgroundColor: colors.state.error, // ← Badge background
         borderRadius: 12,
         minWidth: 24,
         height: 24,
@@ -470,7 +468,7 @@ export function NotificationBadge({ count }: any) {
     >
       <Text
         style={{
-          color: colors.component.badgeText, // ← Badge text
+          color: colors.background.elevated, // ← Badge text
           fontSize: 12,
           fontWeight: 'bold',
         }}
@@ -487,7 +485,7 @@ export function CategoryChip({ label, onPress }: any) {
   return (
     <Pressable
       style={{
-        backgroundColor: colors.component.chipBackground, // ← Chip background
+        backgroundColor: colors.background.input, // ← Chip background
         paddingVertical: 6,
         paddingHorizontal: 12,
         borderRadius: 16,
@@ -495,7 +493,7 @@ export function CategoryChip({ label, onPress }: any) {
       }}
       onPress={onPress}
     >
-      <Text style={{ color: colors.component.chipText, fontSize: 14 }}>{label}</Text>
+      <Text style={{ color: colors.text.secondary, fontSize: 14 }}>{label}</Text>
     </Pressable>
   );
 }
