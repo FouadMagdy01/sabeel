@@ -62,8 +62,6 @@ export type {
   IconColors,
   StateColors,
   OverlayColors,
-  ComponentColors,
-  IslamicColors,
   GradientColors,
   ShadowConfig,
 } from './types';

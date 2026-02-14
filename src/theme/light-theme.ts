@@ -12,496 +12,392 @@ import type { ThemeColors } from './types';
  * - Secondary: Islamic teal (#0FA18F) - spirituality and peace
  * - Tertiary: Deep forest (#084F49) - depth and contemplation
  */
+/**
+ * Sabeel Light Theme Colors (Active)
+ *
+ * Emerald and deep green palette with warm accents.
+ * Optimized for daytime reading with excellent contrast.
+ *
+ * Color Philosophy:
+ * - Primary: Emerald (#10B981) - growth and vitality
+ * - Secondary: Deep emerald (#064E3B) - strong readable headings
+ * - Tertiary: Amber (#D97706) - warm achievement accents
+ */
 export const lightColors: ThemeColors = {
   mode: 'light',
 
   brand: {
     /**
-     * Primary brand color - Desert gold
+     * Primary brand color - Emerald green
      * @usage Main CTAs, primary buttons, active tabs, key highlights
      * @examples "Pray Now" button, active tab indicator, selected prayer time
      */
-    primary: '#B08A54',
+    primary: '#10B981',
 
     /**
-     * Secondary brand color - Islamic teal
-     * @usage Secondary actions, navigation icons, links, supporting elements
-     * @examples Navigation bar icons, text links, secondary buttons
+     * Secondary brand color - Deep emerald
+     * @usage Headings, strong readable text on light backgrounds
+     * @examples Section headings, card titles, greeting text
      */
-    secondary: '#0FA18F',
+    secondary: '#064E3B',
 
     /**
-     * Tertiary brand color - Deep forest
-     * @usage Subtle accents, tertiary actions, less prominent UI elements
-     * @examples Helper icons, subtle badges, tertiary buttons
+     * Tertiary brand color - Amber accent
+     * @usage Achievement icons, streaks, gold accents, special highlights
+     * @examples Streak fire icon, points star, best streak medal
      */
-    tertiary: '#084F49',
+    tertiary: '#D97706',
 
     /**
-     * Primary variant - Darker desert gold
+     * Primary variant - Darker emerald
      * @usage Hover states, pressed states, primary button variants
      * @examples Primary button hover state, selected card background
      */
-    primaryVariant: '#8B6B3E',
+    primaryVariant: '#059669',
 
     /**
-     * Secondary variant - Darker teal
+     * Secondary variant - Lighter deep emerald
      * @usage Secondary element hover states, alternative secondary actions
      * @examples Secondary button hover, alternative navigation highlight
      */
-    secondaryVariant: '#0A7A6C',
+    secondaryVariant: '#065F46',
   },
 
   background: {
     /**
-     * Main app background - Soft cream paper
+     * Main app background - Soft warm gray
      * @usage Root background color for the entire app
      * @examples Screen background, main container background
      */
-    app: '#FFF7EC',
+    app: '#F8FAF9',
 
     /**
-     * Primary surface background - Pure white
+     * Primary surface background - White
      * @usage Cards, sheets, elevated components
-     * @examples Prayer time cards, Quran reader card, bottom sheets
+     * @examples Stats card, prayer cards, daily todo cards, bottom sheets
      */
     surface: '#FFFFFF',
 
     /**
-     * Alternative surface background - Warm white
-     * @usage Nested surfaces, alternative cards, dialogs
-     * @examples Modal backgrounds, nested cards, elevated dialogs
+     * Alternative surface background - Very light gray
+     * @usage Nested surfaces, alternative cards, bento card backgrounds
+     * @examples Bento grid cards, inactive toggles, subtle backgrounds
      */
-    surfaceAlt: '#FFFDF8',
+    surfaceAlt: '#F1F5F4',
 
     /**
-     * Section background - Soft mint
-     * @usage Grouped content sections, list backgrounds
-     * @examples Settings sections, grouped prayer times, list containers
+     * Section background - Light warm gray
+     * @usage Grouped content sections
+     * @examples Prayer card background, sacred section backgrounds
      */
-    section: '#F3FAF9',
+    section: '#F0FDF4',
 
     /**
-     * Elevated surface background - Pure white
+     * Elevated surface background - White
      * @usage Floating action buttons, tooltips, elevated menus
      * @examples FAB background, dropdown menus, popovers
      */
     elevated: '#FFFFFF',
 
     /**
-     * Input field background - Light beige
+     * Input field background - Very light gray
      * @usage Text inputs, search bars, editable fields
      * @examples Search input, form fields, text areas
      */
-    input: '#FAF4EC',
+    input: '#F1F5F9',
 
     /**
-     * Disabled background - Light gray with opacity
+     * Disabled background - Light gray
      * @usage Disabled buttons, inactive elements
      * @examples Disabled button background, inactive toggle background
      */
-    disabled: 'rgba(214, 206, 193, 0.6)',
+    disabled: '#E2E8F0',
   },
 
   text: {
     /**
-     * Primary text color - Rich dark brown
+     * Primary text color - Near black
      * @usage Main readable content, body text, primary labels
-     * @examples Quran text, article content, main headings
+     * @examples Prayer names, card values, main headings
      */
-    primary: '#3E2D14',
+    primary: '#0F172A',
 
     /**
-     * Secondary text color - Medium brown
+     * Secondary text color - Dark gray
      * @usage Subheadings, secondary labels, supporting text
-     * @examples Card subtitles, section descriptions, helper labels
+     * @examples Card subtitles, section descriptions, card titles
      */
-    secondary: '#5F4A2C',
+    secondary: '#334155',
 
     /**
-     * Tertiary text color - Light brown
+     * Tertiary text color - Medium gray
      * @usage Tertiary information, timestamps, metadata
-     * @examples Post timestamps, verse numbers, metadata labels
+     * @examples Hijri date, stat labels, section headers
      */
-    tertiary: '#7A643F',
+    tertiary: '#64748B',
 
     /**
-     * Muted text color - Soft gray-brown
+     * Muted text color - Light gray
      * @usage Placeholder text, disabled text, very low priority information
-     * @examples Input placeholders, disabled labels, footnotes
+     * @examples Input placeholders, disabled labels
      */
-    muted: '#B2A489',
+    muted: '#94A3B8',
 
     /**
-     * Inverse text color - Pure white
+     * Inverse text color - White
      * @usage Text on dark/colored backgrounds
-     * @examples Text on primary buttons, text on dark cards, overlay text
+     * @examples Text on primary buttons, text on gradient cards
      */
     inverse: '#FFFFFF',
 
     /**
-     * Accent text color - Orange-brown
-     * @usage Highlighted text, emphasized content, special keywords
-     * @examples Allah (SWT), Prophet names, sacred terms, badges
+     * Accent text color - Amber
+     * @usage Highlighted text, emphasized content, special labels
+     * @examples Streak values, gold accents
      */
-    accent: '#9C5F17',
+    accent: '#D97706',
 
     /**
-     * Link text color - Darker teal
+     * Link text color - Emerald
      * @usage Clickable links, interactive text
      * @examples Hyperlinks, "Read more" links, navigation links
      */
-    link: '#0A7A6C',
+    link: '#10B981',
 
     /**
-     * Link hover color - Very dark teal
+     * Link hover color - Darker emerald
      * @usage Link hover and active states
      * @examples Link hover effect, pressed link state
      */
-    linkHover: '#064F46',
+    linkHover: '#059669',
   },
 
   border: {
     /**
-     * Default border color - Light tan
-     * @usage Standard borders for inputs, cards, containers
-     * @examples Input borders, card outlines, container borders
+     * Default border color - Light gray
+     * @usage Standard borders for cards, containers
+     * @examples Card borders, container outlines
      */
-    default: '#BFA06A',
+    default: '#E2E8F0',
 
     /**
-     * Subtle border color - Very light beige
+     * Subtle border color - Very light gray
      * @usage Light dividers, subtle separators
-     * @examples List dividers, section separators, subtle card borders
+     * @examples Stat dividers, section separators
      */
-    subtle: '#E6D8C5',
+    subtle: '#F1F5F9',
 
     /**
-     * Strong border color - Medium brown
+     * Strong border color - Medium gray
      * @usage Emphasized borders, important separators
      * @examples Selected card border, important section dividers
      */
-    strong: '#8B7355',
+    strong: '#CBD5E1',
 
     /**
-     * Focus border color - Bright teal
+     * Focus border color - Emerald
      * @usage Focused input states, keyboard navigation indicators
-     * @examples Focused input ring, selected button outline, active navigation
+     * @examples Focused input ring, selected button outline
      */
-    focus: '#0FA18F',
+    focus: '#10B981',
 
     /**
-     * Disabled border color - Light gray
+     * Disabled border color - Very light gray
      * @usage Borders for disabled elements
      * @examples Disabled input border, inactive button border
      */
-    disabled: 'rgba(214, 206, 193, 0.4)',
+    disabled: '#E2E8F0',
   },
 
   icon: {
     /**
-     * Primary icon color - Deep forest
+     * Primary icon color - Dark gray
      * @usage Main interactive icons, primary navigation
-     * @examples Tab bar icons, primary action icons, main navigation icons
+     * @examples Tab bar icons, primary action icons
      */
-    primary: '#084F49',
+    primary: '#334155',
 
     /**
-     * Secondary icon color - Medium brown
+     * Secondary icon color - Medium gray
      * @usage Supporting icons, secondary actions
-     * @examples Utility icons, secondary action icons, helper icons
+     * @examples Utility icons, secondary action icons
      */
-    secondary: '#5F4A2C',
+    secondary: '#64748B',
 
     /**
-     * Tertiary icon color - Light brown
+     * Tertiary icon color - Light gray
      * @usage Subtle icons, decorative elements
-     * @examples Decorative icons, subtle indicators, low-priority icons
+     * @examples Decorative icons, subtle indicators
      */
-    tertiary: '#8B7355',
+    tertiary: '#94A3B8',
 
     /**
-     * Muted icon color - Soft gray-brown
+     * Muted icon color - Very light gray
      * @usage Disabled icons, inactive states
      * @examples Disabled action icons, inactive navigation icons
      */
-    muted: '#B2A489',
+    muted: '#CBD5E1',
 
     /**
-     * Inverse icon color - Pure white
+     * Inverse icon color - White
      * @usage Icons on dark/colored backgrounds
-     * @examples Icons on primary buttons, icons on dark surfaces
+     * @examples Icons on primary buttons, icons on gradient cards
      */
     inverse: '#FFFFFF',
 
     /**
-     * Accent icon color - Desert gold
-     * @usage Special attention icons, featured elements
-     * @examples Featured prayer icon, special badge icons, highlighted actions
+     * Accent icon color - Amber
+     * @usage Achievement icons, streak indicators
+     * @examples Fire icon, stars icon
      */
-    accent: '#B08A54',
+    accent: '#D97706',
   },
 
   state: {
     /**
      * Success state color - Green
      * @usage Success messages, completed actions, positive feedback
-     * @examples "Prayer completed" badge, successful form submission, checkmarks
+     * @examples Completed prayer check, completed random act badge
      */
     success: '#10B981',
 
     /**
-     * Success background - Light green with opacity
-     * @usage Background for success messages and indicators
-     * @examples Success notification background, completed task background
+     * Success background - Light green tint
+     * @usage Background for success/completed states
+     * @examples Completed bento card background
      */
-    successBg: 'rgba(16, 185, 129, 0.15)',
+    successBg: '#E8F5E9',
 
     /**
      * Warning state color - Amber
-     * @usage Warning messages, caution indicators, alerts
-     * @examples Low battery warning, approaching prayer time, confirmations
+     * @usage Warning messages, caution indicators
+     * @examples Approaching prayer time
      */
     warning: '#F59E0B',
 
     /**
-     * Warning background - Light amber with opacity
+     * Warning background - Light amber tint
      * @usage Background for warning messages
-     * @examples Warning notification background, caution banner
+     * @examples Warning notification background
      */
-    warningBg: 'rgba(245, 158, 11, 0.15)',
+    warningBg: 'rgba(245, 158, 11, 0.12)',
 
     /**
      * Error state color - Red
-     * @usage Error messages, validation errors, critical alerts
-     * @examples Form validation errors, failed actions, error notifications
+     * @usage Error messages, validation errors
+     * @examples Form validation errors
      */
     error: '#EF4444',
 
     /**
-     * Error background - Light red with opacity
+     * Error background - Light red tint
      * @usage Background for error messages
-     * @examples Error notification background, validation error background
+     * @examples Error notification background
      */
-    errorBg: 'rgba(239, 68, 68, 0.15)',
+    errorBg: 'rgba(239, 68, 68, 0.12)',
 
     /**
-     * Info state color - Teal
-     * @usage Informational messages, neutral notifications, hints
-     * @examples Tooltips, info banners, helpful hints, educational content
+     * Info state color - Blue
+     * @usage Informational messages, azkar progress indicator
+     * @examples Azkar progress ring color, info banners
      */
-    info: '#0FA18F',
+    info: '#3B82F6',
 
     /**
-     * Info background - Light teal with opacity
+     * Info background - Light blue tint
      * @usage Background for info messages
-     * @examples Info notification background, hint box background
+     * @examples Info notification background
      */
-    infoBg: 'rgba(15, 161, 143, 0.15)',
+    infoBg: 'rgba(59, 130, 246, 0.12)',
 
     /**
      * Disabled state color - Light gray
      * @usage Disabled elements, inactive states
-     * @examples Disabled button text, inactive toggles, unavailable options
+     * @examples Disabled button text, inactive toggles
      */
-    disabled: '#D1D5DB',
+    disabled: '#CBD5E1',
   },
 
   overlay: {
     /**
      * Modal backdrop overlay - Semi-transparent black
      * @usage Semi-transparent overlay behind modals and dialogs
-     * @examples Modal backdrop, drawer overlay, dialog dimming
+     * @examples Modal backdrop, drawer overlay
      */
     modal: 'rgba(0, 0, 0, 0.5)',
 
     /**
-     * Press feedback overlay - Light teal with low opacity
+     * Press feedback overlay - Emerald tint
      * @usage Touch/press ripple effects, interactive feedback
-     * @examples Button press effect, list item press, touchable feedback
+     * @examples Button press effect, card press feedback
      */
-    pressed: 'rgba(15, 161, 143, 0.12)',
+    pressed: 'rgba(16, 185, 129, 0.12)',
 
     /**
-     * Hover feedback overlay - Very light teal
-     * @usage Hover state overlay (for web/desktop)
-     * @examples Card hover effect, button hover, interactive element hover
+     * Hover feedback overlay - Subtle emerald tint
+     * @usage Hover state overlay
+     * @examples Card hover effect, button hover
      */
-    hover: 'rgba(15, 161, 143, 0.08)',
+    hover: 'rgba(16, 185, 129, 0.08)',
 
     /**
-     * Focus overlay - Light teal
+     * Focus overlay - Emerald tint
      * @usage Keyboard focus indicator overlay
      * @examples Focus ring, keyboard navigation highlight
      */
-    focus: 'rgba(15, 161, 143, 0.15)',
+    focus: 'rgba(16, 185, 129, 0.15)',
 
     /**
      * Shadow color - Semi-transparent black
      * @usage Drop shadows, elevation shadows
-     * @examples Card shadow, button shadow, elevated surface shadow
+     * @examples Card shadow, button shadow
      */
-    shadow: 'rgba(0, 0, 0, 0.15)',
-  },
-
-  component: {
-    switchTrackOff: '#D1D5DB',
-    switchTrackOn: '#B08A54',
-    switchThumb: '#FFFFFF',
-    checkboxBorder: '#9E9E9E',
-    checkboxChecked: '#B08A54',
-    radioBorder: '#9E9E9E',
-    radioChecked: '#B08A54',
-    sliderTrackInactive: '#E5E7EB',
-    sliderTrackActive: '#B08A54',
-    sliderThumb: '#FFFFFF',
-    progressTrack: '#F0E8DC',
-    progressFill: '#B08A54',
-    tabBarBackground: '#FFFFFF',
-    tabBarBorder: '#E5E7EB',
-    badgeBackground: '#EF4444',
-    badgeText: '#FFFFFF',
-    chipBackground: '#F5EFE6',
-    chipText: '#084F49',
-    divider: '#E6D8C5',
-  },
-
-  islamic: {
-    /**
-     * Active prayer time indicator - Bright teal
-     * @usage Current/active prayer time highlight
-     * @examples Current prayer highlight, active prayer badge
-     */
-    prayerActive: '#0FA18F',
-
-    /**
-     * Upcoming prayer time indicator - Desert gold
-     * @usage Next prayer time highlight
-     * @examples Next prayer countdown, upcoming prayer card
-     */
-    prayerUpcoming: '#B08A54',
-
-    /**
-     * Passed prayer time indicator - Muted gray
-     * @usage Completed prayer times
-     * @examples Passed prayer times in list, completed prayer indicator
-     */
-    prayerPassed: '#B2A489',
-
-    /**
-     * Quran text color - Rich dark brown
-     * @usage Arabic Quran text, special typography
-     * @examples Quran verses, Arabic content
-     */
-    quranText: '#1A1A1A',
-
-    /**
-     * Quran background - Very light cream
-     * @usage Background for Quran reading view
-     * @examples Quran reader background, verse card background
-     */
-    quranBackground: '#FFFCF5',
-
-    /**
-     * Verse highlight color - Light teal with opacity
-     * @usage Selected or highlighted Quran verses
-     * @examples Selected verse background, bookmarked verse highlight
-     */
-    verseHighlight: 'rgba(15, 161, 143, 0.15)',
-
-    /**
-     * Verse number badge - Desert gold
-     * @usage Verse number indicators
-     * @examples Verse number badges, ayah markers
-     */
-    verseNumber: '#B08A54',
-
-    /**
-     * Tasbih counter background - Light warm beige
-     * @usage Digital tasbih/dhikr counter background
-     * @examples Counter display background, tasbeeh card
-     */
-    tasbihBackground: '#F5EFE6',
-
-    /**
-     * Tasbih counter text - Deep forest
-     * @usage Counter numbers and text
-     * @examples Count display, progress text
-     */
-    tasbihText: '#084F49',
-
-    /**
-     * Hadith background - Light peachy beige
-     * @usage Background for Hadith cards/sections
-     * @examples Hadith card background, narration section
-     */
-    hadithBackground: '#FFF5EB',
-
-    /**
-     * Sacred text accent - Saturated gold
-     * @usage Emphasis on sacred names and terms (Allah, Muhammad ﷺ)
-     * @examples Sacred name highlighting, honorific markers
-     */
-    sacredTextAccent: '#D4A056',
-
-    /**
-     * Qibla direction indicator - Bright saturated teal
-     * @usage Qibla compass indicator
-     * @examples Qibla arrow, direction marker
-     */
-    qiblaIndicator: '#0CC9B3',
-
-    /**
-     * Islamic calendar date - Darker gold
-     * @usage Hijri date display
-     * @examples Islamic date badge, calendar display
-     */
-    hijriDate: '#8B6B3E',
+    shadow: 'rgba(0, 0, 0, 0.1)',
   },
 
   gradient: {
     /**
-     * Primary gradient - Forest to teal
-     * @usage Main brand gradients, hero sections
-     * @examples Primary button gradient, header gradient, featured cards
+     * Primary gradient - Emerald range
+     * @usage Main brand gradients, current prayer card background
+     * @examples Current prayer card gradient
      */
-    primary: ['#084F49', '#12B09E'],
+    primary: ['#064E3B', '#10B981'],
 
     /**
-     * Secondary gradient - Light teal gradient
+     * Secondary gradient - Green range
      * @usage Supporting gradients, alternative styling
      * @examples Secondary cards, alternative headers
      */
-    secondary: ['#0FA18F', '#3DBFB0'],
+    secondary: ['#10B981', '#34D399'],
 
     /**
-     * Sacred/Spiritual gradient - Dark brown gradient
-     * @usage Quran headers, prayer time cards, spiritual content
-     * @examples Quran header, prayer card gradient, sacred section background
+     * Sacred/Spiritual gradient - Deep emerald
+     * @usage Current prayer card, spiritual content backgrounds
+     * @examples Prayer card gradient
      */
-    sacred: ['#4B2418', '#7A4A2C'],
+    sacred: ['#D1FAE5', '#A7F3D0'],
 
     /**
-     * Success gradient - Green gradient
+     * Success gradient - Green range
      * @usage Success states, achievements, completions
      * @examples Completion badges, success notifications
      */
-    success: ['#10B981', '#34D399'],
+    success: ['#059669', '#34D399'],
 
     /**
-     * Premium/Featured gradient - Purple gradient
-     * @usage Premium features, special content
+     * Premium/Featured gradient - Amber range
+     * @usage Premium features, gold-themed content
      * @examples Premium badges, featured content cards
      */
-    premium: ['#8B5CF6', '#A78BFA'],
+    premium: ['#B45309', '#F59E0B'],
   },
 
   shadow: {
-    color: 'rgba(0, 0, 0, 0.15)',
-    elevation: 8,
+    color: 'rgba(0, 0, 0, 0.1)',
+    elevation: 4,
     elevationSmall: 2,
-    elevationMedium: 8,
-    elevationLarge: 16,
+    elevationMedium: 4,
+    elevationLarge: 8,
   },
 };
 

@@ -1,9 +1,10 @@
+import type { ICON_FAMILIES } from '@/common/components/Icon/Icon.constants';
+import type { IconColorVariant, IconName } from '@/common/components/Icon/Icon.types';
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
-import type { ICON_FAMILIES } from '@/common/components/Icon/icon.constants';
-import type { IconColorVariant, IconName } from '@/common/components/Icon/icon.types';
 
 export type IconButtonSize = 'small' | 'medium' | 'large';
-export type IconButtonVariant = 'filled' | 'outlined' | 'ghost';
+export type IconButtonVariant = 'filled' | 'outlined' | 'ghost' | 'tinted';
+export type IconButtonColor = 'primary' | 'success' | 'error' | 'warning' | 'info';
 
 export interface IconButtonProps<T extends keyof typeof ICON_FAMILIES> extends Omit<
   PressableProps,
@@ -42,10 +43,22 @@ export interface IconButtonProps<T extends keyof typeof ICON_FAMILIES> extends O
   variant?: IconButtonVariant;
 
   /**
+   * Tinted variant color (only applies when variant="tinted")
+   * @default 'success'
+   */
+  color?: IconButtonColor;
+
+  /**
    * Whether the button is disabled
    * @default false
    */
   disabled?: boolean;
+
+  /**
+   * Show loading spinner instead of icon
+   * @default false
+   */
+  loading?: boolean;
 
   /**
    * Custom container style

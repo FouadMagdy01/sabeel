@@ -1,2 +1,7 @@
 export { IconButton } from './iconButton';
-export type { IconButtonProps, IconButtonSize, IconButtonVariant } from './iconButton.types';
+export type {
+  IconButtonColor,
+  IconButtonProps,
+  IconButtonSize,
+  IconButtonVariant,
+} from './iconButton.types';

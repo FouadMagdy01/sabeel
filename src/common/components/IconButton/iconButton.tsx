@@ -1,14 +1,27 @@
 import React from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 
-import Icon from '@/common/components/Icon';
-import type { ICON_FAMILIES } from '@/common/components/Icon/icon.constants';
+import type { IconColorVariant } from '@/common/components/Icon';
+import { Icon } from '@/common/components/Icon';
+import type { ICON_FAMILIES } from '@/common/components/Icon/Icon.constants';
 import { ICON_SIZES, styles } from './iconButton.styles';
-import type { IconButtonProps } from './iconButton.types';
+import type { IconButtonColor, IconButtonProps } from './iconButton.types';
+
+const TINTED_ICON_COLORS: Record<
+  IconButtonColor,
+  (theme: ReturnType<typeof useUnistyles>['theme']) => string
+> = {
+  primary: (theme) => theme.colors.brand.primary,
+  success: (theme) => theme.colors.brand.primary,
+  error: (theme) => theme.colors.state.error,
+  warning: (theme) => theme.colors.state.warning,
+  info: (theme) => theme.colors.state.info,
+};
 
 /**
- * IconButton component - A pressable button containing only an icon
+ * IconButton component - A pressable button containing only an icon.
+ * Supports loading state with spinner.
  *
  * @example
  * ```tsx
@@ -28,13 +41,21 @@ import type { IconButtonProps } from './iconButton.types';
  *   onPress={handlePress}
  * />
  *
- * // Outlined button
+ * // Tinted error button
+ * <IconButton
+ *   familyName="MaterialIcons"
+ *   iconName="delete"
+ *   variant="tinted"
+ *   color="error"
+ *   onPress={handleDelete}
+ * />
+ *
+ * // Loading state
  * <IconButton
  *   familyName="Feather"
- *   iconName="x"
- *   variant="outlined"
- *   size="large"
- *   onPress={handlePress}
+ *   iconName="save"
+ *   loading
+ *   onPress={handleSave}
  * />
  * ```
  */
@@ -45,7 +66,9 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
   iconColor,
   size = 'medium',
   variant = 'ghost',
+  color = 'success',
   disabled = false,
+  loading = false,
   style,
   ...pressableProps
 }: IconButtonProps<T>) {
@@ -54,34 +77,51 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
   styles.useVariants({
     variant,
     size,
+    color,
     disabled: disabled as true | false,
   });
 
-  // Determine icon color based on variant
-  const getDefaultIconVariant = () => {
-    if (iconVariant) return iconVariant;
-    if (variant === 'filled') return 'inverse';
-    return 'primary';
+  // Determine icon/spinner color based on button variant
+  const getIconColor = (): { variant?: IconColorVariant; color?: string } => {
+    if (iconColor) return { color: iconColor };
+    if (iconVariant) return { variant: iconVariant };
+    if (variant === 'filled') return { variant: 'inverse' };
+    if (variant === 'tinted') return { color: TINTED_ICON_COLORS[color](theme) };
+    return { variant: 'primary' };
   };
 
   const iconSize = ICON_SIZES[size];
+  const resolvedIconColor = getIconColor();
+
+  // Determine spinner color
+  const spinnerColor = resolvedIconColor.color ?? theme.colors.icon.primary;
 
   const iconProps = {
     familyName,
     iconName,
-    variant: iconColor ? undefined : getDefaultIconVariant(),
-    color: iconColor,
     size: iconSize,
+    ...(resolvedIconColor.variant ? { variant: resolvedIconColor.variant } : {}),
+    ...(resolvedIconColor.color ? { color: resolvedIconColor.color } : {}),
   } as const;
+
+  // Render icon or loading spinner
+  const renderContent = () => {
+    if (loading) {
+      return <ActivityIndicator size="small" color={spinnerColor} />;
+    }
+    // @ts-expect-error - Generic icon props are complex
+    return <Icon {...iconProps} />;
+  };
+
+  const isDisabled = disabled || loading;
 
   const button = (
     <Pressable
-      style={({ pressed }) => [styles.container, pressed && { opacity: 0.7 }, style]}
-      disabled={disabled}
+      style={({ pressed }) => [styles.container, pressed && !loading && { opacity: 0.7 }, style]}
+      disabled={isDisabled}
       {...pressableProps}
     >
-      {/* @ts-expect-error - Generic icon props are complex */}
-      <Icon {...iconProps} />
+      {renderContent()}
     </Pressable>
   );
 
@@ -91,15 +131,14 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
       <View style={styles.androidWrapper}>
         <Pressable
           style={[styles.container, style]}
-          disabled={disabled}
+          disabled={isDisabled}
           android_ripple={{
             color: theme.colors.overlay.pressed,
             borderless: true,
           }}
           {...pressableProps}
         >
-          {/* @ts-expect-error - Generic icon props are complex */}
-          <Icon {...iconProps} />
+          {renderContent()}
         </Pressable>
       </View>
     );

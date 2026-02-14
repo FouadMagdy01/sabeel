@@ -52,6 +52,7 @@
       "selectDate": "Select Date",
       "cancel": "Cancel",
       "confirm": "Confirm",
+      "placeholder": "Select a date",
       "months": {
         "january": "January",
         "february": "February",
@@ -95,7 +96,27 @@
   "screens": {
     "home": {
       "title": "Home",
-      "testButton": "Test"
+      "testButton": "Test",
+      "stats": {
+        "dayStreak": "Day Streak",
+        "totalPoints": "Total Points",
+        "bestStreak": "Best Streak"
+      },
+      "currentPrayer": {
+        "label": "Current Prayer",
+        "endsIn": "Ends in {{countdown}}"
+      },
+      "dailyTodos": {
+        "sectionTitle": "Daily Todos",
+        "prayers": "Prayers",
+        "azkar": "Azkar",
+        "randomActs": "Random Acts",
+        "completed": "Completed",
+        "tapToComplete": "Tap to complete"
+      },
+      "verseOfTheDay": {
+        "label": "Verse of the Day"
+      }
     },
     "quran": {
       "test": "Test",
@@ -107,7 +128,33 @@
       "title": "Prayers"
     },
     "library": {
-      "title": "Library"
+      "title": "Library",
+      "tabs": {
+        "favorites": "Favorites",
+        "explore": "Explore",
+        "downloads": "Downloads"
+      },
+      "subtabs": {
+        "suras": "Suras",
+        "reciters": "Reciters",
+        "ayas": "Ayas"
+      },
+      "sura": {
+        "verses": "{{count}} Verses"
+      },
+      "reciter": {
+        "suras": "{{count}} Suras"
+      },
+      "aya": {
+        "verse": "Verse {{number}}"
+      },
+      "explore": {
+        "featuredReciters": "Featured Reciters",
+        "recommendedForYou": "Recommended for You",
+        "seeAll": "See All",
+        "surasAvailable": "{{count}} Surahs Available",
+        "play": "Play"
+      }
     },
     "settings": {
       "title": "Settings"
@@ -116,5 +163,8 @@
       "login": "Log In",
       "signup": "Sign Up"
     }
+  },
+  "common": {
+    "noOptionsFound": "No options found"
   }
 }

@@ -388,68 +388,6 @@ colors.state.disabled;
 
 ---
 
-#### 6. Component Colors
-
-Specific UI components.
-
-```tsx
-// Switches
-colors.component.switchTrackOff;
-colors.component.switchTrackOn;
-colors.component.switchThumb;
-
-// Checkboxes
-colors.component.checkboxBorder;
-colors.component.checkboxChecked;
-
-// Sliders
-colors.component.sliderTrackInactive;
-colors.component.sliderTrackActive;
-colors.component.sliderThumb;
-
-// Progress
-colors.component.progressTrack;
-colors.component.progressFill;
-
-// Badges
-colors.component.badgeBackground;
-colors.component.badgeText;
-
-// Chips
-colors.component.chipBackground;
-colors.component.chipText;
-
-// Dividers
-colors.component.divider;
-```
-
----
-
-#### 7. Islamic-Specific Colors
-
-Special tokens for Islamic features.
-
-```tsx
-// Prayer Times
-colors.islamic.prayerActive; // Current prayer
-colors.islamic.prayerUpcoming; // Next prayer
-colors.islamic.prayerPassed; // Completed prayers
-
-// Quran
-colors.islamic.quranText; // Arabic text
-colors.islamic.quranBackground; // Reader background
-colors.islamic.verseHighlight; // Selected verses
-colors.islamic.verseNumber; // Verse numbers
-
-// Other
-colors.islamic.tasbihBackground; // Counter background
-colors.islamic.tasbihText; // Counter text
-colors.islamic.hadithBackground; // Hadith cards
-colors.islamic.sacredTextAccent; // Allah, Prophet names
-colors.islamic.qiblaIndicator; // Qibla compass
-colors.islamic.hijriDate; // Islamic calendar
-```
-
 ---
 
 ## Component Patterns
@@ -599,7 +537,7 @@ Alternative actions.
 ```tsx
 <View
   style={{
-    backgroundColor: colors.islamic.prayerActive,
+    backgroundColor: colors.brand.primary,
     borderRadius: 12,
     padding: 16,
   }}
@@ -619,11 +557,11 @@ Alternative actions.
     borderRadius: 12,
     padding: 16,
     borderLeftWidth: 4,
-    borderLeftColor: colors.islamic.prayerUpcoming,
+    borderLeftColor: colors.text.muted,
   }}
 >
   <Text style={{ color: colors.text.primary, fontSize: 18, fontWeight: '600' }}>Asr</Text>
-  <Text style={{ color: colors.islamic.prayerUpcoming, fontSize: 16 }}>3:45 PM</Text>
+  <Text style={{ color: colors.text.muted, fontSize: 16 }}>3:45 PM</Text>
   <Text style={{ color: colors.text.tertiary, fontSize: 12 }}>Next Prayer</Text>
 </View>
 ```
@@ -635,7 +573,7 @@ Alternative actions.
 ```tsx
 <View
   style={{
-    backgroundColor: colors.islamic.quranBackground,
+    backgroundColor: colors.background.section,
     padding: 20,
     borderRadius: 12,
   }}
@@ -643,7 +581,7 @@ Alternative actions.
   {/* Arabic Text */}
   <Text
     style={{
-      color: colors.islamic.quranText,
+      color: colors.text.primary,
       fontSize: 24,
       lineHeight: 40,
       textAlign: 'right',
@@ -655,7 +593,7 @@ Alternative actions.
   {/* Verse Number */}
   <View
     style={{
-      backgroundColor: colors.islamic.verseNumber,
+      backgroundColor: colors.brand.tertiary,
       paddingHorizontal: 12,
       paddingVertical: 6,
       borderRadius: 16,
@@ -673,7 +611,7 @@ Alternative actions.
 ```tsx
 // Add highlighted background
 <View style={{
-  backgroundColor: colors.islamic.verseHighlight,
+  backgroundColor: colors.overlay.focus,
   // ... other styles
 }}>
 ```
@@ -685,7 +623,7 @@ Alternative actions.
 ```tsx
 <View
   style={{
-    backgroundColor: colors.islamic.tasbihBackground,
+    backgroundColor: colors.background.section,
     borderRadius: 20,
     padding: 32,
     alignItems: 'center',
@@ -694,7 +632,7 @@ Alternative actions.
   {/* Count */}
   <Text
     style={{
-      color: colors.islamic.tasbihText,
+      color: colors.brand.secondary,
       fontSize: 64,
       fontWeight: 'bold',
     }}
@@ -809,17 +747,7 @@ colors.background.surface; // Cards
 colors.background.surfaceAlt; // Nested cards
 ```
 
-### 3. Use Component-Specific Tokens
-
-```tsx
-// ✅ Good - Using component color
-switchTrackOn: colors.component.switchTrackOn;
-
-// ❌ Avoid - Using generic brand color
-switchTrackOn: colors.brand.primary;
-```
-
-### 4. Test Both Light and Dark Modes
+### 3. Test Both Light and Dark Modes
 
 ```tsx
 // Always test your UI in both modes
@@ -827,7 +755,7 @@ const lightTheme = PRESETS.emerald.light;
 const darkTheme = PRESETS.emerald.dark;
 ```
 
-### 5. Use `text.inverse` on Colored Backgrounds
+### 4. Use `text.inverse` on Colored Backgrounds
 
 ```tsx
 // ✅ Good

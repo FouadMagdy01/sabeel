@@ -1,0 +1,87 @@
+import { Card } from '@/common/components/Card';
+import { Icon } from '@/common/components/Icon';
+import { Typography } from '@/common/components/Typography';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import type { ViewStyle } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
+import type { VerseData } from '../../types';
+import { styles } from './VerseOfTheDay.styles';
+
+interface VerseOfTheDayProps {
+  verse: VerseData;
+  onShare: () => void;
+}
+
+export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
+  const { theme } = useUnistyles();
+  const { t } = useTranslation();
+
+  const isIOS = Platform.OS === 'ios';
+
+  return (
+    <Card variant="elevated" radius="xl" padding="lg" style={styles.container}>
+      <View style={styles.decorativeIcon}>
+        <Icon
+          familyName="MaterialIcons"
+          iconName="menu-book"
+          size={140}
+          color={theme.colors.brand.secondary}
+        />
+      </View>
+
+      <View style={styles.headerRow}>
+        <View style={styles.labelRow}>
+          <View style={styles.labelDot} />
+          <Typography size="xxs" weight="bold" color="brandTertiary" uppercase style={styles.label}>
+            {t('screens.home.verseOfTheDay.label')}
+          </Typography>
+        </View>
+        <Pressable
+          style={({ pressed }) =>
+            [styles.shareButton, isIOS && pressed ? styles.pressed : undefined] as ViewStyle[]
+          }
+          onPress={onShare}
+          android_ripple={{
+            color: theme.colors.overlay.pressed,
+            borderless: true,
+            foreground: true,
+          }}
+        >
+          <Icon
+            familyName="MaterialIcons"
+            iconName="share"
+            size={20}
+            color={theme.colors.icon.inverse}
+          />
+        </Pressable>
+      </View>
+
+      <View style={styles.contentArea}>
+        <Typography
+          size="3xl"
+          weight="bold"
+          color="brandSecondary"
+          align="right"
+          style={styles.arabicText}
+        >
+          {verse.arabic}
+        </Typography>
+        <Typography
+          size="lg"
+          weight="medium"
+          color="brandPrimary"
+          align="center"
+          italic
+          style={styles.translationText}
+        >
+          {verse.translation}
+        </Typography>
+        <Typography type="overline" color="tertiary" align="center" style={styles.referenceText}>
+          {verse.reference}
+        </Typography>
+      </View>
+    </Card>
+  );
+}

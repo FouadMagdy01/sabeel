@@ -1,3 +1,3 @@
-export { default } from './icon';
-export * from './icon.constants';
-export * from './icon.types';
+export * from './Icon';
+export * from './Icon.constants';
+export * from './Icon.types';

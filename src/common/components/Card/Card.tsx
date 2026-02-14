@@ -1,0 +1,102 @@
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { ActivityIndicator, Pressable, View } from 'react-native';
+
+import { RADIUS_MAP, styles } from './Card.styles';
+import type { CardProps } from './Card.types';
+
+/**
+ * Versatile card container with multiple visual variants and gradient support.
+ * Provides elevation, outline, filled, and gradient styles with customizable padding and radius.
+ *
+ * @example
+ * <Card variant="elevated" radius="lg" padding="md">
+ *   <Typography>Card content</Typography>
+ * </Card>
+ *
+ * <Card variant="outlined" onPress={handlePress}>
+ *   <Typography>Pressable card</Typography>
+ * </Card>
+ *
+ * <Card variant="filled" loading>
+ *   <Typography>Loading card</Typography>
+ * </Card>
+ */
+export function Card({
+  variant = 'elevated',
+  radius = 'md',
+  padding = 'md',
+  gradientColors,
+  gradientStart = { x: 0, y: 0 },
+  gradientEnd = { x: 1, y: 1 },
+  onPress,
+  loading = false,
+  style,
+  children,
+}: CardProps) {
+  styles.useVariants({ variant, radius, padding });
+
+  const renderLoadingOverlay = () => {
+    if (!loading) return null;
+    return (
+      <View style={styles.loadingOverlay}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  };
+
+  const renderContent = () => (
+    <>
+      {children}
+      {renderLoadingOverlay()}
+    </>
+  );
+
+  // Gradient variant with optional press interaction
+  if (variant === 'gradient' && gradientColors) {
+    const gradientStyle = [styles.container, { borderRadius: RADIUS_MAP[radius] }, style];
+
+    if (onPress) {
+      return (
+        <Pressable onPress={onPress} disabled={loading}>
+          {({ pressed }) => (
+            <LinearGradient
+              colors={gradientColors}
+              start={gradientStart}
+              end={gradientEnd}
+              style={[gradientStyle, pressed && styles.pressedState]}
+            >
+              {renderContent()}
+            </LinearGradient>
+          )}
+        </Pressable>
+      );
+    }
+
+    return (
+      <LinearGradient
+        colors={gradientColors}
+        start={gradientStart}
+        end={gradientEnd}
+        style={gradientStyle}
+      >
+        {renderContent()}
+      </LinearGradient>
+    );
+  }
+
+  // Regular variants with optional press interaction
+  if (onPress) {
+    return (
+      <Pressable onPress={onPress} disabled={loading}>
+        {({ pressed }) => (
+          <View style={[styles.container, pressed && styles.pressedState, style]}>
+            {renderContent()}
+          </View>
+        )}
+      </Pressable>
+    );
+  }
+
+  return <View style={[styles.container, style]}>{renderContent()}</View>;
+}

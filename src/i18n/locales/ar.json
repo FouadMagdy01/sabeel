@@ -52,6 +52,7 @@
       "selectDate": "اختر التاريخ",
       "cancel": "إلغاء",
       "confirm": "تأكيد",
+      "placeholder": "اختر تاريخاً",
       "months": {
         "january": "يناير",
         "february": "فبراير",
@@ -95,7 +96,27 @@
   "screens": {
     "home": {
       "title": "الرئيسية",
-      "testButton": "اختبار"
+      "testButton": "اختبار",
+      "stats": {
+        "dayStreak": "أيام متتالية",
+        "totalPoints": "إجمالي النقاط",
+        "bestStreak": "أفضل سلسلة"
+      },
+      "currentPrayer": {
+        "label": "الصلاة الحالية",
+        "endsIn": "ينتهي في {{countdown}}"
+      },
+      "dailyTodos": {
+        "sectionTitle": "المهام اليومية",
+        "prayers": "الصلوات",
+        "azkar": "الأذكار",
+        "randomActs": "أعمال عشوائية",
+        "completed": "مكتمل",
+        "tapToComplete": "اضغط للإكمال"
+      },
+      "verseOfTheDay": {
+        "label": "آية اليوم"
+      }
     },
     "quran": {
       "test": "تشغيل",
@@ -107,7 +128,33 @@
       "title": "الصلوات"
     },
     "library": {
-      "title": "المكتبة"
+      "title": "المكتبة",
+      "tabs": {
+        "favorites": "المفضلة",
+        "explore": "استكشاف",
+        "downloads": "التحميلات"
+      },
+      "subtabs": {
+        "suras": "السور",
+        "reciters": "القراء",
+        "ayas": "الآيات"
+      },
+      "sura": {
+        "verses": "{{count}} آيات"
+      },
+      "reciter": {
+        "suras": "{{count}} سور"
+      },
+      "aya": {
+        "verse": "الآية {{number}}"
+      },
+      "explore": {
+        "featuredReciters": "قراء مميزون",
+        "recommendedForYou": "موصى به لك",
+        "seeAll": "عرض الكل",
+        "surasAvailable": "{{count}} سورة متاحة",
+        "play": "تشغيل"
+      }
     },
     "settings": {
       "title": "الإعدادات"
@@ -116,5 +163,8 @@
       "login": "تسجيل الدخول",
       "signup": "إنشاء حساب"
     }
+  },
+  "common": {
+    "noOptionsFound": "لا توجد خيارات"
   }
 }

@@ -1,32 +1,61 @@
-import { supabase } from '@/integrations/supabase';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { CurrentPrayerCard, DailyTodos, StatsCard, VerseOfTheDay } from '@/features/home';
+import {
+  CURRENT_PRAYER_COUNTDOWN,
+  DUMMY_AZKAR,
+  DUMMY_PRAYERS,
+  DUMMY_RANDOM_ACTS,
+  DUMMY_STATS,
+  DUMMY_VERSE,
+} from '@/features/home/data';
+import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native-unistyles';
 
 export default function HomeScreen() {
-  const { t } = useTranslation();
-
-  const handlePress = () => {
-    void supabase.auth.getSession().then(({ data: session, error }) => {
-      if (error) {
-        console.error('Session error:', error);
-      } else {
-        console.warn('Session:', session);
-      }
-    });
-  };
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
-      <Text>{t('screens.home.title')}</Text>
-      <Button title={t('screens.home.testButton')} onPress={handlePress} />
+    <View style={homeStyles.screen}>
+      <ScrollView
+        contentContainerStyle={[
+          homeStyles.content,
+          {
+            paddingTop: insets.top + 16,
+            paddingBottom: insets.bottom + 120,
+          },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        <StatsCard stats={DUMMY_STATS} />
+
+        <CurrentPrayerCard
+          prayers={DUMMY_PRAYERS}
+          currentPrayer="Asr"
+          countdown={CURRENT_PRAYER_COUNTDOWN}
+        />
+
+        <DailyTodos
+          prayers={DUMMY_PRAYERS}
+          azkar={DUMMY_AZKAR}
+          randomActs={DUMMY_RANDOM_ACTS}
+          onPrayerPress={(p) => console.warn('Prayer pressed:', p.name)}
+          onAzkarPress={(a) => console.warn('Azkar pressed:', a.type)}
+          onActPress={(a) => console.warn('Act pressed:', a.title)}
+        />
+
+        <VerseOfTheDay verse={DUMMY_VERSE} onShare={() => console.warn('Share verse')} />
+      </ScrollView>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
+const homeStyles = StyleSheet.create((theme) => ({
+  screen: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: theme.colors.background.app,
   },
-});
+  content: {
+    paddingHorizontal: theme.metrics.spacing.p24,
+    gap: theme.metrics.spacingV.p24,
+  },
+}));

@@ -7,10 +7,9 @@ A comprehensive, Islamic-inspired design system with extensive color customizati
 - **5 Predefined Islamic Themes**: Emerald, Desert, Sapphire, Moonlight, and Royal
 - **Light & Dark Modes**: Each theme has both light and dark variants
 - **Custom Theme Generator**: Create personalized themes from any color
-- **Comprehensive Color Tokens**: Over 60+ semantic color tokens for every UI element
+- **Comprehensive Color Tokens**: Semantic color tokens for every UI element
 - **TypeScript Documentation**: Detailed usage documentation for each color token
 - **Design System Ready**: Colors optimized for buttons, inputs, toggles, icons, and more
-- **Islamic-Specific Colors**: Special tokens for prayers, Quran, tasbih, and more
 
 ## 🚀 New to Design? Start Here!
 
@@ -168,52 +167,6 @@ colors.overlay.focus; // Focus indicator
 colors.overlay.shadow; // Drop shadows
 ```
 
-### Component Colors
-
-Specific UI component colors.
-
-```tsx
-colors.component.switchTrackOff;
-colors.component.switchTrackOn;
-colors.component.switchThumb;
-colors.component.checkboxBorder;
-colors.component.checkboxChecked;
-colors.component.radioBorder;
-colors.component.radioChecked;
-colors.component.sliderTrackInactive;
-colors.component.sliderTrackActive;
-colors.component.sliderThumb;
-colors.component.progressTrack;
-colors.component.progressFill;
-colors.component.tabBarBackground;
-colors.component.tabBarBorder;
-colors.component.badgeBackground;
-colors.component.badgeText;
-colors.component.chipBackground;
-colors.component.chipText;
-colors.component.divider;
-```
-
-### Islamic-Specific Colors
-
-Colors for Islamic features.
-
-```tsx
-colors.islamic.prayerActive; // Current prayer
-colors.islamic.prayerUpcoming; // Next prayer
-colors.islamic.prayerPassed; // Completed prayers
-colors.islamic.quranText; // Quran Arabic text
-colors.islamic.quranBackground; // Quran reader
-colors.islamic.verseHighlight; // Selected verses
-colors.islamic.verseNumber; // Verse numbers
-colors.islamic.tasbihBackground; // Tasbih counter
-colors.islamic.tasbihText; // Counter text
-colors.islamic.hadithBackground; // Hadith cards
-colors.islamic.sacredTextAccent; // Allah, Prophet names
-colors.islamic.qiblaIndicator; // Qibla compass
-colors.islamic.hijriDate; // Islamic calendar
-```
-
 ### Gradient Colors
 
 Multi-color gradients for special effects.
@@ -268,7 +221,7 @@ const PrayerCard = ({ prayer, isActive, isPassed }) => {
   const { colors } = useTheme();
 
   const backgroundColor = isActive
-    ? colors.islamic.prayerActive
+    ? colors.brand.primary
     : isPassed
       ? colors.background.section
       : colors.background.surface;
@@ -297,14 +250,14 @@ const QuranVerse = ({ verse, isHighlighted }) => {
   return (
     <View
       style={{
-        backgroundColor: colors.islamic.quranBackground,
+        backgroundColor: colors.background.section,
         padding: 20,
       }}
     >
       {isHighlighted && (
         <View
           style={{
-            backgroundColor: colors.islamic.verseHighlight,
+            backgroundColor: colors.overlay.focus,
             position: 'absolute',
             top: 0,
             left: 0,
@@ -315,7 +268,7 @@ const QuranVerse = ({ verse, isHighlighted }) => {
       )}
       <Text
         style={{
-          color: colors.islamic.quranText,
+          color: colors.text.primary,
           fontSize: 24,
           textAlign: 'right',
         }}
@@ -324,7 +277,7 @@ const QuranVerse = ({ verse, isHighlighted }) => {
       </Text>
       <View
         style={{
-          backgroundColor: colors.islamic.verseNumber,
+          backgroundColor: colors.brand.tertiary,
           borderRadius: 16,
           padding: 8,
         }}
@@ -394,25 +347,7 @@ function MyComponent({ colors }: { colors: ThemeColors }) {
 
 2. **Follow Usage Guidelines**: Each color token has `@usage` and `@examples` in its documentation
 
-   ```tsx
-   // ✅ Good - Using prayer colors for prayer times
-   color: colors.islamic.prayerActive;
-
-   // ❌ Bad - Using generic colors for specific Islamic features
-   color: colors.brand.primary;
-   ```
-
-3. **Respect Component Tokens**: Use component-specific tokens for UI elements
-
-   ```tsx
-   // ✅ Good
-   backgroundColor: colors.component.switchTrackOn;
-
-   // ❌ Bad
-   backgroundColor: colors.brand.primary;
-   ```
-
-4. **Test Both Modes**: Always test your UI in both light and dark modes
+3. **Test Both Modes**: Always test your UI in both light and dark modes
    ```tsx
    const theme = PRESETS.emerald.light; // Test light
    const darkTheme = PRESETS.emerald.dark; // Test dark
@@ -429,7 +364,7 @@ const oldColor = colors.brand.primary; // "#b39262"
 // New - More semantic and comprehensive
 const newColor = colors.brand.primary; // "#B08A54"
 const hoverColor = colors.brand.primaryVariant; // For hover states
-const accentColor = colors.islamic.sacredTextAccent; // For sacred text
+const accentColor = colors.text.accent; // For sacred text
 ```
 
 ### Adding New Components
@@ -438,8 +373,8 @@ When creating new components, choose the appropriate semantic token:
 
 ```tsx
 // For a new notification badge
-backgroundColor: colors.component.badgeBackground;
-textColor: colors.component.badgeText;
+backgroundColor: colors.state.error;
+textColor: colors.background.elevated;
 
 // For a new success message
 backgroundColor: colors.state.successBg;

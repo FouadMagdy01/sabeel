@@ -43,7 +43,6 @@ const darkTheme = {
 
 /**
  * Default app themes (current implementation)
- * @deprecated Use `THEME_PRESETS.emerald` or custom themes for more options
  */
 export const appThemes = {
   light: lightTheme,

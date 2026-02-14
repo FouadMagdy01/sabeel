@@ -222,12 +222,12 @@ color: colors.state.info;
 
 ```tsx
 // Active prayer (happening now)
-backgroundColor: colors.islamic.prayerActive;
+backgroundColor: colors.brand.primary;
 textColor: colors.text.inverse;
 
 // Upcoming prayer (next one)
 backgroundColor: colors.background.surface;
-accentColor: colors.islamic.prayerUpcoming; // Use for text or border
+accentColor: colors.text.muted; // Use for text or border
 
 // Passed prayer (already done)
 backgroundColor: colors.background.section;
@@ -237,10 +237,10 @@ textColor: colors.text.muted;
 ### Quran Reader
 
 ```tsx
-backgroundColor: colors.islamic.quranBackground;
-textColor: colors.islamic.quranText;
-verseHighlight: colors.islamic.verseHighlight;
-verseNumber: colors.islamic.verseNumber;
+backgroundColor: colors.background.section;
+textColor: colors.text.primary;
+verseHighlight: colors.overlay.focus;
+verseNumber: colors.brand.tertiary;
 ```
 
 ---
@@ -256,29 +256,19 @@ verseNumber: colors.islamic.verseNumber;
    </View>
    ```
 
-2. **Use the component-specific colors when available**
-
-   ```tsx
-   // ✅ Better - use component color
-   switchTrackOn: colors.component.switchTrackOn;
-
-   // ❌ Avoid - using generic brand color
-   switchTrackOn: colors.brand.primary;
-   ```
-
-3. **Follow the text hierarchy**
+2. **Follow the text hierarchy**
    - Primary text = `text.primary`
    - Supporting text = `text.secondary`
    - Meta info = `text.tertiary`
    - Placeholders = `text.muted`
 
-4. **Screen backgrounds always use `background.app`**
+3. **Screen backgrounds always use `background.app`**
 
    ```tsx
    <View style={{ flex: 1, backgroundColor: colors.background.app }}>
    ```
 
-5. **Cards use `background.surface`**
+4. **Cards use `background.surface`**
    ```tsx
    <View style={{ backgroundColor: colors.background.surface }}>
    ```
