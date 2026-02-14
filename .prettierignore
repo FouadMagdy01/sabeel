@@ -1,0 +1,32 @@
+# Prettier ignore patterns for Sabeel
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.expo/
+web-build/
+
+# Coverage
+coverage/
+
+# Lock files (generated)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Generated files
+expo-env.d.ts
+*.tsbuildinfo
+
+# Platform-specific
+/ios
+/android
+
+# Logs
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*

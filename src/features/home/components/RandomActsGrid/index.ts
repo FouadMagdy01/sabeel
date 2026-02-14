@@ -1,0 +1,1 @@
+export { RandomActsGrid } from './RandomActsGrid';
