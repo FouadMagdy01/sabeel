@@ -21,6 +21,7 @@
       "Bash(git commit:*)",
       "Bash(npm run validate:*)",
       "Bash(npx prettier:*)",
+      "Bash(npm test:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:medium.com)"
     ],

@@ -78,9 +78,9 @@ export function DatePicker({
   styles.useVariants({
     variant,
     size,
-    disabled: disabled as true | false,
-    error: error as true | false,
-    open: isOpen as true | false,
+    disabled,
+    error,
+    open: isOpen,
     placeholder: !value as true | false,
   });
 

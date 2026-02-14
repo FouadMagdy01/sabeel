@@ -22,6 +22,44 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
   const progress = completedCount / azkar.length;
   const percentage = Math.round(progress * 100);
 
+  /**
+   * Renders an individual azkar chip with completion status styling.
+   *
+   * @param item - The azkar data containing type and status
+   * @returns A pressable chip component with icon and label
+   *
+   * @remarks
+   * This is a pure render function that accesses theme and event handlers from parent scope via closure.
+   * The function can be tested independently by providing mock AzkarData.
+   */
+  const renderAzkarChip = (item: AzkarData): React.JSX.Element => {
+    const isCompleted = item.status === 'completed';
+    return (
+      <Pressable
+        key={item.type}
+        style={isCompleted ? styles.chipCompleted : styles.chipUncompleted}
+        onPress={() => onAzkarPress(item)}
+        android_ripple={{ color: theme.colors.overlay.pressed, foreground: true }}
+      >
+        <Icon
+          familyName="MaterialIcons"
+          iconName={isCompleted ? 'check-circle' : 'radio-button-unchecked'}
+          size={14}
+          color={isCompleted ? theme.colors.state.success : theme.colors.icon.muted}
+        />
+        <Typography
+          size="xxs"
+          weight="bold"
+          color={isCompleted ? 'brandSecondary' : 'secondary'}
+          uppercase
+          style={styles.chipText}
+        >
+          {item.type}
+        </Typography>
+      </Pressable>
+    );
+  };
+
   return (
     <Card variant="elevated" padding="lg" style={styles.cardLayout}>
       <View style={styles.header}>
@@ -36,35 +74,7 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
         </View>
       </View>
 
-      <View style={styles.chipsRow}>
-        {azkar.map((item) => {
-          const isCompleted = item.status === 'completed';
-          return (
-            <Pressable
-              key={item.type}
-              style={isCompleted ? styles.chipCompleted : styles.chipUncompleted}
-              onPress={() => onAzkarPress(item)}
-              android_ripple={{ color: theme.colors.overlay.pressed, foreground: true }}
-            >
-              <Icon
-                familyName="MaterialIcons"
-                iconName={isCompleted ? 'check-circle' : 'radio-button-unchecked'}
-                size={14}
-                color={isCompleted ? theme.colors.state.success : theme.colors.icon.muted}
-              />
-              <Typography
-                size="xxs"
-                weight="bold"
-                color={isCompleted ? 'brandSecondary' : 'secondary'}
-                uppercase
-                style={styles.chipText}
-              >
-                {item.type}
-              </Typography>
-            </Pressable>
-          );
-        })}
-      </View>
+      <View style={styles.chipsRow}>{azkar.map(renderAzkarChip)}</View>
     </Card>
   );
 }
