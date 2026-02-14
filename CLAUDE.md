@@ -228,3 +228,12 @@ These paths are intentionally excluded from ESLint:
 - `src/utils/**` - To be fixed in separate PR
 - `src/services/**` - To be fixed in separate PR
 - `src/common/components/Icon/**` - Icon components use color literals
+
+## Active Technologies
+
+- TypeScript 5.9.2, React Native 0.81.5, Expo SDK 54 + `react-native-unistyles` 3.0.20, `react-i18next` 16.5.3, `react-native-reanimated` 4.1.1, `react-native-svg` (003-fix-component-issues)
+- N/A (UI refactoring only) (003-fix-component-issues)
+
+## Recent Changes
+
+- 003-fix-component-issues: Added TypeScript 5.9.2, React Native 0.81.5, Expo SDK 54 + `react-native-unistyles` 3.0.20, `react-i18next` 16.5.3, `react-native-reanimated` 4.1.1, `react-native-svg`

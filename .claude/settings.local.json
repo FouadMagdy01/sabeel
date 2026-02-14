@@ -20,7 +20,9 @@
       "Bash(grep:*)",
       "Bash(git commit:*)",
       "Bash(npm run validate:*)",
-      "Bash(npx prettier:*)"
+      "Bash(npx prettier:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:medium.com)"
     ],
     "deny": [],
     "ask": []

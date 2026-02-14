@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, Text, View } from 'react-native';
+import { Modal, Pressable, View } from 'react-native';
 
 import { Button } from '@/common/components/Button';
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
+import { Typography } from '@/common/components/Typography';
 import { styles } from './DatePicker.styles';
 import type { DatePickerProps } from './DatePicker.types';
 
@@ -196,13 +197,17 @@ export function DatePicker({
 
   const monthYearDisplay = useMemo(() => {
     const monthKey = MONTHS[viewDate.getMonth()];
-    const monthName = t(`auth.calendar.months.${monthKey}`);
+    const monthName = t(`auth.calendar.months.${monthKey}` as const);
     return `${monthName} ${viewDate.getFullYear()}`;
   }, [viewDate, t]);
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
+      {label && (
+        <Typography type="label" size="sm" style={labelStyle}>
+          {label}
+        </Typography>
+      )}
 
       <Pressable
         style={[styles.pickerButton, pickerStyle]}
@@ -211,7 +216,9 @@ export function DatePicker({
       >
         <View style={styles.pickerContent}>
           <Icon familyName="Feather" iconName="calendar" variant="muted" size={20} />
-          <Text style={styles.pickerText}>{displayText}</Text>
+          <Typography type="body" size="md" color={!value ? 'muted' : 'primary'}>
+            {displayText}
+          </Typography>
         </View>
         <View style={styles.rightActions}>
           {clearable && value && !disabled && (
@@ -223,13 +230,19 @@ export function DatePicker({
         </View>
       </Pressable>
 
-      {displayHelperText && <Text style={styles.helperText}>{displayHelperText}</Text>}
+      {displayHelperText && (
+        <Typography type="caption" size="xs" color={error ? 'error' : 'muted'}>
+          {displayHelperText}
+        </Typography>
+      )}
 
       <Modal visible={isOpen} transparent animationType="fade" onRequestClose={handleClose}>
         <Pressable style={styles.modalOverlay} onPress={handleClose}>
           <Pressable style={styles.modalContent} onPress={(e) => e.stopPropagation()}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{t('auth.calendar.selectDate')}</Text>
+              <Typography type="heading" size="lg" weight="semiBold">
+                {t('auth.calendar.selectDate')}
+              </Typography>
               <IconButton
                 familyName="Feather"
                 iconName="x"
@@ -242,7 +255,9 @@ export function DatePicker({
             <View style={styles.calendarContainer}>
               {/* Month/Year Navigation */}
               <View style={styles.monthYearSelector}>
-                <Text style={styles.monthYearText}>{monthYearDisplay}</Text>
+                <Typography type="heading" size="md" weight="medium">
+                  {monthYearDisplay}
+                </Typography>
                 <View style={styles.monthYearNav}>
                   <IconButton
                     familyName="Feather"
@@ -265,7 +280,9 @@ export function DatePicker({
               <View style={styles.weekdaysRow}>
                 {WEEKDAYS.map((day) => (
                   <View key={day} style={styles.weekdayCell}>
-                    <Text style={styles.weekdayText}>{t(`auth.calendar.weekdays.${day}`)}</Text>
+                    <Typography type="caption" size="xs" weight="medium" color="muted">
+                      {t(`auth.calendar.weekdays.${day}` as const)}
+                    </Typography>
                   </View>
                 ))}
               </View>
@@ -290,16 +307,21 @@ export function DatePicker({
                         }
                         disabled={isDisabled || !item.isCurrentMonth}
                       >
-                        <Text
-                          style={[
-                            styles.dayText,
-                            isSelected && styles.dayTextSelected,
-                            isDisabled && styles.dayTextDisabled,
-                            !item.isCurrentMonth && styles.dayTextOtherMonth,
-                          ]}
+                        <Typography
+                          type="body"
+                          size="sm"
+                          color={
+                            isSelected
+                              ? 'inverse'
+                              : isDisabled
+                                ? 'disabled'
+                                : !item.isCurrentMonth
+                                  ? 'muted'
+                                  : 'primary'
+                          }
                         >
                           {item.date.getDate()}
-                        </Text>
+                        </Typography>
                       </Pressable>
                     </View>
                   );

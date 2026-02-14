@@ -1,6 +1,14 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
 import { RADIUS_MAP, styles } from './Card.styles';
 import type { CardProps } from './Card.types';
@@ -34,7 +42,27 @@ export function Card({
   style,
   children,
 }: CardProps) {
+  const { theme } = useUnistyles();
   styles.useVariants({ variant, radius, padding });
+
+  const isDisabled = loading;
+
+  const getPressedStyle = useCallback(
+    (pressed: boolean): StyleProp<ViewStyle> => {
+      if (!pressed || isDisabled || Platform.OS === 'android') return undefined;
+      return { opacity: 0.85 };
+    },
+    [isDisabled]
+  );
+
+  const androidRipple = useMemo(() => {
+    if (Platform.OS !== 'android' || isDisabled) return undefined;
+    return {
+      color: theme.colors.overlay.pressed,
+      borderless: false,
+      foreground: true,
+    };
+  }, [theme.colors.overlay.pressed, isDisabled]);
 
   const renderLoadingOverlay = () => {
     if (!loading) return null;
@@ -58,17 +86,20 @@ export function Card({
 
     if (onPress) {
       return (
-        <Pressable onPress={onPress} disabled={loading}>
-          {({ pressed }) => (
-            <LinearGradient
-              colors={gradientColors}
-              start={gradientStart}
-              end={gradientEnd}
-              style={[gradientStyle, pressed && styles.pressedState]}
-            >
-              {renderContent()}
-            </LinearGradient>
-          )}
+        <Pressable
+          onPress={onPress}
+          disabled={isDisabled}
+          style={({ pressed }) => [styles.container, getPressedStyle(pressed)]}
+          android_ripple={androidRipple}
+        >
+          <LinearGradient
+            colors={gradientColors}
+            start={gradientStart}
+            end={gradientEnd}
+            style={gradientStyle}
+          >
+            {renderContent()}
+          </LinearGradient>
         </Pressable>
       );
     }
@@ -88,12 +119,13 @@ export function Card({
   // Regular variants with optional press interaction
   if (onPress) {
     return (
-      <Pressable onPress={onPress} disabled={loading}>
-        {({ pressed }) => (
-          <View style={[styles.container, pressed && styles.pressedState, style]}>
-            {renderContent()}
-          </View>
-        )}
+      <Pressable
+        onPress={onPress}
+        disabled={isDisabled}
+        style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
+        android_ripple={androidRipple}
+      >
+        {renderContent()}
       </Pressable>
     );
   }
