@@ -8,4 +8,7 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.text.muted,
     opacity: 0.6, // Reduced opacity for subtle dot separator
   },
+  dotWithColor: {
+    opacity: 1,
+  },
 }));
