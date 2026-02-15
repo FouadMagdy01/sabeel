@@ -23,7 +23,9 @@
       "Bash(npx prettier:*)",
       "Bash(npm test:*)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:medium.com)"
+      "WebFetch(domain:medium.com)",
+      "Bash(find:*)",
+      "Bash(/Users/fouadmagdy/projects/personal/sabeel/specs/006-signup-screen/spec.md:*)"
     ],
     "deny": [],
     "ask": []

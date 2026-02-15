@@ -3,6 +3,8 @@
     "login": {
       "title": "مرحباً بعودتك",
       "subtitle": "سجل الدخول لمتابعة رحلتك",
+      "appName": "سبيل",
+      "tagline": "ابدأ رحلتك الروحية",
       "emailPlaceholder": "أدخل بريدك الإلكتروني",
       "passwordPlaceholder": "أدخل كلمة المرور",
       "forgotPassword": "نسيت كلمة المرور؟",
@@ -10,11 +12,15 @@
       "or": "أو",
       "continueAsGuest": "المتابعة كضيف",
       "noAccount": "ليس لديك حساب؟",
-      "createAccount": "إنشاء حساب"
+      "createAccount": "إنشاء حساب",
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "serviceUnavailable": "الخدمة غير متوفرة مؤقتاً. يرجى المحاولة لاحقاً"
     },
     "signup": {
       "title": "إنشاء حساب",
       "subtitle": "انضم إلينا في رحلتك الروحية",
+      "appName": "سبيل",
+      "tagline": "ابدأ رحلتك الروحية",
       "firstNamePlaceholder": "الاسم الأول",
       "lastNamePlaceholder": "الاسم الأخير",
       "emailPlaceholder": "أدخل بريدك الإلكتروني",
@@ -24,7 +30,8 @@
       "dateOfBirthPlaceholder": "اختر تاريخ الميلاد",
       "signupButton": "إنشاء حساب",
       "alreadyHaveAccount": "لديك حساب بالفعل؟",
-      "loginLink": "تسجيل الدخول"
+      "loginLink": "تسجيل الدخول",
+      "serviceUnavailable": "الخدمة غير متوفرة مؤقتاً. يرجى المحاولة لاحقاً"
     },
     "validation": {
       "emailRequired": "البريد الإلكتروني مطلوب",
@@ -37,7 +44,9 @@
       "confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
       "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
       "countryRequired": "البلد مطلوب",
-      "dateOfBirthRequired": "تاريخ الميلاد مطلوب"
+      "dateOfBirthRequired": "تاريخ الميلاد مطلوب",
+      "ageRequirement": "يجب أن يكون عمرك 13 عاماً على الأقل للتسجيل",
+      "emailExists": "يوجد حساب بهذا البريد الإلكتروني بالفعل"
     },
     "labels": {
       "email": "البريد الإلكتروني",
@@ -75,7 +84,17 @@
         "thu": "خمي",
         "fri": "جمع",
         "sat": "سبت"
-      }
+      },
+      "time": {
+        "hours": "الساعات",
+        "minutes": "الدقائق",
+        "am": "ص",
+        "pm": "م"
+      },
+      "selectTime": "اختر الوقت",
+      "selectDateTime": "اختر التاريخ والوقت",
+      "selectYear": "اختر السنة",
+      "yearInput": "أدخل السنة"
     }
   },
   "errors": {

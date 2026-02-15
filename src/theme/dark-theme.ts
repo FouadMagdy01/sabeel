@@ -112,6 +112,13 @@ export const darkColors: ThemeColors = {
      * @examples Disabled button background, inactive toggle background
      */
     disabled: 'rgba(255, 255, 255, 0.05)',
+
+    /**
+     * Modal background - Solid dark emerald
+     * @usage Modal dialogs, bottom sheets, popovers
+     * @examples Date picker modal, select bottom sheet, dialog backgrounds
+     */
+    modal: '#0A2318',
   },
 
   text: {
@@ -346,6 +353,13 @@ export const darkColors: ThemeColors = {
      * @examples Focus ring, keyboard navigation highlight
      */
     focus: 'rgba(25, 230, 94, 0.2)',
+
+    /**
+     * Ripple effect overlay - Semi-transparent white
+     * @usage Android ripple on colored/contained button backgrounds
+     * @examples Ripple on primary button, ripple on success button
+     */
+    ripple: 'rgba(255, 255, 255, 0.2)',
 
     /**
      * Shadow color - Deep semi-transparent black

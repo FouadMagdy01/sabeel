@@ -1,7 +1,7 @@
 import { Redirect } from 'expo-router';
 
 // Replace with your actual authentication logic
-const isAuthenticated = true;
+const isAuthenticated = false;
 
 export default function Index() {
   if (isAuthenticated) {

@@ -3,6 +3,8 @@
     "login": {
       "title": "Welcome Back",
       "subtitle": "Sign in to continue your journey",
+      "appName": "Sabeel",
+      "tagline": "Begin your spiritual journey",
       "emailPlaceholder": "Enter your email",
       "passwordPlaceholder": "Enter your password",
       "forgotPassword": "Forgot Password?",
@@ -10,11 +12,15 @@
       "or": "Or",
       "continueAsGuest": "Continue as Guest",
       "noAccount": "Don't have an account?",
-      "createAccount": "Create Account"
+      "createAccount": "Create Account",
+      "invalidCredentials": "Invalid email or password",
+      "serviceUnavailable": "Service temporarily unavailable. Please try again later"
     },
     "signup": {
       "title": "Create Account",
       "subtitle": "Join us on your spiritual journey",
+      "appName": "Sabeel",
+      "tagline": "Begin your spiritual journey",
       "firstNamePlaceholder": "First name",
       "lastNamePlaceholder": "Last name",
       "emailPlaceholder": "Enter your email",
@@ -24,7 +30,8 @@
       "dateOfBirthPlaceholder": "Select date of birth",
       "signupButton": "Sign Up",
       "alreadyHaveAccount": "Already have an account?",
-      "loginLink": "Log In"
+      "loginLink": "Log In",
+      "serviceUnavailable": "Service temporarily unavailable. Please try again later"
     },
     "validation": {
       "emailRequired": "Email is required",
@@ -37,7 +44,9 @@
       "confirmPasswordRequired": "Please confirm your password",
       "passwordsDoNotMatch": "Passwords do not match",
       "countryRequired": "Country is required",
-      "dateOfBirthRequired": "Date of birth is required"
+      "dateOfBirthRequired": "Date of birth is required",
+      "ageRequirement": "You must be at least 13 years old to sign up",
+      "emailExists": "An account with this email already exists"
     },
     "labels": {
       "email": "Email",
@@ -75,7 +84,17 @@
         "thu": "Thu",
         "fri": "Fri",
         "sat": "Sat"
-      }
+      },
+      "time": {
+        "hours": "Hours",
+        "minutes": "Minutes",
+        "am": "AM",
+        "pm": "PM"
+      },
+      "selectTime": "Select Time",
+      "selectDateTime": "Select Date & Time",
+      "selectYear": "Select Year",
+      "yearInput": "Enter year"
     }
   },
   "errors": {

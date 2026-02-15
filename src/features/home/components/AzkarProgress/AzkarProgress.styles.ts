@@ -24,29 +24,31 @@ export const styles = StyleSheet.create((theme) => ({
   chipsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: theme.metrics.spacing.p12, // Updated from 8pt to 12pt per research decision
+    gap: theme.metrics.spacing.p12,
   },
   chipCompleted: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: theme.metrics.spacing.p16,
-    paddingVertical: theme.metrics.spacingV.p12, // Updated for minimum 44pt height
+    paddingVertical: theme.metrics.spacingV.p12,
     borderRadius: 100,
     backgroundColor: theme.colors.state.successBg,
     borderWidth: 1,
     borderColor: theme.colors.state.success,
+    overflow: 'hidden',
   },
   chipUncompleted: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: theme.metrics.spacing.p16,
-    paddingVertical: theme.metrics.spacingV.p12, // Updated for minimum 44pt height
+    paddingVertical: theme.metrics.spacingV.p12,
     borderRadius: 100,
     backgroundColor: theme.colors.background.input,
     borderWidth: 1,
     borderColor: theme.colors.border.default,
+    overflow: 'hidden',
   },
   chipText: {
     fontSize: 10,

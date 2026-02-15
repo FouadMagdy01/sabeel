@@ -23,16 +23,15 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.metrics.spacingV.p12, // 12pt vertical spacing between cards
   },
   cardContainer: {
-    // Container for each card with press feedback
+    borderRadius: 16,
+    borderWidth: 1,
+    overflow: 'hidden',
   },
   actCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 16,
     padding: theme.metrics.spacing.p16,
-    borderWidth: 1,
     minHeight: 64, // Ensure minimum 44pt+ touch target with padding
-    overflow: 'hidden',
   },
   cardCompleted: {
     backgroundColor: theme.colors.state.successBg,

@@ -88,6 +88,11 @@ export interface SelectProps {
   loading?: boolean;
 
   /**
+   * Left icon element (like Input component)
+   */
+  leftIcon?: React.ReactNode;
+
+  /**
    * Custom container style
    */
   containerStyle?: StyleProp<ViewStyle>;

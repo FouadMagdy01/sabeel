@@ -51,19 +51,18 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
       <Pressable
         key={act.id}
         style={({ pressed }) =>
-          [styles.cardContainer, isIOS && pressed ? styles.pressed : undefined] as ViewStyle[]
+          [
+            styles.cardContainer,
+            isCompleted && styles.cardCompleted,
+            !isCompleted && !isLocked && styles.cardUnlocked,
+            isLocked && styles.cardLocked,
+            isIOS && pressed ? styles.pressed : undefined,
+          ] as ViewStyle[]
         }
         onPress={() => onActPress(act)}
         android_ripple={{ color: theme.colors.overlay.pressed, foreground: true }}
       >
-        <View
-          style={[
-            styles.actCard,
-            isCompleted && styles.cardCompleted,
-            !isCompleted && !isLocked && styles.cardUnlocked,
-            isLocked && styles.cardLocked,
-          ]}
-        >
+        <View style={styles.actCard}>
           {/* Status badge */}
           <View style={styles.statusBadge}>
             <Icon

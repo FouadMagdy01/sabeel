@@ -8,7 +8,9 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     variants: {
       variant: {
-        contained: {},
+        contained: {
+          backgroundColor: theme.colors.brand.primary,
+        },
         outlined: {
           backgroundColor: 'transparent',
           borderWidth: 1,

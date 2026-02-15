@@ -66,28 +66,27 @@ export function Button({
   const androidRipple = useMemo(() => {
     if (Platform.OS !== 'android' || isDisabled) return undefined;
 
-    const getColorForRipple = () => {
-      if (color === 'primary') return theme.colors.brand.primary;
-      if (color === 'secondary') return theme.colors.brand.secondary;
-      if (color === 'success') return theme.colors.state.success;
-      if (color === 'error') return theme.colors.state.error;
-      if (color === 'warning') return theme.colors.state.warning;
-      if (color === 'info') return theme.colors.state.info;
-      return theme.colors.brand.primary;
-    };
-
     const rippleColor =
-      variant === 'contained' ? 'rgba(255, 255, 255, 0.25)' : `${getColorForRipple()}25`;
+      variant === 'contained' ? theme.colors.overlay.ripple : theme.colors.overlay.hover;
 
     return {
       color: rippleColor,
       borderless: false,
       foreground: true,
     };
-  }, [variant, color, theme, isDisabled]);
+  }, [variant, theme, isDisabled]);
 
   const spinnerColor = useMemo(() => {
-    if (variant === 'contained') return theme.colors.text.inverse;
+    // For contained variant, use appropriate text color based on state
+    if (variant === 'contained') {
+      // When disabled (including loading + disabled), button becomes gray background
+      // Use primary text color for visibility on gray disabled background
+      if (disabled) return theme.colors.text.primary;
+      // When only loading (not disabled), button keeps its color - use inverse
+      return theme.colors.text.inverse;
+    }
+
+    // For other variants, use the button's color scheme
     if (color === 'primary') return theme.colors.brand.primary;
     if (color === 'secondary') return theme.colors.brand.secondary;
     if (color === 'success') return theme.colors.state.success;
@@ -95,27 +94,17 @@ export function Button({
     if (color === 'warning') return theme.colors.state.warning;
     if (color === 'info') return theme.colors.state.info;
     return theme.colors.brand.primary;
-  }, [variant, color, theme]);
+  }, [variant, color, theme, disabled]);
 
   const getPressedStyle = useCallback(
     (pressed: boolean): StyleProp<ViewStyle> => {
-      if (!pressed || isDisabled || Platform.OS === 'android') return undefined;
+      if (!pressed || isDisabled || Platform.OS === 'android') return {};
       if (variant === 'contained') return { opacity: 0.85 };
       if (variant === 'transparent') return { opacity: 0.7 };
 
-      const getBaseColor = () => {
-        if (color === 'primary') return theme.colors.brand.primary;
-        if (color === 'secondary') return theme.colors.brand.secondary;
-        if (color === 'success') return theme.colors.state.success;
-        if (color === 'error') return theme.colors.state.error;
-        if (color === 'warning') return theme.colors.state.warning;
-        if (color === 'info') return theme.colors.state.info;
-        return theme.colors.brand.primary;
-      };
-
-      return { backgroundColor: `${getBaseColor()}15` };
+      return { backgroundColor: theme.colors.overlay.pressed };
     },
-    [variant, color, theme, isDisabled]
+    [variant, theme, isDisabled]
   );
 
   const renderContent = () => (

@@ -33,12 +33,6 @@ export const styles = StyleSheet.create((theme) => ({
     letterSpacing: 3,
   },
   shareButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.brand.tertiary,
-    alignItems: 'center',
-    justifyContent: 'center',
     shadowColor: theme.colors.brand.tertiary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -60,8 +54,5 @@ export const styles = StyleSheet.create((theme) => ({
   },
   referenceText: {
     fontSize: 10,
-  },
-  pressed: {
-    opacity: 0.8,
   },
 }));

@@ -5,6 +5,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 999,
+    overflow: 'hidden',
     variants: {
       variant: {
         filled: {
@@ -38,6 +39,8 @@ export const styles = StyleSheet.create((theme) => ({
       },
       color: {
         primary: {},
+        secondary: {},
+        tertiary: {},
         success: {},
         error: {},
         warning: {},
@@ -51,6 +54,57 @@ export const styles = StyleSheet.create((theme) => ({
       },
     },
     compoundVariants: [
+      // Filled variant colors
+      {
+        variant: 'filled',
+        color: 'primary',
+        styles: {
+          backgroundColor: theme.colors.brand.primary,
+        },
+      },
+      {
+        variant: 'filled',
+        color: 'secondary',
+        styles: {
+          backgroundColor: theme.colors.brand.secondary,
+        },
+      },
+      {
+        variant: 'filled',
+        color: 'tertiary',
+        styles: {
+          backgroundColor: theme.colors.brand.tertiary,
+        },
+      },
+      {
+        variant: 'filled',
+        color: 'success',
+        styles: {
+          backgroundColor: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'filled',
+        color: 'error',
+        styles: {
+          backgroundColor: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'filled',
+        color: 'warning',
+        styles: {
+          backgroundColor: theme.colors.state.warning,
+        },
+      },
+      {
+        variant: 'filled',
+        color: 'info',
+        styles: {
+          backgroundColor: theme.colors.state.info,
+        },
+      },
+      // Disabled states
       {
         variant: 'filled',
         disabled: true,
@@ -65,9 +119,24 @@ export const styles = StyleSheet.create((theme) => ({
           borderColor: theme.colors.border.disabled,
         },
       },
+      // Tinted variant colors
       {
         variant: 'tinted',
         color: 'primary',
+        styles: {
+          backgroundColor: theme.colors.state.infoBg,
+        },
+      },
+      {
+        variant: 'tinted',
+        color: 'secondary',
+        styles: {
+          backgroundColor: theme.colors.state.infoBg,
+        },
+      },
+      {
+        variant: 'tinted',
+        color: 'tertiary',
         styles: {
           backgroundColor: theme.colors.state.infoBg,
         },

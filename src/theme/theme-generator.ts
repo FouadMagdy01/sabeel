@@ -54,6 +54,9 @@ function generateLightTheme(base: chroma.Color): ThemeColors {
       elevated: '#FFFFFF',
       input: base.brighten(4.4).desaturate(3).hex(),
       disabled: base.brighten(3.2).desaturate(2.8).alpha(0.6).hex(),
+      get modal() {
+        return this.surface;
+      },
     },
 
     text: {
@@ -101,6 +104,7 @@ function generateLightTheme(base: chroma.Color): ThemeColors {
       pressed: base.alpha(0.12).hex(),
       hover: base.alpha(0.08).hex(),
       focus: secondary.alpha(0.15).hex(),
+      ripple: 'rgba(255, 255, 255, 0.25)',
       shadow: 'rgba(0, 0, 0, 0.15)',
     },
 
@@ -150,6 +154,9 @@ function generateDarkTheme(base: chroma.Color): ThemeColors {
       elevated: base.darken(2.8).desaturate(1.3).hex(),
       input: base.darken(3.2).desaturate(1.5).hex(),
       disabled: base.darken(3).desaturate(2).alpha(0.5).hex(),
+      get modal() {
+        return this.section;
+      },
     },
 
     text: {
@@ -197,6 +204,7 @@ function generateDarkTheme(base: chroma.Color): ThemeColors {
       pressed: base.alpha(0.2).hex(),
       hover: base.alpha(0.12).hex(),
       focus: secondary.alpha(0.2).hex(),
+      ripple: 'rgba(255, 255, 255, 0.2)',
       shadow: 'rgba(0, 0, 0, 0.6)',
     },
 

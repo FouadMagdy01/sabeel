@@ -231,6 +231,12 @@ These paths are intentionally excluded from ESLint:
 
 ## Active Technologies
 
+- TypeScript 5.9.2 + React Native 0.81.5, Expo SDK 54, react-native-unistyles 3.0.20, react-native-reanimated 4.1.1, react-i18next 16.5.3 (007-datepicker-enhancements)
+- N/A (component-level state only) (007-datepicker-enhancements)
+
+- TypeScript 5.9.2, React Native 0.81.5, Expo SDK 54 + react-hook-form 7.71.1, zod 4.3.6, @hookform/resolvers 5.2.2, @gorhom/bottom-sheet 5.2.8, react-native-unistyles 3.0.20, react-i18next 16.5.3 (006-signup-screen)
+- Supabase (auth + user metadata) (006-signup-screen)
+
 - TypeScript 5.9.2, React Native 0.81.5, Expo SDK 54 + `react-native-unistyles` 3.0.20, `react-i18next` 16.5.3, `react-native-reanimated` 4.1.1, `react-native-svg` (003-fix-component-issues, 004-refactor-map-renderers)
 - N/A (UI refactoring only) (003-fix-component-issues, 004-refactor-map-renderers)
 

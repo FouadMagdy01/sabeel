@@ -112,6 +112,13 @@ export const lightColors: ThemeColors = {
      * @examples Disabled button background, inactive toggle background
      */
     disabled: '#E2E8F0',
+
+    /**
+     * Modal background - Solid white
+     * @usage Modal dialogs, bottom sheets, popovers
+     * @examples Date picker modal, select bottom sheet, dialog backgrounds
+     */
+    modal: '#FFFFFF',
   },
 
   text: {
@@ -346,6 +353,13 @@ export const lightColors: ThemeColors = {
      * @examples Focus ring, keyboard navigation highlight
      */
     focus: 'rgba(16, 185, 129, 0.15)',
+
+    /**
+     * Ripple effect overlay - Semi-transparent white
+     * @usage Android ripple on colored/contained button backgrounds
+     * @examples Ripple on primary button, ripple on success button
+     */
+    ripple: 'rgba(255, 255, 255, 0.25)',
 
     /**
      * Shadow color - Semi-transparent black

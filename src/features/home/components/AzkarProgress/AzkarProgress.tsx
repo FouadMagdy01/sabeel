@@ -34,12 +34,16 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
    */
   const renderAzkarChip = (item: AzkarData): React.JSX.Element => {
     const isCompleted = item.status === 'completed';
+
     return (
       <Pressable
         key={item.type}
         style={isCompleted ? styles.chipCompleted : styles.chipUncompleted}
         onPress={() => onAzkarPress(item)}
-        android_ripple={{ color: theme.colors.overlay.pressed, foreground: true }}
+        android_ripple={{
+          color: theme.colors.overlay.pressed,
+          foreground: true,
+        }}
       >
         <Icon
           familyName="MaterialIcons"

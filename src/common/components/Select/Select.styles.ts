@@ -3,10 +3,11 @@ import { StyleSheet } from 'react-native-unistyles';
 export const styles = StyleSheet.create((theme) => ({
   container: {
     width: '100%',
+    gap: theme.metrics.spacingV.p4,
   },
   label: {
-    fontFamily: theme.fonts.medium,
-    fontSize: theme.fonts.size.sm,
+    fontFamily: theme.fonts.semiBold,
+    fontSize: theme.fonts.size.xs,
     color: theme.colors.text.secondary,
     marginBottom: theme.metrics.spacingV.p4,
     variants: {
@@ -44,17 +45,17 @@ export const styles = StyleSheet.create((theme) => ({
       size: {
         small: {
           paddingHorizontal: theme.metrics.spacing.p8,
-          paddingVertical: theme.metrics.spacingV.p4,
+          minHeight: 36,
           borderRadius: 6,
         },
         medium: {
           paddingHorizontal: theme.metrics.spacing.p12,
-          paddingVertical: theme.metrics.spacingV.p8,
+          minHeight: 44,
           borderRadius: 8,
         },
         large: {
           paddingHorizontal: theme.metrics.spacing.p16,
-          paddingVertical: theme.metrics.spacingV.p12,
+          minHeight: 52,
           borderRadius: 10,
         },
       },
@@ -107,6 +108,10 @@ export const styles = StyleSheet.create((theme) => ({
       },
     ],
   },
+  leftElement: {
+    marginRight: theme.metrics.spacing.p8,
+    justifyContent: 'center',
+  },
   selectContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -155,7 +160,7 @@ export const styles = StyleSheet.create((theme) => ({
     },
   },
   bottomSheetBackground: {
-    backgroundColor: theme.colors.background.surface,
+    backgroundColor: theme.colors.background.modal,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -171,7 +176,7 @@ export const styles = StyleSheet.create((theme) => ({
     paddingVertical: theme.metrics.spacingV.p12,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border.subtle,
-    backgroundColor: theme.colors.background.surface,
+    backgroundColor: theme.colors.background.modal,
     marginBottom: theme.metrics.spacingV.p8,
   },
   modalTitle: {
@@ -214,7 +219,7 @@ export const styles = StyleSheet.create((theme) => ({
     paddingVertical: theme.metrics.spacingV.p8,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border.subtle,
-    backgroundColor: theme.colors.background.surface,
+    backgroundColor: theme.colors.background.modal,
   },
   loadingContainer: {
     paddingVertical: theme.metrics.spacingV.p32,

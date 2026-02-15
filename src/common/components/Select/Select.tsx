@@ -8,6 +8,7 @@ import { useUnistyles } from 'react-native-unistyles';
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { SearchInput } from '@/common/components/SearchInput';
+import { Typography } from '@/common/components/Typography';
 import { styles } from './Select.styles';
 import type { SelectOption, SelectProps } from './Select.types';
 
@@ -69,6 +70,7 @@ export function Select({
   searchable = false,
   allowClear = false,
   loading = false,
+  leftIcon,
   containerStyle,
   selectStyle,
   labelStyle,
@@ -135,17 +137,30 @@ export function Select({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
+      {label && (
+        <Typography type="label" size="xs" weight="semiBold" color="secondary" style={labelStyle}>
+          {label}
+        </Typography>
+      )}
 
       <Pressable
         style={[styles.selectButton, selectStyle]}
         onPress={handleOpen}
         disabled={disabled}
       >
+        {leftIcon && <View style={styles.leftElement}>{leftIcon}</View>}
+
         <View style={styles.selectContent}>
           {selectedOption?.icon && <Text style={styles.selectIcon}>{selectedOption.icon}</Text>}
-          <Text style={styles.selectText}>{displayText}</Text>
+          <Typography
+            type="body"
+            size={size === 'small' ? 'xs' : size === 'large' ? 'md' : 'sm'}
+            color={!value ? 'muted' : 'primary'}
+          >
+            {displayText}
+          </Typography>
         </View>
+
         <View style={styles.rightActions}>
           {allowClear && value && !disabled && (
             <Pressable onPress={handleClear} style={styles.clearButton} hitSlop={8}>
@@ -156,7 +171,11 @@ export function Select({
         </View>
       </Pressable>
 
-      {displayHelperText && <Text style={styles.helperText}>{displayHelperText}</Text>}
+      {displayHelperText && (
+        <Typography type="caption" size="xs" color={error ? 'error' : 'tertiary'}>
+          {displayHelperText}
+        </Typography>
+      )}
 
       <BottomSheetModal
         ref={bottomSheetModalRef}

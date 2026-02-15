@@ -1,10 +1,10 @@
 import { Card } from '@/common/components/Card';
 import { Icon } from '@/common/components/Icon';
+import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ViewStyle } from 'react-native';
-import { Platform, Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import type { VerseData } from '../../types';
 import { styles } from './VerseOfTheDay.styles';
@@ -17,8 +17,6 @@ interface VerseOfTheDayProps {
 export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
-
-  const isIOS = Platform.OS === 'ios';
 
   return (
     <Card variant="elevated" radius="xl" padding="lg" style={styles.container}>
@@ -38,24 +36,16 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
             {t('screens.home.verseOfTheDay.label')}
           </Typography>
         </View>
-        <Pressable
-          style={({ pressed }) =>
-            [styles.shareButton, isIOS && pressed ? styles.pressed : undefined] as ViewStyle[]
-          }
+        <IconButton
+          familyName="MaterialIcons"
+          iconName="share"
+          variant="filled"
+          color="tertiary"
+          iconVariant="inverse"
+          size="medium"
           onPress={onShare}
-          android_ripple={{
-            color: theme.colors.overlay.pressed,
-            borderless: true,
-            foreground: true,
-          }}
-        >
-          <Icon
-            familyName="MaterialIcons"
-            iconName="share"
-            size={20}
-            color={theme.colors.icon.inverse}
-          />
-        </Pressable>
+          style={styles.shareButton}
+        />
       </View>
 
       <View style={styles.contentArea}>

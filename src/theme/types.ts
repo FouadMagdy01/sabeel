@@ -97,6 +97,13 @@ export interface BackgroundColors {
    * @examples Disabled button background, inactive toggle background
    */
   disabled: string;
+
+  /**
+   * Modal background
+   * @usage Modal dialogs, bottom sheets, popovers
+   * @examples Date picker modal, select bottom sheet, dialog backgrounds
+   */
+  modal: string;
 }
 
 /**
@@ -346,6 +353,13 @@ export interface OverlayColors {
    * @examples Focus ring, keyboard navigation highlight
    */
   focus: string;
+
+  /**
+   * Ripple effect overlay for contained buttons
+   * @usage Android ripple effect on colored/contained button backgrounds
+   * @examples Ripple on primary button, ripple on success button
+   */
+  ripple: string;
 
   /**
    * Shadow color

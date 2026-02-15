@@ -3,6 +3,7 @@ import { Text, TextInput, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 
 import { IconButton } from '@/common/components/IconButton';
+import { Typography } from '@/common/components/Typography';
 import { styles } from './Input.styles';
 import type { InputProps } from './Input.types';
 
@@ -123,10 +124,10 @@ export function Input({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <Text style={[styles.label, labelStyle]}>
+        <Typography type="label" size="xs" weight="semiBold" color="secondary" style={labelStyle}>
           {label}
           {required && <Text style={styles.requiredIndicator}> *</Text>}
-        </Text>
+        </Typography>
       )}
 
       <View style={[styles.inputContainer, inputContainerStyle]}>
