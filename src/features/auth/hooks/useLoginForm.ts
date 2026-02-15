@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { Keyboard } from 'react-native';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Keyboard } from 'react-native';
 import { createLoginSchema, type LoginFormData } from '../schemas/login.schema';
-import { supabase } from '@/integrations/supabase';
+import { login } from '../services/authService';
+import type { LoginParams } from '../services/authService.types';
 
 export function useLoginForm() {
   const { t } = useTranslation();
@@ -15,7 +17,7 @@ export function useLoginForm() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
@@ -23,7 +25,14 @@ export function useLoginForm() {
   });
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+
+  const loginMutation = useMutation({
+    mutationFn: (params: LoginParams) => login(params),
+    onSuccess: () => {
+      // After successful login, navigate to main app
+      router.replace('/(main)/(tabs)');
+    },
+  });
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
@@ -31,31 +40,39 @@ export function useLoginForm() {
 
   const handleLogin = async (data: LoginFormData) => {
     Keyboard.dismiss();
-    setServerError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    // Map form data to LoginParams
+    const params: LoginParams = {
       email: data.email,
       password: data.password,
-    });
+    };
 
-    if (error) {
-      // Map Supabase error to localized message
-      if (error.message.includes('Invalid') || error.message.includes('credentials')) {
-        setServerError(t('auth.login.invalidCredentials'));
-      } else {
-        setServerError(t('errors.network'));
-      }
-      return;
-    }
-
-    // Navigate to main app on success
-    router.replace('/(main)/(tabs)');
+    await loginMutation.mutateAsync(params);
   };
+
+  // Map mutation error to localized message
+  const serverError = loginMutation.error
+    ? (() => {
+        const errorMessage = loginMutation.error.message;
+
+        if (errorMessage.includes('Invalid') || errorMessage.includes('credentials')) {
+          return t('auth.authError.invalidCredentials');
+        }
+        if (
+          errorMessage.toLowerCase().includes('network') ||
+          errorMessage.toLowerCase().includes('timeout')
+        ) {
+          return t('auth.authError.networkError');
+        }
+
+        return t('auth.authError.unknownError');
+      })()
+    : null;
 
   return {
     control,
     errors,
-    isSubmitting,
+    isSubmitting: loginMutation.isPending,
     serverError,
     isPasswordVisible,
     togglePasswordVisibility,

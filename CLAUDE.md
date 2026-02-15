@@ -231,6 +231,9 @@ These paths are intentionally excluded from ESLint:
 
 ## Active Technologies
 
+- TypeScript 5.9.2, React Native 0.81.5, Expo SDK 54 + @supabase/supabase-js 2.x, @tanstack/react-query 5.90.20, react-hook-form 7.71.1, zod 4.3.6, @hookform/resolvers 5.2.2, react-i18next 16.5.3, react-native-mmkv 4.1.0 (008-supabase-auth-refactor)
+- Supabase PostgreSQL (remote), MMKV (local session persistence via custom storage adapter in `src/integrations/supabase.ts`) (008-supabase-auth-refactor)
+
 - TypeScript 5.9.2 + React Native 0.81.5, Expo SDK 54, react-native-unistyles 3.0.20, react-native-reanimated 4.1.1, react-i18next 16.5.3 (007-datepicker-enhancements)
 - N/A (component-level state only) (007-datepicker-enhancements)
 

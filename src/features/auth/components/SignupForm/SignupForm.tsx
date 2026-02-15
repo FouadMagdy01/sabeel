@@ -267,7 +267,8 @@ export function SignupForm() {
           <Button
             variant="text"
             size="small"
-            onPress={() => router.push('/(auth)')}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onPress={() => router.push('/(auth)' as any)}
             accessibilityRole="link"
             accessibilityLabel={t('auth.signup.loginLink')}
           >

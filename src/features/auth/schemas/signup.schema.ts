@@ -19,7 +19,9 @@ export const createSignupSchema = (t: TFunction) =>
       password: z
         .string()
         .min(1, t('auth.validation.passwordRequired'))
-        .min(8, t('auth.validation.passwordMinLength')),
+        .min(8, t('auth.validation.passwordMinLength'))
+        .regex(/[a-zA-Z]/, t('auth.authError.passwordNeedsLetterAndNumber'))
+        .regex(/[0-9]/, t('auth.authError.passwordNeedsLetterAndNumber')),
       confirmPassword: z.string().min(1, t('auth.validation.confirmPasswordRequired')),
       country: z.string().min(1, t('auth.validation.countryRequired')),
       dateOfBirth: z.date(),

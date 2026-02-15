@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { Keyboard } from 'react-native';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Keyboard } from 'react-native';
 import { createSignupSchema, type SignupFormData } from '../schemas/signup.schema';
-import { supabase } from '@/integrations/supabase';
+import { register } from '../services/authService';
+import type { RegisterParams } from '../services/authService.types';
 
 export function useSignupForm() {
   const { t } = useTranslation();
@@ -16,16 +18,16 @@ export function useSignupForm() {
     control,
     handleSubmit,
     trigger,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(schema),
     mode: 'onSubmit',
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      firstName: 'Fouad',
+      lastName: 'Magdy',
+      email: 'fouad.magdy7515@gmail.com',
+      password: 'FouadMagdy2024@',
+      confirmPassword: 'FouadMagdy2024@',
       country: '',
       dateOfBirth: undefined,
     },
@@ -33,7 +35,15 @@ export function useSignupForm() {
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+
+  const registerMutation = useMutation({
+    mutationFn: (params: RegisterParams) => register(params),
+    onSuccess: () => {
+      // After successful registration and auto-login, navigate to main app
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      router.replace('/(main)/(tabs)' as any);
+    },
+  });
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
@@ -45,46 +55,52 @@ export function useSignupForm() {
 
   const handleSignup = async (data: SignupFormData) => {
     Keyboard.dismiss();
-    setServerError(null);
 
-    const { error } = await supabase.auth.signUp({
+    // Map form data to RegisterParams
+    const params: RegisterParams = {
       email: data.email,
       password: data.password,
-      options: {
-        data: {
-          first_name: data.firstName,
-          last_name: data.lastName,
-          country: data.country,
-          date_of_birth: data.dateOfBirth.toISOString().split('T')[0], // ISO date string
-        },
-      },
-    });
+      firstName: data.firstName,
+      lastName: data.lastName,
+      country: data.country,
+      dateOfBirth: data.dateOfBirth.toISOString().split('T')[0], // Convert Date to "YYYY-MM-DD"
+    };
 
-    if (error) {
-      // Map Supabase error to localized message
-      if (error.message.includes('already registered')) {
-        setServerError(t('auth.validation.emailExists'));
-      } else if (error.message.includes('Invalid email')) {
-        setServerError(t('auth.validation.emailInvalid'));
-      } else if (
-        error.message.toLowerCase().includes('network') ||
-        error.message.toLowerCase().includes('timeout')
-      ) {
-        setServerError(t('errors.network'));
-      } else {
-        setServerError(t('auth.signup.serviceUnavailable'));
-      }
-      return;
-    }
-
-    // Navigate to main app on success
-    router.replace('/(main)/(tabs)');
+    await registerMutation.mutateAsync(params);
   };
+
+  // Map mutation error to localized message
+  const serverError = registerMutation.error
+    ? (() => {
+        const errorMessage = registerMutation.error.message;
+
+        if (
+          errorMessage.includes('already registered') ||
+          errorMessage.includes('User already registered')
+        ) {
+          return t('auth.authError.emailAlreadyRegistered');
+        }
+        if (
+          errorMessage.toLowerCase().includes('network') ||
+          errorMessage.toLowerCase().includes('timeout')
+        ) {
+          return t('auth.authError.networkError');
+        }
+        if (errorMessage.includes('Password must be at least 8')) {
+          return t('auth.authError.passwordTooShort');
+        }
+        if (errorMessage.includes('letter and') || errorMessage.includes('letter and one number')) {
+          return t('auth.authError.passwordNeedsLetterAndNumber');
+        }
+
+        return t('auth.authError.registrationFailed');
+      })()
+    : null;
 
   return {
     control,
     errors,
-    isSubmitting,
+    isSubmitting: registerMutation.isPending,
     serverError,
     isPasswordVisible,
     isConfirmVisible,

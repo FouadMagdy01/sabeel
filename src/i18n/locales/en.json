@@ -95,6 +95,18 @@
       "selectDateTime": "Select Date & Time",
       "selectYear": "Select Year",
       "yearInput": "Enter year"
+    },
+    "authError": {
+      "invalidCredentials": "Invalid email or password",
+      "emailAlreadyRegistered": "An account with this email already exists",
+      "networkError": "Network error. Please check your connection and try again",
+      "sessionExpired": "Your session has expired. Please log in again",
+      "registrationFailed": "Registration failed. Please try again",
+      "logoutFailed": "Logout failed. Please try again",
+      "profileLoadFailed": "Failed to load profile data",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordNeedsLetterAndNumber": "Password must contain at least one letter and one number",
+      "unknownError": "An unexpected error occurred. Please try again"
     }
   },
   "errors": {

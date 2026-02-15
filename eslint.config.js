@@ -12,21 +12,42 @@ module.exports = defineConfig([
   expoConfig,
   {
     ignores: [
-      'dist/*',
+      // Dependencies
       'node_modules/*',
+      // Build outputs
+      'dist/*',
+      'build/*',
+      '.expo/*',
+      'web-build/*',
+      // Platform-specific
       'android/*',
       'ios/*',
-      '.expo/*',
-      'build/*',
-      'supabase/functions/**/*', // Supabase Edge Functions - separate TS project
+      // Coverage
+      'coverage/*',
+      // Generated files
+      '*.tsbuildinfo',
+      'expo-env.d.ts',
+      // Cache
+      '.metro-health-check*',
+      // Environment
+      '.env*',
+      // Minified files
+      '*.min.js',
+      '*.min.css',
+      // Supabase Edge Functions - separate TS project
+      'supabase/functions/**/*',
+      // Theme and config files
       'src/theme/EXAMPLES.tsx', // Documentation file with intentional inline styles
-      'src/utils/**/*', // Utility files - to be fixed in separate PR
-      'src/services/**/*', // Service files - to be fixed in separate PR
-      'src/i18n/config.ts', // i18n config
       'src/theme/config.ts', // Theme config
       'src/theme/unistyles.ts', // Unistyles config
-      'index.ts', // Root index
-      'src/common/components/Icon/**/*', // Icon components
+      'src/i18n/config.ts', // i18n config
+      // Utility and service files - to be fixed in separate PR
+      'src/utils/**/*',
+      'src/services/**/*',
+      // Icon components
+      'src/common/components/Icon/**/*',
+      // Root index
+      'index.ts',
     ],
   },
   {
