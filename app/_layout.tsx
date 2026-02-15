@@ -1,12 +1,21 @@
-import { AuthProvider, QueryProvider } from '@/providers';
+import { AuthProvider, QueryProvider, useAuth } from '@/providers';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
+import { StyleSheet } from 'react-native-unistyles';
 
 function RootNavigator() {
-  // TODO: Replace with useAuthStore isAuthenticated when auth flow is finalized
-  const isAuthenticated = false;
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -35,10 +44,10 @@ export default function RootLayout() {
   );
 }
 
-// const styles = StyleSheet.create((_theme) => ({
-//   loadingContainer: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// }));
+const styles = StyleSheet.create((_theme) => ({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+}));
