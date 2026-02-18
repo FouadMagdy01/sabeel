@@ -25,7 +25,13 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:medium.com)",
       "Bash(find:*)",
-      "Bash(/Users/fouadmagdy/projects/personal/sabeel/specs/006-signup-screen/spec.md:*)"
+      "Bash(/Users/fouadmagdy/projects/personal/sabeel/specs/006-signup-screen/spec.md:*)",
+      "Bash(python3 -c \"import sys,json; deps={**json.load\\(sys.stdin\\).get\\(''''dependencies'''',{}\\), **json.load\\(open\\(''''package.json''''\\)\\).get\\(''''devDependencies'''',{}\\)}; print\\(''''react-native-zip-archive'''' in deps, ''''jszip'''' in deps\\)\")",
+      "Bash(npm uninstall:*)",
+      "Bash(git stash:*)",
+      "WebSearch",
+      "WebFetch(domain:www.unistyl.es)",
+      "Bash(node -e:*)"
     ],
     "deny": [],
     "ask": []

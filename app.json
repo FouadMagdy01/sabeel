@@ -55,6 +55,13 @@
             "./assets/fonts/Cairo-Black.ttf"
           ]
         }
+      ],
+      "expo-sqlite",
+      [
+        "expo-asset",
+        {
+          "assets": ["./assets/quran/quran_ayah_bounds.db"]
+        }
       ]
     ],
     "experiments": {

@@ -1,4 +1,11 @@
-import { CurrentPrayerCard, DailyTodos, StatsCard, VerseOfTheDay } from '@/features/home';
+import {
+  CurrentPrayerCard,
+  DailyTodos,
+  QuickAccess,
+  StatsCard,
+  VerseOfTheDay,
+} from '@/features/home';
+import { QUICK_ACCESS_ITEMS } from '@/features/home/constants';
 import {
   CURRENT_PRAYER_COUNTDOWN,
   DUMMY_AZKAR,
@@ -34,6 +41,13 @@ export default function HomeScreen() {
           countdown={CURRENT_PRAYER_COUNTDOWN}
         />
 
+        <QuickAccess
+          items={QUICK_ACCESS_ITEMS}
+          onItemPress={(item) => console.warn('Quick access pressed:', item.id)}
+        />
+
+        <VerseOfTheDay verse={DUMMY_VERSE} onShare={() => console.warn('Share verse')} />
+
         <DailyTodos
           prayers={DUMMY_PRAYERS}
           azkar={DUMMY_AZKAR}
@@ -42,8 +56,6 @@ export default function HomeScreen() {
           onAzkarPress={(a) => console.warn('Azkar pressed:', a.type)}
           onActPress={(a) => console.warn('Act pressed:', a.title)}
         />
-
-        <VerseOfTheDay verse={DUMMY_VERSE} onShare={() => console.warn('Share verse')} />
       </ScrollView>
     </View>
   );

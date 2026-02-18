@@ -1,10 +1,21 @@
 import { AuthProvider, QueryProvider, useAuth } from '@/providers';
+import i18n from '@/i18n/config';
+import { initializeTheme } from '@/theme/themeManager';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, I18nManager, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { StyleSheet } from 'react-native-unistyles';
+
+// Initialize theme from persisted preferences (synchronous)
+initializeTheme();
+
+// Force RTL if saved language is Arabic
+const isArabic = i18n.language === 'ar';
+if (isArabic !== I18nManager.isRTL) {
+  I18nManager.forceRTL(isArabic);
+}
 
 function RootNavigator() {
   const { isAuthenticated, isLoading } = useAuth();
