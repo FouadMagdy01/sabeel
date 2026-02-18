@@ -92,8 +92,8 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
     if (variant === 'filled' && disabled) return { variant: 'primary' };
     if (variant === 'filled') return { variant: 'inverse' };
 
-    if (variant === 'tinted') return { color: ICON_COLORS[color](theme) };
-    return { variant: 'primary' };
+    // Ghost, tinted, and outlined variants all respect the color prop
+    return { color: ICON_COLORS[color](theme) };
   };
 
   const iconSize = ICON_SIZES[size];

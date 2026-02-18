@@ -2,17 +2,11 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import type { ComponentSize } from '../shared.types';
 
-interface StyleProps {
-  size: ComponentSize;
-  fullWidth: boolean;
-  disabled: boolean;
-}
-
 /**
  * Size-based configuration for SegmentedControl variants.
  * Maps each size to specific metrics for consistent sizing.
  */
-const SIZE_CONFIG = {
+export const SIZE_CONFIG = {
   small: {
     containerPadding: 3,
     segmentPaddingVertical: 6,
@@ -46,10 +40,98 @@ const SIZE_CONFIG = {
 } as const;
 
 /**
- * Creates dynamic styles for SegmentedControl based on props.
- * Supports size variants, fullWidth layout, and disabled states.
+ * Module-level stylesheet - created once, reactive to theme changes
+ * without flicker. Size/fullWidth/disabled are applied as style overrides.
  */
-export const createStyles = ({ size, fullWidth, disabled }: StyleProps) => {
+export const styles = StyleSheet.create((theme) => ({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border.default,
+  },
+  containerFullWidth: {
+    alignSelf: 'stretch',
+  },
+  containerDisabled: {
+    opacity: 0.5,
+  },
+  segment: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  segmentFullWidth: {
+    flex: 1,
+  },
+  segmentActive: {
+    backgroundColor: theme.colors.brand.primary,
+    shadowColor: theme.colors.brand.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: theme.colors.shadow.elevationMedium,
+  },
+  segmentDisabled: {
+    opacity: 0.4,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  segmentText: {
+    fontFamily: theme.fonts.semiBold,
+    color: theme.colors.text.muted,
+    textAlign: 'center',
+  },
+  segmentTextActive: {
+    fontFamily: theme.fonts.bold,
+    color: theme.colors.text.inverse,
+  },
+  segmentTextDisabled: {
+    color: theme.colors.state.disabled,
+  },
+}));
+
+/**
+ * Get size-dependent numeric styles (no theme colors, safe for inline use).
+ */
+export function getSizeStyles(size: ComponentSize) {
+  const config = SIZE_CONFIG[size];
+  return {
+    container: {
+      borderRadius: config.borderRadius,
+      padding: config.containerPadding,
+    },
+    segment: {
+      paddingVertical: config.segmentPaddingVertical,
+      paddingHorizontal: config.segmentPaddingHorizontal,
+      borderRadius: config.segmentBorderRadius,
+      minWidth: 80,
+    },
+    iconContainer: {
+      marginRight: config.iconSpacing,
+      width: config.iconSize,
+      height: config.iconSize,
+    },
+    fontSize: config.fontSize,
+  };
+}
+
+/**
+ * @deprecated Use styles + getSizeStyles() instead.
+ * Kept for backward compatibility only.
+ */
+export const createStyles = ({
+  size,
+  fullWidth,
+  disabled,
+}: {
+  size: ComponentSize;
+  fullWidth: boolean;
+  disabled: boolean;
+}) => {
   const config = SIZE_CONFIG[size];
 
   return StyleSheet.create((theme) => ({
@@ -108,45 +190,3 @@ export const createStyles = ({ size, fullWidth, disabled }: StyleProps) => {
     },
   }));
 };
-
-/**
- * Legacy static styles export for backward compatibility.
- * New code should use createStyles() with props instead.
- * @deprecated
- */
-export const styles = StyleSheet.create((theme) => ({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.background.surface,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: theme.colors.border.default,
-    padding: 4,
-  },
-  segment: {
-    flex: 1,
-    paddingVertical: theme.metrics.spacingV.p8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
-  },
-  segmentActive: {
-    backgroundColor: theme.colors.brand.primary,
-    shadowColor: theme.colors.brand.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: theme.colors.shadow.elevationMedium,
-  },
-  segmentText: {
-    fontSize: theme.fonts.size.xs,
-    fontFamily: theme.fonts.semiBold,
-    color: theme.colors.text.muted,
-  },
-  segmentTextActive: {
-    fontSize: theme.fonts.size.xs,
-    fontFamily: theme.fonts.bold,
-    color: theme.colors.text.inverse,
-  },
-}));

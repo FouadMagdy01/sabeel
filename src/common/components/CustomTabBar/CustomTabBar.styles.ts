@@ -6,10 +6,8 @@ export const styles = StyleSheet.create((theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    marginBottom: 24,
-    marginHorizontal: 8,
-    height: 72,
     borderRadius: 20,
+    paddingTop: theme.metrics.spacingV.p12,
     overflow: 'hidden',
   },
   blur: {

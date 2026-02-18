@@ -1,6 +1,7 @@
 import { CommonActions } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import { Platform, Pressable, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 import { styles } from './CustomTabBar.styles';
 import type { CustomTabBarProps } from './CustomTabBar.types';
@@ -19,9 +20,9 @@ const ICON_SIZE = 22;
 export function CustomTabBar({ state, descriptors, navigation }: CustomTabBarProps) {
   const { theme } = useUnistyles();
   const isDark = theme.colors.mode === 'dark';
-
+  const { bottom } = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: bottom + theme.metrics.spacingV.p8 }]}>
       <BlurView
         experimentalBlurMethod="dimezisBlurView"
         intensity={Platform.OS === 'ios' ? 40 : 80}
