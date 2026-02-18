@@ -5,3 +5,4 @@ export { AzkarProgress } from './AzkarProgress';
 export { RandomActsGrid } from './RandomActsGrid';
 export { VerseOfTheDay } from './VerseOfTheDay';
 export { DailyTodos } from './DailyTodos';
+export { QuickAccess } from './QuickAccess';
