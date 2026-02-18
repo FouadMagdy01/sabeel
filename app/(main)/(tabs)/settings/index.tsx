@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { Alert, I18nManager, ScrollView, View } from 'react-native';
+import { Alert, I18nManager, Platform, ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useUnistyles, StyleSheet } from 'react-native-unistyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useBottomPadding } from '@/hooks/useBottomPadding';
 import { Button } from '@/common/components/Button';
 import { Toggle } from '@/common/components/Toggle';
 import { Typography } from '@/common/components/Typography';
@@ -27,6 +28,7 @@ export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const { theme } = useUnistyles();
   const insets = useSafeAreaInsets();
+  const bottomPadding = useBottomPadding();
   const { isAuthenticated } = useAuth();
   const logoutMutation = useLogoutMutation();
 
@@ -46,21 +48,33 @@ export default function SettingsScreen() {
 
   const handleLanguageChange = useCallback(
     (language: string) => {
-      setCurrentLanguage(language);
-      void i18n.changeLanguage(language);
-      setItem(STORAGE_KEYS.preferences.language, language);
-
-      // RTL requires app reload to take effect
       const isArabic = language === 'ar';
-      if (isArabic !== I18nManager.isRTL) {
-        I18nManager.forceRTL(isArabic);
+      const needsRTLChange = isArabic !== I18nManager.isRTL;
+
+      if (Platform.OS === 'android' && needsRTLChange) {
+        // On Android, defer language change until user confirms restart
+        // because Android needs a full restart for RTL to take effect
         Alert.alert(t('settings.language.restartRequired'), t('settings.language.restartMessage'), [
           { text: t('common.cancel'), style: 'cancel' },
           {
             text: t('common.restart'),
-            onPress: reloadApp,
+            onPress: () => {
+              setCurrentLanguage(language);
+              void i18n.changeLanguage(language);
+              setItem(STORAGE_KEYS.preferences.language, language);
+              I18nManager.forceRTL(isArabic);
+              reloadApp();
+            },
           },
         ]);
+      } else {
+        // On iOS or when no RTL change needed, apply immediately
+        setCurrentLanguage(language);
+        void i18n.changeLanguage(language);
+        setItem(STORAGE_KEYS.preferences.language, language);
+        if (needsRTLChange) {
+          I18nManager.forceRTL(isArabic);
+        }
       }
     },
     [t, i18n]
@@ -81,10 +95,13 @@ export default function SettingsScreen() {
     // Placeholder for future navigation
   }, []);
 
+  // Inline background color to avoid flicker during theme switching
+  const bgColor = { backgroundColor: theme.colors.background.app };
+
   return (
     <ScrollView
-      style={[styles.container, { paddingTop: insets.top }]}
-      contentContainerStyle={styles.contentContainer}
+      style={[styles.container, bgColor, { paddingTop: insets.top }]}
+      contentContainerStyle={[styles.contentContainer, { paddingBottom: bottomPadding }]}
       showsVerticalScrollIndicator={false}
     >
       <Typography type="heading" size="2xl" weight="bold" style={styles.screenTitle}>
@@ -180,14 +197,11 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create(() => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background.app,
   },
-  contentContainer: {
-    paddingBottom: spacingV.p40,
-  },
+  contentContainer: {},
   screenTitle: {
     paddingHorizontal: 16,
     paddingTop: spacingV.p16,

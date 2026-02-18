@@ -53,6 +53,20 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
    * The function can be tested independently by providing mock PrayerData.
    * The PulsingDot component is already extracted and used for the current prayer status.
    */
+  // Inline color styles to avoid flicker during theme switching
+  const circleCompletedColors = {
+    backgroundColor: theme.colors.brand.primary,
+    shadowColor: theme.colors.brand.primary,
+  };
+  const circleCurrentColors = {
+    borderColor: theme.colors.brand.primary,
+    backgroundColor: theme.colors.background.surface,
+  };
+  const circleUpcomingColors = {
+    borderColor: theme.colors.border.default,
+    backgroundColor: theme.colors.background.surfaceAlt,
+  };
+
   const renderPrayerCircle = (prayer: PrayerData): React.JSX.Element => {
     return (
       <Pressable
@@ -66,7 +80,7 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
         }}
       >
         {prayer.status === 'completed' && (
-          <View style={styles.circleCompleted}>
+          <View style={[styles.circleCompleted, circleCompletedColors]}>
             <Icon
               familyName="MaterialIcons"
               iconName="check"
@@ -76,12 +90,12 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
           </View>
         )}
         {prayer.status === 'current' && (
-          <View style={styles.circleCurrent}>
+          <View style={[styles.circleCurrent, circleCurrentColors]}>
             <PulsingDot />
           </View>
         )}
         {prayer.status === 'upcoming' && (
-          <View style={styles.circleUpcoming}>
+          <View style={[styles.circleUpcoming, circleUpcomingColors]}>
             <Icon
               familyName="MaterialCommunityIcons"
               iconName="circle-outline"

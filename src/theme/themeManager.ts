@@ -1,5 +1,5 @@
-import { UnistylesRuntime } from 'react-native-unistyles';
 import { getItem, setItem, STORAGE_KEYS } from '@/utils/storage';
+import { UnistylesRuntime } from 'react-native-unistyles';
 import {
   compositeThemeName,
   parseCompositeThemeName,

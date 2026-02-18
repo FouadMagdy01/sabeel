@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 
-export const styles = StyleSheet.create(() => ({
+export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -14,8 +14,8 @@ export const styles = StyleSheet.create(() => ({
     marginTop: 4,
   },
   statLabel: {
-    fontSize: 9,
-    letterSpacing: -0.5,
+    fontSize: theme.fonts.size.xxs,
+    letterSpacing: -0.3,
     marginTop: 2,
   },
 }));

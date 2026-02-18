@@ -3,7 +3,11 @@ import { spacing, spacingV, hs, vs } from '@/theme/metrics';
 
 export const ICON_BG_SIZE = hs(36);
 
-export const styles = StyleSheet.create((theme) => ({
+/**
+ * Layout-only styles. Theme colors applied inline via useUnistyles()
+ * to avoid flicker during theme switching.
+ */
+export const styles = StyleSheet.create(() => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -12,16 +16,14 @@ export const styles = StyleSheet.create((theme) => ({
   },
   separator: {
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border.subtle,
   },
   iconContainer: {
     width: ICON_BG_SIZE,
     height: ICON_BG_SIZE,
     borderRadius: hs(10),
-    backgroundColor: `${theme.colors.brand.primary}15`,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.p12,
+    marginEnd: spacing.p12,
   },
   content: {
     flex: 1,
@@ -30,6 +32,6 @@ export const styles = StyleSheet.create((theme) => ({
     marginTop: vs(2),
   },
   rightContainer: {
-    marginLeft: spacing.p8,
+    marginStart: spacing.p8,
   },
 }));

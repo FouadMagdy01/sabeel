@@ -47,6 +47,23 @@ export function Card({
 
   const isDisabled = loading;
 
+  // Inline color styles to avoid flicker during theme switching
+  const variantColors =
+    variant === 'gradient'
+      ? {}
+      : variant === 'elevated'
+        ? {
+            backgroundColor: theme.colors.background.surface,
+            borderColor: theme.colors.border.default,
+            shadowColor: theme.colors.shadow.color,
+          }
+        : variant === 'outlined'
+          ? {
+              backgroundColor: theme.colors.background.surface,
+              borderColor: theme.colors.border.default,
+            }
+          : { backgroundColor: theme.colors.background.surface };
+
   const getPressedStyle = useCallback(
     (pressed: boolean): StyleProp<ViewStyle> => {
       if (!pressed || isDisabled || Platform.OS === 'android') return undefined;
@@ -64,10 +81,12 @@ export function Card({
     };
   }, [theme.colors.overlay.pressed, isDisabled]);
 
+  const loadingOverlayColor = { backgroundColor: theme.colors.background.disabled };
+
   const renderLoadingOverlay = () => {
     if (!loading) return null;
     return (
-      <View style={styles.loadingOverlay}>
+      <View style={[styles.loadingOverlay, loadingOverlayColor]}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -122,7 +141,7 @@ export function Card({
       <Pressable
         onPress={onPress}
         disabled={isDisabled}
-        style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
+        style={({ pressed }) => [styles.container, variantColors, getPressedStyle(pressed), style]}
         android_ripple={androidRipple}
       >
         {renderContent()}
@@ -130,5 +149,5 @@ export function Card({
     );
   }
 
-  return <View style={[styles.container, style]}>{renderContent()}</View>;
+  return <View style={[styles.container, variantColors, style]}>{renderContent()}</View>;
 }

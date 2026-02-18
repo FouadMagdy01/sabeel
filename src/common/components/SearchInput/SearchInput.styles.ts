@@ -10,10 +10,8 @@ export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.input,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: theme.colors.border.default,
     gap: theme.metrics.spacing.p8,
     variants: {
       size: {
@@ -36,7 +34,6 @@ export const styles = StyleSheet.create((theme) => ({
       disabled: {
         true: {
           opacity: 0.5,
-          backgroundColor: theme.colors.background.disabled,
         },
         false: {},
       },
@@ -45,7 +42,6 @@ export const styles = StyleSheet.create((theme) => ({
   input: {
     flex: 1,
     fontFamily: theme.fonts.regular,
-    color: theme.colors.text.primary,
     padding: 0,
     variants: {
       size: {

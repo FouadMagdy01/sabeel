@@ -18,14 +18,11 @@ export const styles = StyleSheet.create((theme) => ({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: theme.colors.state.successBg,
-    borderWidth: 1,
-    borderColor: theme.colors.state.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
   verseLabel: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
   },
   arabicText: {
     lineHeight: 32,

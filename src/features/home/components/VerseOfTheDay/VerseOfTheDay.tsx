@@ -18,8 +18,18 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
 
+  // Inline color styles to avoid flicker during theme switching
+  const containerBorderColor = { borderTopColor: theme.colors.brand.tertiary };
+  const labelDotColor = { backgroundColor: theme.colors.brand.tertiary };
+  const shareButtonShadow = { shadowColor: theme.colors.brand.tertiary };
+
   return (
-    <Card variant="elevated" radius="xl" padding="lg" style={styles.container}>
+    <Card
+      variant="elevated"
+      radius="xl"
+      padding="lg"
+      style={[styles.container, containerBorderColor]}
+    >
       <View style={styles.decorativeIcon}>
         <Icon
           familyName="MaterialIcons"
@@ -31,7 +41,7 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
 
       <View style={styles.headerRow}>
         <View style={styles.labelRow}>
-          <View style={styles.labelDot} />
+          <View style={[styles.labelDot, labelDotColor]} />
           <Typography size="xxs" weight="bold" color="brandTertiary" uppercase style={styles.label}>
             {t('screens.home.verseOfTheDay.label')}
           </Typography>
@@ -44,7 +54,7 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
           iconVariant="inverse"
           size="medium"
           onPress={onShare}
-          style={styles.shareButton}
+          style={[styles.shareButton, shareButtonShadow]}
         />
       </View>
 

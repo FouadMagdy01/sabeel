@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 
-import { styles, getSizeStyles } from './SegmentedControl.styles';
+import { getSizeStyles, styles } from './SegmentedControl.styles';
 import type { SegmentOption, SegmentedControlProps } from './SegmentedControl.types';
 
 /**
@@ -118,10 +118,26 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
     }
   };
 
+  // Inline color styles derived from theme to avoid flicker during theme switching.
+  // StyleSheet.create colors update via JSI while useUnistyles() triggers React re-render,
+  // causing a race condition. Inline styles from useUnistyles() update atomically with React.
+  const containerColors = {
+    backgroundColor: theme.colors.background.surface,
+    borderColor: theme.colors.border.default,
+  };
+  const activeSegmentColors = {
+    backgroundColor: theme.colors.brand.primary,
+    shadowColor: theme.colors.brand.primary,
+  };
+  const textColor = { color: theme.colors.text.muted };
+  const activeTextColor = { color: theme.colors.text.inverse };
+  const disabledTextColor = { color: theme.colors.state.disabled };
+
   return (
     <View
       style={[
         styles.container,
+        containerColors,
         sizeStyles.container,
         fullWidth && styles.containerFullWidth,
         disabled && styles.containerDisabled,
@@ -139,6 +155,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
               sizeStyles.segment,
               fullWidth && styles.segmentFullWidth,
               isActive && styles.segmentActive,
+              isActive && activeSegmentColors,
               isSegmentDisabled && styles.segmentDisabled,
             ]}
             onPress={() => !isSegmentDisabled && handleChange(option.value)}
@@ -161,9 +178,11 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
             <Text
               style={[
                 styles.segmentText,
+                textColor,
                 { fontSize: theme.fonts.size[sizeStyles.fontSize] },
                 isActive && styles.segmentTextActive,
-                isSegmentDisabled && styles.segmentTextDisabled,
+                isActive && activeTextColor,
+                isSegmentDisabled && disabledTextColor,
               ]}
             >
               {option.label}

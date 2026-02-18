@@ -5,6 +5,7 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
 import type { DownloadedSura } from '../../types';
 import { styles } from './DownloadedSuraCard.styles';
@@ -15,10 +16,13 @@ interface DownloadedSuraCardProps {
 
 const DownloadedSuraCard: React.FC<DownloadedSuraCardProps> = ({ sura }) => {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
+
+  const badgeColors = { backgroundColor: `${theme.colors.brand.primary}15` };
 
   return (
     <Card variant="outlined" style={styles.cardLayout}>
-      <View style={styles.numberBadge}>
+      <View style={[styles.numberBadge, badgeColors]}>
         <Typography size="md" weight="bold" color="brandPrimary">
           {sura.id}
         </Typography>

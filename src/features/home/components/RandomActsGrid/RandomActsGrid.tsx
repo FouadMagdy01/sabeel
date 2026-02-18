@@ -2,7 +2,7 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ViewStyle } from 'react-native';
 import { Platform, Pressable, View } from 'react-native';
@@ -23,7 +23,7 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
   const progress = completedCount / acts.length;
   const percentage = Math.round(progress * 100);
 
-  // Order acts: completed first, then unlocked, then locked (research decision #6)
+  // Order acts: completed first, then unlocked, then locked
   const completedActs = acts.filter((a) => a.status === 'completed');
   const unlockedActs = acts.filter((a) => a.status === 'unlocked');
   const lockedActs = acts.filter((a) => a.status === 'locked');
@@ -31,21 +31,21 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
 
   const isIOS = Platform.OS === 'ios';
 
-  /**
-   * Renders an individual random act card with status-based styling (completed, unlocked, locked).
-   *
-   * @param act - The random act data containing id, title, icon, and status
-   * @returns A pressable card component with status badge, icon, and localized text
-   *
-   * @remarks
-   * This is a pure render function that accesses theme, translations (t), platform (isIOS),
-   * and event handlers from parent scope via closure.
-   * The function can be tested independently by providing mock RandomActData.
-   * Platform-specific behavior: iOS uses pressed state styling, Android uses ripple effects.
-   */
+  const androidRipple = useMemo(
+    () =>
+      Platform.OS === 'android'
+        ? { color: theme.colors.overlay.pressed, foreground: true, borderless: false }
+        : undefined,
+    [theme.colors.overlay.pressed]
+  );
+
   const renderActCard = (act: RandomActData): React.JSX.Element => {
     const isCompleted = act.status === 'completed';
     const isLocked = act.status === 'locked';
+
+    const cardBg = isCompleted
+      ? { backgroundColor: theme.colors.state.successBg }
+      : { backgroundColor: theme.colors.background.surfaceAlt };
 
     return (
       <Pressable
@@ -53,38 +53,19 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
         style={({ pressed }) =>
           [
             styles.cardContainer,
-            isCompleted && styles.cardCompleted,
-            !isCompleted && !isLocked && styles.cardUnlocked,
-            isLocked && styles.cardLocked,
+            cardBg,
             isIOS && pressed ? styles.pressed : undefined,
           ] as ViewStyle[]
         }
         onPress={() => onActPress(act)}
-        android_ripple={{ color: theme.colors.overlay.pressed, foreground: true }}
+        android_ripple={androidRipple}
       >
         <View style={styles.actCard}>
-          {/* Status badge */}
-          <View style={styles.statusBadge}>
-            <Icon
-              familyName="MaterialIcons"
-              iconName={isCompleted ? 'check-circle' : isLocked ? 'lock' : 'add'}
-              size={14}
-              color={
-                isCompleted
-                  ? theme.colors.state.success
-                  : isLocked
-                    ? theme.colors.icon.muted
-                    : theme.colors.brand.tertiary
-              }
-            />
-          </View>
-
-          {/* Card content */}
           <View style={styles.cardContent}>
             <Icon
               familyName={act.iconFamily}
               iconName={act.iconName}
-              size={24}
+              size={22}
               color={
                 isCompleted
                   ? theme.colors.state.success
@@ -94,21 +75,24 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
               }
             />
             <View style={styles.textContainer}>
-              <Typography size="xxs" weight="bold" color="brandSecondary" uppercase>
+              <Typography size="sm" weight="semiBold" color={isLocked ? 'muted' : 'primary'}>
                 {act.title}
               </Typography>
-              <Typography
-                size="xxs"
-                weight="bold"
-                color={isCompleted ? 'brandPrimary' : 'tertiary'}
-                uppercase
-                style={styles.statusText}
-              >
-                {isCompleted
-                  ? t('screens.home.dailyTodos.completed')
-                  : t('screens.home.dailyTodos.tapToComplete')}
-              </Typography>
             </View>
+          </View>
+          <View style={styles.statusIcon}>
+            <Icon
+              familyName="MaterialIcons"
+              iconName={isCompleted ? 'check-circle' : isLocked ? 'lock' : 'radio-button-unchecked'}
+              size={20}
+              color={
+                isCompleted
+                  ? theme.colors.state.success
+                  : isLocked
+                    ? theme.colors.icon.muted
+                    : theme.colors.icon.muted
+              }
+            />
           </View>
         </View>
       </Pressable>

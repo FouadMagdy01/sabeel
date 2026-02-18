@@ -40,16 +40,15 @@ export const SIZE_CONFIG = {
 } as const;
 
 /**
- * Module-level stylesheet - created once, reactive to theme changes
- * without flicker. Size/fullWidth/disabled are applied as style overrides.
+ * Module-level stylesheet - layout and metrics only.
+ * Theme COLORS are applied inline via useUnistyles() to avoid
+ * flicker during theme switching (race between JSI style update and React re-render).
  */
 export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.surface,
     borderWidth: 1,
-    borderColor: theme.colors.border.default,
   },
   containerFullWidth: {
     alignSelf: 'stretch',
@@ -66,8 +65,6 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
   },
   segmentActive: {
-    backgroundColor: theme.colors.brand.primary,
-    shadowColor: theme.colors.brand.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -82,15 +79,10 @@ export const styles = StyleSheet.create((theme) => ({
   },
   segmentText: {
     fontFamily: theme.fonts.semiBold,
-    color: theme.colors.text.muted,
     textAlign: 'center',
   },
   segmentTextActive: {
     fontFamily: theme.fonts.bold,
-    color: theme.colors.text.inverse,
-  },
-  segmentTextDisabled: {
-    color: theme.colors.state.disabled,
   },
 }));
 

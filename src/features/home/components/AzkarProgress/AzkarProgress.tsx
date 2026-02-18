@@ -2,9 +2,9 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import type { AzkarData } from '../../types';
 import { styles } from './AzkarProgress.styles';
@@ -22,42 +22,41 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
   const progress = completedCount / azkar.length;
   const percentage = Math.round(progress * 100);
 
-  /**
-   * Renders an individual azkar chip with completion status styling.
-   *
-   * @param item - The azkar data containing type and status
-   * @returns A pressable chip component with icon and label
-   *
-   * @remarks
-   * This is a pure render function that accesses theme and event handlers from parent scope via closure.
-   * The function can be tested independently by providing mock AzkarData.
-   */
+  const isIOS = Platform.OS === 'ios';
+
+  const androidRipple = useMemo(
+    () =>
+      Platform.OS === 'android'
+        ? { color: theme.colors.overlay.pressed, foreground: true, borderless: false }
+        : undefined,
+    [theme.colors.overlay.pressed]
+  );
+
   const renderAzkarChip = (item: AzkarData): React.JSX.Element => {
     const isCompleted = item.status === 'completed';
+
+    const chipBg = isCompleted
+      ? { backgroundColor: theme.colors.state.successBg }
+      : { backgroundColor: theme.colors.background.surfaceAlt };
 
     return (
       <Pressable
         key={item.type}
-        style={isCompleted ? styles.chipCompleted : styles.chipUncompleted}
+        style={({ pressed }) => [
+          styles.chip,
+          chipBg,
+          isIOS && pressed ? styles.pressed : undefined,
+        ]}
         onPress={() => onAzkarPress(item)}
-        android_ripple={{
-          color: theme.colors.overlay.pressed,
-          foreground: true,
-        }}
+        android_ripple={androidRipple}
       >
         <Icon
           familyName="MaterialIcons"
           iconName={isCompleted ? 'check-circle' : 'radio-button-unchecked'}
-          size={14}
+          size={16}
           color={isCompleted ? theme.colors.state.success : theme.colors.icon.muted}
         />
-        <Typography
-          size="xxs"
-          weight="bold"
-          color={isCompleted ? 'brandSecondary' : 'secondary'}
-          uppercase
-          style={styles.chipText}
-        >
+        <Typography size="xs" weight="semiBold" color={isCompleted ? 'primary' : 'secondary'}>
           {item.type}
         </Typography>
       </Pressable>
@@ -71,7 +70,7 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
           {t('screens.home.dailyTodos.azkar')}
         </Typography>
         <View style={styles.progressRow}>
-          <Typography size="xs" weight="bold" style={styles.progressText}>
+          <Typography size="xs" weight="bold" color="brandPrimary">
             {percentage}%
           </Typography>
           <CircularProgress progress={progress} color={theme.colors.state.info} />

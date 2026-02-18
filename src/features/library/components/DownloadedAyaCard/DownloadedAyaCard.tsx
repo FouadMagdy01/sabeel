@@ -4,6 +4,7 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
 import type { DownloadedAya } from '../../types';
 import { styles } from './DownloadedAyaCard.styles';
@@ -14,12 +15,15 @@ interface DownloadedAyaCardProps {
 
 const DownloadedAyaCard: React.FC<DownloadedAyaCardProps> = ({ aya }) => {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
+
+  const badgeColors = { backgroundColor: `${theme.colors.brand.primary}15` };
 
   return (
     <Card variant="outlined" style={styles.cardLayout}>
       <View style={styles.headerRow}>
         <View style={styles.suraInfo}>
-          <View style={styles.numberBadge}>
+          <View style={[styles.numberBadge, badgeColors]}>
             <Typography size="xs" weight="bold" color="brandPrimary">
               {aya.suraNumber}
             </Typography>

@@ -6,13 +6,15 @@ export const styles = StyleSheet.create((theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     paddingTop: theme.metrics.spacingV.p12,
     overflow: 'hidden',
   },
   blur: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     overflow: 'hidden',
   },
   tabRow: {

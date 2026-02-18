@@ -141,7 +141,12 @@ const CircularProgress = ({
       {(children ?? showLabel) && (
         <View style={styles.labelContainer}>
           {children ?? (
-            <Typography type="caption" size="xs" weight="medium" style={styles.label}>
+            <Typography
+              type="caption"
+              size="xs"
+              weight="medium"
+              style={[styles.label, { color: theme.colors.text.primary }]}
+            >
               {percentageText}
             </Typography>
           )}

@@ -18,39 +18,21 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: 8,
   },
-  progressText: {
-    color: theme.colors.state.info,
-  },
   chipsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: theme.metrics.spacing.p12,
+    gap: theme.metrics.spacing.p8,
   },
-  chipCompleted: {
+  chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: theme.metrics.spacing.p16,
-    paddingVertical: theme.metrics.spacingV.p12,
-    borderRadius: 100,
-    backgroundColor: theme.colors.state.successBg,
-    borderWidth: 1,
-    borderColor: theme.colors.state.success,
+    gap: 6,
+    paddingHorizontal: theme.metrics.spacing.p12,
+    paddingVertical: theme.metrics.spacingV.p8,
+    borderRadius: 10,
     overflow: 'hidden',
   },
-  chipUncompleted: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: theme.metrics.spacing.p16,
-    paddingVertical: theme.metrics.spacingV.p12,
-    borderRadius: 100,
-    backgroundColor: theme.colors.background.input,
-    borderWidth: 1,
-    borderColor: theme.colors.border.default,
-    overflow: 'hidden',
-  },
-  chipText: {
-    fontSize: 10,
+  pressed: {
+    opacity: 0.85,
   },
 }));

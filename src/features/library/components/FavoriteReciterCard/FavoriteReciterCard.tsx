@@ -19,9 +19,15 @@ const FavoriteReciterCard: React.FC<FavoriteReciterCardProps> = ({ reciter }) =>
   const { t } = useTranslation();
   const { theme } = useUnistyles();
 
+  // Inline color styles to avoid flicker during theme switching
+  const avatarColors = {
+    backgroundColor: `${theme.colors.brand.primary}15`,
+    borderColor: `${theme.colors.brand.primary}30`,
+  };
+
   return (
     <Card variant="outlined" style={styles.cardLayout}>
-      <View style={styles.avatar}>
+      <View style={[styles.avatar, avatarColors]}>
         <Icon
           familyName="MaterialIcons"
           iconName="person"

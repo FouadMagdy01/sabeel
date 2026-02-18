@@ -20,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
           backgroundColor: 'transparent',
         },
         tinted: {
-          backgroundColor: theme.colors.state.successBg,
+          backgroundColor: `${theme.colors.brand.primary}18`,
         },
       },
       size: {
@@ -124,21 +124,21 @@ export const styles = StyleSheet.create((theme) => ({
         variant: 'tinted',
         color: 'primary',
         styles: {
-          backgroundColor: theme.colors.state.infoBg,
+          backgroundColor: `${theme.colors.brand.primary}18`,
         },
       },
       {
         variant: 'tinted',
         color: 'secondary',
         styles: {
-          backgroundColor: theme.colors.state.infoBg,
+          backgroundColor: `${theme.colors.brand.secondary}15`,
         },
       },
       {
         variant: 'tinted',
         color: 'tertiary',
         styles: {
-          backgroundColor: theme.colors.state.infoBg,
+          backgroundColor: `${theme.colors.brand.tertiary}18`,
         },
       },
       {

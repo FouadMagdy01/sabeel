@@ -10,9 +10,6 @@ export const styles = StyleSheet.create((theme) => ({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: theme.colors.state.successBg,
-    borderWidth: 1,
-    borderColor: theme.colors.state.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -26,7 +23,7 @@ export const styles = StyleSheet.create((theme) => ({
     marginTop: 2,
   },
   metaText: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
     letterSpacing: 0.3,
   },
   actionsRow: {

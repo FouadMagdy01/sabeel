@@ -249,6 +249,10 @@ export function QuranPage({
   const selectionPath = buildSelectionPath(bounds, selectedKeys, ratio);
   const hasSelection = selectedKeys.size > 0;
   const imageSource = imageUri ? { uri: imageUri } : BUNDLED_PAGE_1;
+  const imageColors = {
+    backgroundColor: theme.colors.background.app,
+    tintColor: theme.colors.text.primary,
+  };
 
   const selectedAyahs = useMemo(() => {
     if (!hasSelection) return [];
@@ -303,7 +307,7 @@ export function QuranPage({
       <View style={styles.container}>
         <Image
           source={imageSource}
-          style={[styles.image, { width: screenWidth, height: pageHeight }]}
+          style={[styles.image, imageColors, { width: screenWidth, height: pageHeight }]}
           contentFit="contain"
           pointerEvents="none"
         />
@@ -334,14 +338,11 @@ export function QuranPage({
   );
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create(() => ({
   container: {
     position: 'relative',
   },
-  image: {
-    backgroundColor: theme.colors.background.app,
-    tintColor: theme.colors.text.primary,
-  },
+  image: {},
   svgOverlay: {
     position: 'absolute',
     top: 0,

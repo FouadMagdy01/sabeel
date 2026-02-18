@@ -22,8 +22,15 @@ type ToolbarProps = {
 export function Toolbar({ actions, showLabels = false, style }: ToolbarProps) {
   const { theme } = useUnistyles();
 
+  // Inline color styles to avoid flicker during theme switching
+  const containerColors = {
+    backgroundColor: theme.colors.brand.secondary,
+    shadowColor: theme.colors.shadow.color,
+  };
+  const labelColor = { color: theme.colors.text.inverse };
+
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, containerColors, style]}>
       {actions.map((action) => {
         const androidRipple =
           Platform.OS === 'android' && !action.disabled
@@ -44,7 +51,7 @@ export function Toolbar({ actions, showLabels = false, style }: ToolbarProps) {
           >
             <Icon {...action.icon} size={20} variant={action.disabled ? 'muted' : 'inverse'} />
             {showLabels && action.label != null && (
-              <Text style={styles.label} numberOfLines={1}>
+              <Text style={[styles.label, labelColor]} numberOfLines={1}>
                 {action.label}
               </Text>
             )}
@@ -59,12 +66,10 @@ const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.brand.secondary,
     borderRadius: 12,
     paddingVertical: theme.metrics.spacingV.p4,
     paddingHorizontal: theme.metrics.spacing.p4,
     gap: theme.metrics.spacing.p4,
-    shadowColor: theme.colors.shadow.color,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -82,7 +87,6 @@ const styles = StyleSheet.create((theme) => ({
     opacity: 0.4,
   },
   label: {
-    color: theme.colors.text.inverse,
     fontSize: theme.fonts.size.xxs,
     fontFamily: theme.fonts.medium,
     marginTop: 2,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { I18nManager, Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 import { styles, TOGGLE_CONSTANTS } from './Toggle.styles';
@@ -7,11 +7,12 @@ import type { ToggleProps } from './Toggle.types';
 
 export function Toggle({ value, onValueChange, disabled = false, size = 'medium' }: ToggleProps) {
   const constants = TOGGLE_CONSTANTS[size];
+  const direction = I18nManager.isRTL ? -1 : 1;
 
   const thumbAnimatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateX: withTiming(value ? constants.translateX : 0, { duration: 200 }),
+        translateX: withTiming(value ? constants.translateX * direction : 0, { duration: 200 }),
       },
     ],
   }));

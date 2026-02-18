@@ -14,12 +14,14 @@ import {
   DUMMY_STATS,
   DUMMY_VERSE,
 } from '@/features/home/data';
+import { useBottomPadding } from '@/hooks/useBottomPadding';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native-unistyles';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const bottomPadding = useBottomPadding();
 
   return (
     <View style={homeStyles.screen}>
@@ -28,7 +30,7 @@ export default function HomeScreen() {
           homeStyles.content,
           {
             paddingTop: insets.top + 16,
-            paddingBottom: insets.bottom + 120,
+            paddingBottom: bottomPadding,
           },
         ]}
         showsVerticalScrollIndicator={false}

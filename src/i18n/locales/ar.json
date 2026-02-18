@@ -226,6 +226,14 @@
       "theme": "مظهر التطبيق",
       "support": "الدعم والقانونية"
     },
+    "themes": {
+      "default": "الافتراضي",
+      "ocean": "المحيط",
+      "desert": "الصحراء",
+      "sapphire": "الياقوت",
+      "rose": "الورد",
+      "royal": "الملكي"
+    },
     "preferences": {
       "darkMode": "الوضع الداكن",
       "language": "اللغة"

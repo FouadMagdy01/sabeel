@@ -14,9 +14,12 @@ const RecommendedReciterCard: React.FC<RecommendedReciterCardProps> = ({ reciter
   const { t } = useTranslation();
   const { theme } = useUnistyles();
 
+  // Inline color styles to avoid flicker during theme switching
+  const imageBgColor = { backgroundColor: `${theme.colors.brand.primary}15` };
+
   return (
     <Card variant="outlined" padding="sm" style={styles.cardLayout}>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer, imageBgColor]}>
         <Icon
           familyName="MaterialIcons"
           iconName="person"

@@ -101,6 +101,38 @@ export function Input({
     onChangeText?.('');
   }, [onChangeText]);
 
+  // Inline color styles to avoid flicker during theme switching
+  const inputContainerColors = (() => {
+    if (error) return { borderColor: theme.colors.state.error };
+    if (success) return { borderColor: theme.colors.state.success };
+    if (isFocused)
+      return variant === 'underlined'
+        ? { borderBottomColor: theme.colors.border.focus }
+        : { borderColor: theme.colors.border.focus };
+    return variant === 'outlined'
+      ? { borderColor: theme.colors.border.default }
+      : variant === 'filled'
+        ? { backgroundColor: theme.colors.background.input }
+        : { borderBottomColor: theme.colors.border.default };
+  })();
+  const inputTextColor = { color: theme.colors.text.primary };
+  const helperTextColor = {
+    color: error
+      ? theme.colors.state.error
+      : success
+        ? theme.colors.state.success
+        : theme.colors.text.muted,
+  };
+  const requiredColor = { color: theme.colors.state.error };
+  const charCountColor = { color: theme.colors.text.muted };
+  const labelColor = {
+    color: error
+      ? theme.colors.state.error
+      : disabled
+        ? theme.colors.text.muted
+        : theme.colors.text.secondary,
+  };
+
   const displayHelperText = error && errorText ? errorText : helperText;
   const showClearButton = clearable && value && value.length > 0;
   const currentLength = value?.length ?? 0;
@@ -124,17 +156,23 @@ export function Input({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <Typography type="label" size="xs" weight="semiBold" color="secondary" style={labelStyle}>
+        <Typography
+          type="label"
+          size="xs"
+          weight="semiBold"
+          color="secondary"
+          style={[labelColor, labelStyle]}
+        >
           {label}
-          {required && <Text style={styles.requiredIndicator}> *</Text>}
+          {required && <Text style={[styles.requiredIndicator, requiredColor]}> *</Text>}
         </Typography>
       )}
 
-      <View style={[styles.inputContainer, inputContainerStyle]}>
+      <View style={[styles.inputContainer, inputContainerColors, inputContainerStyle]}>
         {leftElement && <View style={styles.leftElement}>{leftElement}</View>}
 
         <TextInput
-          style={[styles.input, style]}
+          style={[styles.input, inputTextColor, style]}
           editable={!disabled}
           placeholderTextColor={theme.colors.text.muted}
           onFocus={handleFocus}
@@ -151,9 +189,11 @@ export function Input({
       {(Boolean(displayHelperText) || showCount) && (
         <View style={styles.helperTextRow}>
           {displayHelperText && (
-            <Text style={[styles.helperText, helperTextStyle]}>{displayHelperText}</Text>
+            <Text style={[styles.helperText, helperTextColor, helperTextStyle]}>
+              {displayHelperText}
+            </Text>
           )}
-          {showCount && <Text style={styles.charCount}>{charCountText}</Text>}
+          {showCount && <Text style={[styles.charCount, charCountColor]}>{charCountText}</Text>}
         </View>
       )}
     </View>

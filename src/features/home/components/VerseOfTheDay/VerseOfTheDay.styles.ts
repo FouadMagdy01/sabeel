@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const styles = StyleSheet.create((theme) => ({
   container: {
-    borderTopColor: theme.colors.brand.tertiary,
     borderTopWidth: 1,
   },
   decorativeIcon: {
@@ -26,14 +25,12 @@ export const styles = StyleSheet.create((theme) => ({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: theme.colors.brand.tertiary,
   },
   label: {
-    fontSize: 10,
+    fontSize: theme.fonts.size.xxs,
     letterSpacing: 3,
   },
   shareButton: {
-    shadowColor: theme.colors.brand.tertiary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -53,6 +50,6 @@ export const styles = StyleSheet.create((theme) => ({
     marginBottom: 8,
   },
   referenceText: {
-    fontSize: 10,
+    fontSize: theme.fonts.size.xxs,
   },
 }));

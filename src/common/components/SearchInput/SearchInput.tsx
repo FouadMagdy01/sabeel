@@ -60,8 +60,15 @@ export function SearchInput({
   const shouldShowClear = showClearButton ?? Boolean(value && value.length > 0);
   const iconSize = SEARCH_INPUT_ICON_SIZES[size];
 
+  // Inline color styles to avoid flicker during theme switching
+  const containerColors = {
+    backgroundColor: disabled ? theme.colors.background.disabled : theme.colors.background.input,
+    borderColor: theme.colors.border.default,
+  };
+  const inputColor = { color: theme.colors.text.primary };
+
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[styles.container, containerColors, containerStyle]}>
       {loading ? (
         <ActivityIndicator
           size="small"
@@ -77,7 +84,7 @@ export function SearchInput({
         />
       )}
       <TextInput
-        style={[styles.input, style]}
+        style={[styles.input, inputColor, style]}
         placeholderTextColor={theme.colors.text.muted}
         value={value}
         editable={!disabled}

@@ -19,19 +19,23 @@ export function SettingsRow({
   const { theme } = useUnistyles();
 
   const androidRipple = useMemo(() => {
-    if (Platform.OS !== 'android' || !onPress) return undefined;
-    return { color: theme.colors.overlay.pressed, borderless: false };
-  }, [theme, onPress]);
+    if (Platform.OS !== 'android') return undefined;
+    return { color: theme.colors.overlay.pressed, borderless: false, foreground: true };
+  }, [theme]);
 
   const getPressedStyle = useCallback((pressed: boolean): StyleProp<ViewStyle> => {
     if (!pressed || Platform.OS === 'android') return undefined;
-    return { opacity: 0.7 };
+    return { opacity: 0.85 };
   }, []);
 
+  // Inline color styles to avoid flicker during theme switching
+  const separatorColor = { borderBottomColor: theme.colors.border.subtle };
+  const iconBgColor = { backgroundColor: `${theme.colors.brand.primary}15` };
+
   const content = (
-    <View style={[styles.container, !isLast && styles.separator]}>
+    <View style={[styles.container, !isLast && styles.separator, !isLast && separatorColor]}>
       {icon && (
-        <View style={styles.iconContainer}>
+        <View style={[styles.iconContainer, iconBgColor]}>
           <Icon
             familyName={iconFamily}
             iconName={icon}

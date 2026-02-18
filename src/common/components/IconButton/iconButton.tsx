@@ -141,7 +141,7 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
 
   const getPressedStyle = (pressed: boolean) => {
     if (!pressed || isDisabled || Platform.OS === 'android') return {};
-    return { opacity: 0.7 };
+    return { opacity: 0.85 };
   };
 
   const renderPressable = () => (

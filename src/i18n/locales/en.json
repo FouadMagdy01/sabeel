@@ -226,6 +226,14 @@
       "theme": "App Theme",
       "support": "Support & Legal"
     },
+    "themes": {
+      "default": "Default",
+      "ocean": "Ocean",
+      "desert": "Desert",
+      "sapphire": "Sapphire",
+      "rose": "Rose",
+      "royal": "Royal"
+    },
     "preferences": {
       "darkMode": "Dark Mode",
       "language": "Language"
