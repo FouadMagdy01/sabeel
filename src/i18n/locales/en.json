@@ -145,6 +145,13 @@
         "completed": "Completed",
         "tapToComplete": "Tap to complete"
       },
+      "quickAccess": {
+        "sectionTitle": "Quick Access",
+        "dua": "Dua",
+        "wird": "Wird",
+        "tasbeeh": "Tasbeeh",
+        "quran": "Quran"
+      },
       "verseOfTheDay": {
         "label": "Verse of the Day"
       }
@@ -153,7 +160,22 @@
       "test": "Test",
       "pause": "Pause",
       "playerReady": "Player is ready!",
-      "settingUp": "Setting up player..."
+      "settingUp": "Setting up player...",
+      "download": {
+        "title": "Download Quran Pages",
+        "subtitle": "Download all 604 pages (~80 MB) to read the Quran offline.",
+        "button": "Download",
+        "downloading": "Downloading Quran pages…",
+        "extracting": "Extracting pages…",
+        "cancelButton": "Cancel"
+      },
+      "toolbar": {
+        "tafseer": "Tafseer",
+        "share": "Share",
+        "play": "Play",
+        "settings": "Settings",
+        "bookmark": "Bookmark"
+      }
     },
     "prayers": {
       "title": "Prayers"
@@ -195,7 +217,42 @@
       "signup": "Sign Up"
     }
   },
+  "settings": {
+    "profile": {
+      "guestMode": "Guest"
+    },
+    "sections": {
+      "preferences": "App Preferences",
+      "theme": "App Theme",
+      "support": "Support & Legal"
+    },
+    "preferences": {
+      "darkMode": "Dark Mode",
+      "language": "Language"
+    },
+    "language": {
+      "restartRequired": "Restart Required",
+      "restartMessage": "Please restart the app for the language change to take full effect."
+    },
+    "support": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "about": "About Sabeel",
+      "contact": "Contact Us",
+      "report": "Report an Issue"
+    },
+    "signOut": {
+      "button": "Sign Out",
+      "confirmTitle": "Sign Out",
+      "confirmMessage": "Are you sure you want to sign out?",
+      "confirm": "Sign Out"
+    },
+    "version": "Version {{version}}"
+  },
   "common": {
-    "noOptionsFound": "No options found"
+    "noOptionsFound": "No options found",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "restart": "Restart"
   }
 }

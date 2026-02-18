@@ -145,6 +145,13 @@
         "completed": "مكتمل",
         "tapToComplete": "اضغط للإكمال"
       },
+      "quickAccess": {
+        "sectionTitle": "وصول سريع",
+        "dua": "دعاء",
+        "wird": "ورد",
+        "tasbeeh": "تسبيح",
+        "quran": "قرآن"
+      },
       "verseOfTheDay": {
         "label": "آية اليوم"
       }
@@ -153,7 +160,22 @@
       "test": "تشغيل",
       "pause": "إيقاف",
       "playerReady": "المشغل جاهز!",
-      "settingUp": "جاري إعداد المشغل..."
+      "settingUp": "جاري إعداد المشغل...",
+      "download": {
+        "title": "تحميل صفحات القرآن",
+        "subtitle": "حمّل جميع الـ 604 صفحات (~80 ميجابايت) لقراءة القرآن بدون إنترنت.",
+        "button": "تحميل",
+        "downloading": "جاري تحميل صفحات القرآن…",
+        "extracting": "جاري استخراج الصفحات…",
+        "cancelButton": "إلغاء"
+      },
+      "toolbar": {
+        "tafseer": "تفسير",
+        "share": "مشاركة",
+        "play": "تشغيل",
+        "settings": "إعدادات",
+        "bookmark": "علامة"
+      }
     },
     "prayers": {
       "title": "الصلوات"
@@ -195,7 +217,42 @@
       "signup": "إنشاء حساب"
     }
   },
+  "settings": {
+    "profile": {
+      "guestMode": "ضيف"
+    },
+    "sections": {
+      "preferences": "تفضيلات التطبيق",
+      "theme": "مظهر التطبيق",
+      "support": "الدعم والقانونية"
+    },
+    "preferences": {
+      "darkMode": "الوضع الداكن",
+      "language": "اللغة"
+    },
+    "language": {
+      "restartRequired": "إعادة التشغيل مطلوبة",
+      "restartMessage": "يرجى إعادة تشغيل التطبيق لتطبيق تغيير اللغة بالكامل."
+    },
+    "support": {
+      "privacy": "سياسة الخصوصية",
+      "terms": "شروط الخدمة",
+      "about": "عن سبيل",
+      "contact": "اتصل بنا",
+      "report": "الإبلاغ عن مشكلة"
+    },
+    "signOut": {
+      "button": "تسجيل الخروج",
+      "confirmTitle": "تسجيل الخروج",
+      "confirmMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+      "confirm": "تسجيل الخروج"
+    },
+    "version": "الإصدار {{version}}"
+  },
   "common": {
-    "noOptionsFound": "لا توجد خيارات"
+    "noOptionsFound": "لا توجد خيارات",
+    "cancel": "إلغاء",
+    "ok": "حسناً",
+    "restart": "إعادة التشغيل"
   }
 }
