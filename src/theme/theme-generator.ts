@@ -2,13 +2,25 @@ import chroma from 'chroma-js';
 import type { ThemeColors, ThemeConfig, Theme } from './types';
 
 /**
- * Generates a complete theme from a base color
+ * Generates a complete theme from a base color.
  *
- * This function creates a comprehensive, accessible color system for both
- * light and dark modes, ensuring proper contrast ratios and visual harmony.
+ * Design principles extracted from the hand-crafted Sabeel theme:
  *
- * @param config - Theme configuration with base color and mode
- * @returns Complete theme color palette
+ * LIGHT MODE:
+ * - Text: Tailwind Slate scale (#0F172A → #94A3B8) for proven readability
+ * - Backgrounds: Clean whites/near-whites with subtle brand tint in section
+ * - Borders: Tailwind Slate borders (#E2E8F0, #F1F5F9, #CBD5E1)
+ * - State: Universal colors (green/amber/red/blue) - same across all themes
+ * - Brand: primary = base, secondary = very dark variant, tertiary = warm amber
+ * - Overlays/shadows: base-tinted with appropriate alpha
+ *
+ * DARK MODE:
+ * - Text: Tailwind Slate bright end (#F1F5F9 → #64748B)
+ * - Backgrounds: Very dark base-tinted app bg + glass surfaces (rgba white)
+ * - Borders: Glass edges (rgba white at varying opacity)
+ * - State: Brighter variants of universal colors
+ * - Brand: very bright primary, pastel secondary, gold tertiary
+ * - Overlays: base-tinted dark overlays
  */
 export function generateTheme(config: ThemeConfig): Theme {
   const { baseColor, mode, name, description } = config;
@@ -26,14 +38,32 @@ export function generateTheme(config: ThemeConfig): Theme {
   };
 }
 
+/* ── Light theme ────────────────────────────────────────────────────── */
+
 /**
- * Generates light theme colors from base color
+ * Light theme generation.
+ *
+ * Uses proven Tailwind Slate scale for text/borders (hardcoded for contrast),
+ * derives brand/overlay/gradient colors from base.
+ *
+ * Reference (hand-crafted Sabeel emerald #10B981):
+ *   primary: #10B981, secondary: #064E3B, tertiary: #D97706
+ *   primaryVariant: #059669, secondaryVariant: #065F46
  */
 function generateLightTheme(base: chroma.Color): ThemeColors {
-  // Derive color families from base
-  const primary = base.saturate(0.4).darken(0.3);
-  const secondary = base.set('hsl.h', `+120`).saturate(0.3);
-  const tertiary = base.darken(1.4);
+  // Brand: primary is the base (clamped for readability on white)
+  const primary = base.luminance() > 0.3 ? base.luminance(0.2) : base;
+  // Secondary: very dark version for headings (ref: #064E3B from #10B981)
+  const secondary = base.darken(3).desaturate(0.2);
+  // Primary variant: darker for hover/pressed (ref: #059669)
+  const primaryVariant = base.darken(0.8).saturate(0.2);
+  // Secondary variant: between primary and secondary (ref: #065F46)
+  const secondaryVariant = base.darken(2.2).desaturate(0.1);
+  // Tertiary: warm amber accent - universally harmonious (ref: #D97706)
+  const tertiary = chroma('#D97706');
+
+  // Section bg: very subtle tint of base (ref: #F0FDF4 for emerald)
+  const sectionBg = chroma('#F0FDF4').mix(base.luminance(0.93), 0.4);
 
   return {
     mode: 'light',
@@ -42,98 +72,126 @@ function generateLightTheme(base: chroma.Color): ThemeColors {
       primary: primary.hex(),
       secondary: secondary.hex(),
       tertiary: tertiary.hex(),
-      primaryVariant: primary.darken(0.3).hex(),
-      secondaryVariant: secondary.darken(0.3).hex(),
+      primaryVariant: primaryVariant.hex(),
+      secondaryVariant: secondaryVariant.hex(),
     },
 
+    // Clean whites - subtle brand tint only in section
     background: {
-      app: base.brighten(4.2).desaturate(2.5).hex(),
+      app: '#F8FAF9',
       surface: '#FFFFFF',
-      surfaceAlt: base.brighten(4).desaturate(2.8).hex(),
-      section: base.brighten(3.8).desaturate(2.2).hex(),
+      surfaceAlt: '#F1F5F4',
+      section: sectionBg.hex(),
       elevated: '#FFFFFF',
-      input: base.brighten(4.4).desaturate(3).hex(),
-      disabled: base.brighten(3.2).desaturate(2.8).alpha(0.6).hex(),
-      get modal() {
-        return this.surface;
-      },
+      input: '#F1F5F9',
+      disabled: '#E2E8F0',
+      modal: '#FFFFFF',
     },
 
+    // Tailwind Slate scale - proven contrast ratios
     text: {
-      primary: '#1A1A1A',
-      secondary: '#4A4A4A',
-      tertiary: '#6B6B6B',
-      muted: '#9E9E9E',
+      primary: '#0F172A', // ~15.4:1 on white
+      secondary: '#334155', // ~9.7:1 on white
+      tertiary: '#64748B', // ~5.0:1 on white
+      muted: '#94A3B8', // ~2.8:1 on white (decorative)
       inverse: '#FFFFFF',
-      accent: primary.darken(0.5).hex(),
-      link: secondary.darken(0.4).hex(),
-      linkHover: secondary.darken(0.8).hex(),
+      accent: tertiary.hex(), // derived from base
+      link: primary.hex(),
+      linkHover: primaryVariant.hex(),
     },
 
+    // Tailwind Slate borders - clean and neutral
     border: {
-      default: base.desaturate(1.2).darken(0.4).alpha(0.5).hex(),
-      subtle: base.brighten(2).desaturate(2).alpha(0.3).hex(),
-      strong: base.darken(0.6).hex(),
-      focus: secondary.hex(),
-      disabled: base.brighten(2.5).desaturate(2.5).alpha(0.4).hex(),
+      default: '#E2E8F0',
+      subtle: '#F1F5F9',
+      strong: '#CBD5E1',
+      focus: primary.hex(), // derived from base
+      disabled: '#E2E8F0',
     },
 
     icon: {
-      primary: tertiary.hex(),
-      secondary: base.darken(0.6).hex(),
-      tertiary: base.darken(0.2).hex(),
-      muted: '#9E9E9E',
+      primary: primary.hex(),
+      secondary: secondary.hex(),
+      tertiary: '#94A3B8',
+      muted: '#CBD5E1',
       inverse: '#FFFFFF',
-      accent: primary.hex(),
+      accent: tertiary.hex(),
     },
 
+    // Universal state colors - consistent across all themes
     state: {
       success: '#10B981',
-      successBg: chroma('#10B981').brighten(3).alpha(0.15).hex(),
+      successBg: '#E8F5E9',
       warning: '#F59E0B',
-      warningBg: chroma('#F59E0B').brighten(3).alpha(0.15).hex(),
+      warningBg: 'rgba(245, 158, 11, 0.12)',
       error: '#EF4444',
-      errorBg: chroma('#EF4444').brighten(3).alpha(0.15).hex(),
-      info: secondary.hex(),
-      infoBg: secondary.brighten(3).alpha(0.15).hex(),
-      disabled: '#D1D5DB',
+      errorBg: 'rgba(239, 68, 68, 0.12)',
+      info: '#3B82F6',
+      infoBg: 'rgba(59, 130, 246, 0.12)',
+      disabled: '#CBD5E1',
     },
 
+    // Overlays derived from primary brand color
     overlay: {
       modal: 'rgba(0, 0, 0, 0.5)',
-      pressed: base.alpha(0.12).hex(),
-      hover: base.alpha(0.08).hex(),
-      focus: secondary.alpha(0.15).hex(),
+      pressed: primary.alpha(0.12).css(),
+      hover: primary.alpha(0.08).css(),
+      focus: primary.alpha(0.15).css(),
       ripple: 'rgba(255, 255, 255, 0.25)',
-      shadow: 'rgba(0, 0, 0, 0.15)',
+      shadow: 'rgba(0, 0, 0, 0.1)',
     },
 
+    // Gradients derived from brand colors
     gradient: {
-      primary: [primary.hex(), primary.brighten(0.8).hex()],
-      secondary: [secondary.hex(), secondary.brighten(0.8).hex()],
-      sacred: [tertiary.hex(), base.darken(0.8).hex()],
-      success: ['#10B981', '#34D399'],
-      premium: ['#8B5CF6', '#A78BFA'],
+      primary: [secondary.hex(), primary.hex()],
+      secondary: [primary.hex(), primary.brighten(0.5).hex()],
+      sacred: [
+        base.luminance(0.88).desaturate(1.5).hex(),
+        base.luminance(0.82).desaturate(1).hex(),
+      ],
+      success: ['#059669', '#34D399'],
+      premium: [tertiary.darken(0.5).hex(), tertiary.brighten(0.3).hex()],
     },
 
     shadow: {
-      color: 'rgba(0, 0, 0, 0.15)',
-      elevation: 8,
+      color: 'rgba(0, 0, 0, 0.1)',
+      elevation: 4,
       elevationSmall: 2,
-      elevationMedium: 8,
-      elevationLarge: 16,
+      elevationMedium: 4,
+      elevationLarge: 8,
     },
   };
 }
 
+/* ── Dark theme ─────────────────────────────────────────────────────── */
+
 /**
- * Generates dark theme colors from base color
+ * Dark theme generation.
+ *
+ * Uses Tailwind Slate bright end for text (hardcoded for contrast),
+ * glass surfaces (rgba white), derives brand/backgrounds from base.
+ *
+ * Reference (hand-crafted Sabeel emerald #10B981):
+ *   primary: #19E65E, secondary: #A7F3D0, tertiary: #FBBF24
+ *   appBg: #061612, section: #062A1A
+ *   surfaces: rgba(255, 255, 255, 0.08/0.12/0.15)
  */
 function generateDarkTheme(base: chroma.Color): ThemeColors {
-  // Derive color families - brighter variants for dark mode
-  const primary = base.brighten(1).saturate(0.4);
-  const secondary = base.set('hsl.h', `+120`).brighten(0.8).saturate(0.3);
-  const tertiary = base.darken(0.6);
+  // Brand: very bright and saturated for dark backgrounds (ref: #19E65E)
+  const primary = base.luminance(0.35).saturate(1.5);
+  // Primary variant: softer (ref: #34D399)
+  const primaryVariant = base.luminance(0.25).saturate(0.8);
+  // Secondary: pastel for soft headings (ref: #A7F3D0)
+  const secondary = base.luminance(0.75).desaturate(0.5);
+  // Secondary variant: between primary and secondary (ref: #6EE7B7)
+  const secondaryVariant = base.luminance(0.55).desaturate(0.3);
+  // Tertiary: warm gold accent (ref: #FBBF24)
+  const tertiary = chroma('#FBBF24');
+
+  // Deep dark backgrounds tinted with base hue (ref: #061612, #062A1A, #0A2318)
+  const appBg = base.luminance(0.01).desaturate(1.5);
+  const sectionBg = base.luminance(0.02).desaturate(1);
+  const modalBg = base.luminance(0.015).desaturate(1.2);
 
   return {
     mode: 'dark',
@@ -142,129 +200,130 @@ function generateDarkTheme(base: chroma.Color): ThemeColors {
       primary: primary.hex(),
       secondary: secondary.hex(),
       tertiary: tertiary.hex(),
-      primaryVariant: primary.brighten(0.4).hex(),
-      secondaryVariant: secondary.brighten(0.4).hex(),
+      primaryVariant: primaryVariant.hex(),
+      secondaryVariant: secondaryVariant.hex(),
     },
 
+    // Glass surfaces on deep dark base-tinted background
     background: {
-      app: base.darken(4.2).desaturate(1.5).hex(),
-      surface: base.darken(3.5).desaturate(1.6).hex(),
-      surfaceAlt: base.darken(3).desaturate(1.4).hex(),
-      section: base.darken(3.8).desaturate(1.7).hex(),
-      elevated: base.darken(2.8).desaturate(1.3).hex(),
-      input: base.darken(3.2).desaturate(1.5).hex(),
-      disabled: base.darken(3).desaturate(2).alpha(0.5).hex(),
-      get modal() {
-        return this.section;
-      },
+      app: appBg.hex(),
+      surface: 'rgba(255, 255, 255, 0.08)',
+      surfaceAlt: 'rgba(255, 255, 255, 0.12)',
+      section: sectionBg.hex(),
+      elevated: 'rgba(255, 255, 255, 0.15)',
+      input: 'rgba(255, 255, 255, 0.08)',
+      disabled: 'rgba(255, 255, 255, 0.05)',
+      modal: modalBg.hex(),
     },
 
+    // Tailwind Slate bright end - proven readability on dark
     text: {
-      primary: '#F5F5F5',
-      secondary: '#D4D4D4',
-      tertiary: '#A3A3A3',
-      muted: '#737373',
-      inverse: '#1A1A1A',
-      accent: primary.brighten(0.5).hex(),
-      link: secondary.brighten(0.3).hex(),
-      linkHover: secondary.brighten(0.6).hex(),
+      primary: '#F1F5F9', // ~15.4:1 on near-black
+      secondary: '#CBD5E1', // ~11.0:1
+      tertiary: '#94A3B8', // ~6.8:1
+      muted: '#64748B', // ~3.8:1 (decorative)
+      inverse: appBg.hex(), // derived - for text on bright surfaces
+      accent: tertiary.hex(),
+      link: primary.hex(),
+      linkHover: primaryVariant.hex(),
     },
 
+    // Glass-effect borders
     border: {
-      default: base.desaturate(1).brighten(0.2).alpha(0.4).hex(),
-      subtle: base.darken(2).desaturate(1.5).alpha(0.3).hex(),
-      strong: base.brighten(0.4).hex(),
-      focus: secondary.hex(),
-      disabled: base.darken(2.5).desaturate(2).alpha(0.3).hex(),
+      default: 'rgba(255, 255, 255, 0.12)',
+      subtle: 'rgba(255, 255, 255, 0.06)',
+      strong: 'rgba(255, 255, 255, 0.2)',
+      focus: primary.hex(),
+      disabled: 'rgba(255, 255, 255, 0.05)',
     },
 
     icon: {
       primary: primary.hex(),
-      secondary: secondary.desaturate(0.3).hex(),
-      tertiary: base.brighten(0.5).hex(),
-      muted: '#737373',
-      inverse: '#1A1A1A',
-      accent: primary.saturate(0.4).hex(),
+      secondary: secondary.hex(),
+      tertiary: '#64748B',
+      muted: '#475569',
+      inverse: appBg.hex(),
+      accent: tertiary.hex(),
     },
 
+    // Universal state colors - brighter for dark mode
     state: {
-      success: '#34D399',
-      successBg: chroma('#34D399').darken(3).alpha(0.2).hex(),
+      success: 'rgba(25, 230, 94, 0.3)',
+      successBg: 'rgba(23, 207, 54, 0.1)',
       warning: '#FBBF24',
-      warningBg: chroma('#FBBF24').darken(3).alpha(0.2).hex(),
+      warningBg: 'rgba(251, 191, 36, 0.2)',
       error: '#F87171',
-      errorBg: chroma('#F87171').darken(3).alpha(0.2).hex(),
-      info: secondary.hex(),
-      infoBg: secondary.darken(3).alpha(0.2).hex(),
-      disabled: '#3F3F46',
+      errorBg: 'rgba(248, 113, 113, 0.2)',
+      info: '#60A5FA',
+      infoBg: 'rgba(96, 165, 250, 0.2)',
+      disabled: '#475569',
     },
 
+    // Overlays derived from primary brand color
     overlay: {
       modal: 'rgba(0, 0, 0, 0.7)',
-      pressed: base.alpha(0.2).hex(),
-      hover: base.alpha(0.12).hex(),
-      focus: secondary.alpha(0.2).hex(),
+      pressed: primary.alpha(0.15).css(),
+      hover: primary.alpha(0.08).css(),
+      focus: primary.alpha(0.2).css(),
       ripple: 'rgba(255, 255, 255, 0.2)',
-      shadow: 'rgba(0, 0, 0, 0.6)',
+      shadow: 'rgba(0, 0, 0, 0.5)',
     },
 
+    // Gradients derived from brand colors
     gradient: {
-      primary: [primary.darken(0.4).hex(), primary.brighten(0.6).hex()],
-      secondary: [secondary.darken(0.4).hex(), secondary.brighten(0.6).hex()],
-      sacred: [tertiary.hex(), base.darken(2).hex()],
+      primary: [sectionBg.hex(), primary.hex()],
+      secondary: [primary.hex(), primaryVariant.hex()],
+      sacred: [sectionBg.hex(), sectionBg.brighten(0.5).hex()],
       success: ['#059669', '#34D399'],
-      premium: ['#7C3AED', '#A78BFA'],
+      premium: [tertiary.darken(0.8).hex(), tertiary.hex()],
     },
 
     shadow: {
-      color: 'rgba(0, 0, 0, 0.6)',
-      elevation: 10,
-      elevationSmall: 3,
-      elevationMedium: 10,
-      elevationLarge: 20,
+      color: 'rgba(0, 0, 0, 0.5)',
+      elevation: 6,
+      elevationSmall: 2,
+      elevationMedium: 6,
+      elevationLarge: 12,
     },
   };
 }
 
 /**
  * Predefined Islamic Theme Presets
- *
- * Five carefully crafted color schemes inspired by Islamic art, architecture,
- * and natural elements mentioned in Islamic tradition.
  */
 export const THEME_PRESETS = {
   /**
-   * Emerald - Traditional Islamic teal and emerald
-   * Inspired by traditional Islamic architecture and mosque domes
+   * Ocean - Deep Islamic blue-teal
+   * Inspired by the blues of Ottoman Iznik tiles and mosque interiors
    */
-  emerald: {
+  ocean: {
     light: generateTheme({
-      baseColor: '#0FA18F',
+      baseColor: '#0891B2',
       mode: 'light',
-      name: 'Emerald Light',
-      description: 'Traditional Islamic teal inspired by mosque architecture',
+      name: 'Ocean Light',
+      description: 'Deep blue-teal inspired by Iznik tiles',
     }),
     dark: generateTheme({
-      baseColor: '#0FA18F',
+      baseColor: '#0891B2',
       mode: 'dark',
-      name: 'Emerald Dark',
-      description: 'Traditional Islamic teal for night reading',
+      name: 'Ocean Dark',
+      description: 'Deep ocean tones for night reading',
     }),
   },
 
   /**
-   * Desert - Warm earth tones and desert sand
-   * Inspired by the deserts of Arabia and traditional Islamic calligraphy
+   * Desert - Rich warm terracotta
+   * Inspired by Arabian desert clay and Andalusian architecture
    */
   desert: {
     light: generateTheme({
-      baseColor: '#C9A66B',
+      baseColor: '#C2703E',
       mode: 'light',
       name: 'Desert Light',
-      description: 'Warm desert sands and golden tones',
+      description: 'Warm terracotta inspired by desert architecture',
     }),
     dark: generateTheme({
-      baseColor: '#C9A66B',
+      baseColor: '#C2703E',
       mode: 'dark',
       name: 'Desert Dark',
       description: 'Desert night with warm earth tones',
@@ -272,15 +331,15 @@ export const THEME_PRESETS = {
   },
 
   /**
-   * Sapphire - Deep blue inspired by mosque domes and night sky
-   * Reflects the depth of Islamic scholarship and contemplation
+   * Sapphire - Vivid royal blue
+   * Inspired by the night sky and lapis lazuli in Islamic art
    */
   sapphire: {
     light: generateTheme({
       baseColor: '#2563EB',
       mode: 'light',
       name: 'Sapphire Light',
-      description: 'Deep blue inspired by mosque domes',
+      description: 'Vivid blue inspired by lapis lazuli',
     }),
     dark: generateTheme({
       baseColor: '#2563EB',
@@ -291,34 +350,34 @@ export const THEME_PRESETS = {
   },
 
   /**
-   * Moonlight - Cool silver and white tones
-   * Inspired by the Islamic lunar calendar and night prayers
+   * Rose - Warm rose-pink
+   * Inspired by Persian rose gardens and Mughal miniature art
    */
-  moonlight: {
+  rose: {
     light: generateTheme({
-      baseColor: '#64748B',
+      baseColor: '#E11D48',
       mode: 'light',
-      name: 'Moonlight Light',
-      description: 'Cool silver tones inspired by moonlight',
+      name: 'Rose Light',
+      description: 'Warm rose inspired by Persian gardens',
     }),
     dark: generateTheme({
-      baseColor: '#64748B',
+      baseColor: '#E11D48',
       mode: 'dark',
-      name: 'Moonlight Dark',
-      description: 'Gentle moonlight for night contemplation',
+      name: 'Rose Dark',
+      description: 'Soft rose glow for night contemplation',
     }),
   },
 
   /**
-   * Royal - Rich purple and gold
-   * Inspired by royal Islamic manuscripts and traditional Islamic art
+   * Royal - Rich purple-indigo
+   * Inspired by royal Islamic manuscripts and Topkapi Palace
    */
   royal: {
     light: generateTheme({
       baseColor: '#7C3AED',
       mode: 'light',
       name: 'Royal Light',
-      description: 'Rich purple and gold from Islamic manuscripts',
+      description: 'Rich purple from Islamic manuscripts',
     }),
     dark: generateTheme({
       baseColor: '#7C3AED',
@@ -348,11 +407,6 @@ export function getPreset(preset: keyof typeof THEME_PRESETS, mode: 'light' | 'd
 
 /**
  * Generate a custom theme from user's favorite color
- *
- * @example
- * ```ts
- * const myTheme = generateCustomTheme('#FF5733', 'light', 'My Custom Theme');
- * ```
  */
 export function generateCustomTheme(
   baseColor: string,

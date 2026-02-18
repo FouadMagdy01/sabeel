@@ -2,87 +2,91 @@ import darkColors from '@/theme/dark-theme';
 import { FONTS } from './fonts';
 import { lightColors } from './light-theme';
 import metrics, { fontSize } from './metrics';
-import type { Theme } from './types';
+import type { Theme, ThemeColors } from './types';
 import { THEME_PRESETS, generateCustomTheme, getPreset, getAllPresets } from './theme-generator';
 
 /**
- * Default Light Theme
+ * Build an app theme object from colors
  */
-const lightTheme = {
-  colors: {
-    ...lightColors,
-  },
-  metrics: {
-    ...metrics,
-  },
-  fonts: {
-    ...FONTS,
-    size: {
-      ...fontSize,
-    },
-  },
-};
+function buildAppTheme(colors: ThemeColors) {
+  return {
+    colors,
+    metrics: { ...metrics },
+    fonts: { ...FONTS, size: { ...fontSize } },
+  };
+}
 
 /**
- * Default Dark Theme
- */
-const darkTheme = {
-  colors: {
-    ...darkColors,
-  },
-  metrics: {
-    ...metrics,
-  },
-  fonts: {
-    ...FONTS,
-    size: {
-      ...fontSize,
-    },
-  },
-};
-
-/**
- * Default app themes (current implementation)
+ * Default app themes using the hand-crafted light/dark themes
  */
 export const appThemes = {
-  light: lightTheme,
-  dark: darkTheme,
+  light: buildAppTheme(lightColors),
+  dark: buildAppTheme(darkColors),
 };
+
+/**
+ * All preset names including 'default' (the hand-crafted theme)
+ */
+export type ThemePresetName = 'default' | keyof typeof THEME_PRESETS;
+
+/**
+ * Composite theme name used internally by unistyles.
+ * Format: `{preset}_{mode}` e.g. "default_light", "emerald_dark"
+ */
+export type CompositeThemeName = `${ThemePresetName}_${'light' | 'dark'}`;
+
+/**
+ * Build composite theme name from preset + mode
+ */
+export function compositeThemeName(
+  preset: ThemePresetName,
+  mode: 'light' | 'dark'
+): CompositeThemeName {
+  return `${preset}_${mode}`;
+}
+
+/**
+ * Parse composite theme name back to preset + mode
+ */
+export function parseCompositeThemeName(name: string): {
+  preset: ThemePresetName;
+  mode: 'light' | 'dark';
+} {
+  const lastUnderscore = name.lastIndexOf('_');
+  const mode = name.slice(lastUnderscore + 1) as 'light' | 'dark';
+  const preset = name.slice(0, lastUnderscore) as ThemePresetName;
+  return { preset, mode };
+}
+
+/**
+ * Build ALL themes for registration with StyleSheet.configure().
+ * Returns a flat map of composite names to theme objects.
+ * This enables flicker-free switching via setTheme() instead of updateTheme().
+ */
+export function buildAllThemes() {
+  const themes: Record<string, ReturnType<typeof buildAppTheme>> = {};
+
+  for (const preset of THEME_PRESET_NAMES) {
+    if (preset === 'default') {
+      themes[compositeThemeName('default', 'light')] = appThemes.light;
+      themes[compositeThemeName('default', 'dark')] = appThemes.dark;
+    } else {
+      const presetData = THEME_PRESETS[preset];
+      themes[compositeThemeName(preset, 'light')] = buildAppTheme(presetData.light.colors);
+      themes[compositeThemeName(preset, 'dark')] = buildAppTheme(presetData.dark.colors);
+    }
+  }
+
+  return themes;
+}
 
 /**
  * All available predefined theme presets
- *
- * Five carefully crafted Islamic-inspired color schemes:
- * - Emerald: Traditional teal and emerald (default)
- * - Desert: Warm earth tones and golden sands
- * - Sapphire: Deep blues inspired by mosque domes
- * - Moonlight: Cool silver and white tones for night prayers
- * - Royal: Rich purple and gold from Islamic manuscripts
- *
- * Each preset includes both light and dark variants.
- *
- * @example
- * ```ts
- * // Use Emerald theme
- * const theme = PRESETS.emerald.light;
- *
- * // Use Desert dark theme
- * const darkDesert = PRESETS.desert.dark;
- * ```
  */
 export const PRESETS = THEME_PRESETS;
 
 /**
  * Helper function to get a specific preset theme
- *
- * @param preset - The preset name ('emerald', 'desert', 'sapphire', 'moonlight', 'royal')
- * @param mode - Theme mode ('light' or 'dark')
- * @returns Complete theme object
- *
- * @example
- * ```ts
- * const myTheme = getThemePreset('sapphire', 'dark');
- * ```
  */
 export function getThemePreset(preset: keyof typeof THEME_PRESETS, mode: 'light' | 'dark'): Theme {
   return getPreset(preset, mode);
@@ -90,26 +94,6 @@ export function getThemePreset(preset: keyof typeof THEME_PRESETS, mode: 'light'
 
 /**
  * Get all available theme presets as a flat array
- *
- * Useful for theme selection UI where you want to display all
- * available themes in a list or grid.
- *
- * @returns Array of all theme presets (10 themes total)
- *
- * @example
- * ```tsx
- * const ThemePicker = () => {
- *   const themes = getAllThemePresets();
- *
- *   return themes.map(theme => (
- *     <ThemeCard
- *       key={theme.id}
- *       name={theme.name}
- *       colors={theme.colors}
- *     />
- *   ));
- * };
- * ```
  */
 export function getAllThemePresets() {
   return getAllPresets();
@@ -117,25 +101,6 @@ export function getAllThemePresets() {
 
 /**
  * Generate a custom theme from a user's favorite color
- *
- * This allows users to personalize the app with their own color preferences
- * while maintaining accessibility and design consistency.
- *
- * @param baseColor - Hex color code (e.g., '#FF5733')
- * @param mode - Theme mode ('light' or 'dark')
- * @param name - Optional theme name (defaults to 'Custom Theme')
- * @param description - Optional theme description
- * @returns Complete custom theme object
- *
- * @example
- * ```ts
- * // Create a custom pink theme
- * const pinkTheme = createCustomTheme('#E91E63', 'light', 'Pink Blossom');
- *
- * // Create a custom dark theme from user input
- * const userColor = colorPicker.getValue();
- * const customDark = createCustomTheme(userColor, 'dark', 'My Theme');
- * ```
  */
 export function createCustomTheme(
   baseColor: string,
@@ -147,56 +112,55 @@ export function createCustomTheme(
 }
 
 /**
- * Theme preset names for type safety
- */
-export type ThemePresetName = keyof typeof THEME_PRESETS;
-
-/**
- * All available theme preset names
+ * All available theme preset names (default first)
  */
 export const THEME_PRESET_NAMES: ThemePresetName[] = [
-  'emerald',
+  'default',
+  'ocean',
   'desert',
   'sapphire',
-  'moonlight',
+  'rose',
   'royal',
 ];
 
 /**
- * Theme metadata for UI display
+ * Theme metadata for UI display (baseColor used for swatch preview)
  */
-export const THEME_METADATA = {
-  emerald: {
-    name: 'Emerald',
-    description: 'Traditional Islamic teal inspired by mosque architecture',
-    icon: '🕌',
-    baseColor: '#0FA18F',
+export const THEME_METADATA: Record<
+  ThemePresetName,
+  { name: string; description: string; baseColor: string }
+> = {
+  default: {
+    name: 'Default',
+    description: 'Hand-crafted Sabeel emerald theme',
+    baseColor: '#10B981',
+  },
+  ocean: {
+    name: 'Ocean',
+    description: 'Deep blue-teal inspired by Iznik tiles',
+    baseColor: '#0891B2',
   },
   desert: {
     name: 'Desert',
-    description: 'Warm desert sands and golden tones',
-    icon: '🏜️',
-    baseColor: '#C9A66B',
+    description: 'Warm terracotta inspired by desert architecture',
+    baseColor: '#C2703E',
   },
   sapphire: {
     name: 'Sapphire',
-    description: 'Deep blue inspired by mosque domes',
-    icon: '🔷',
+    description: 'Vivid blue inspired by lapis lazuli',
     baseColor: '#2563EB',
   },
-  moonlight: {
-    name: 'Moonlight',
-    description: 'Cool silver tones inspired by moonlight',
-    icon: '🌙',
-    baseColor: '#64748B',
+  rose: {
+    name: 'Rose',
+    description: 'Warm rose inspired by Persian gardens',
+    baseColor: '#E11D48',
   },
   royal: {
     name: 'Royal',
-    description: 'Rich purple and gold from Islamic manuscripts',
-    icon: '👑',
+    description: 'Rich purple from Islamic manuscripts',
     baseColor: '#7C3AED',
   },
-} as const;
+};
 
 /**
  * Export individual theme colors for backward compatibility

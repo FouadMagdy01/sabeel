@@ -218,28 +218,28 @@ export const lightColors: ThemeColors = {
 
   icon: {
     /**
-     * Primary icon color - Dark gray
-     * @usage Main interactive icons, primary navigation
-     * @examples Tab bar icons, primary action icons
+     * Primary icon color - Brand emerald
+     * @usage Main interactive icons, primary navigation, quick access
+     * @examples Tab bar active icons, primary action icons, feature icons
      */
-    primary: '#334155',
+    primary: '#10B981',
 
     /**
-     * Secondary icon color - Medium gray
-     * @usage Supporting icons, secondary actions
-     * @examples Utility icons, secondary action icons
+     * Secondary icon color - Deep emerald
+     * @usage Supporting icons, secondary actions, section icons
+     * @examples Utility icons, secondary action icons, card header icons
      */
-    secondary: '#64748B',
+    secondary: '#064E3B',
 
     /**
-     * Tertiary icon color - Light gray
+     * Tertiary icon color - Medium gray
      * @usage Subtle icons, decorative elements
      * @examples Decorative icons, subtle indicators
      */
     tertiary: '#94A3B8',
 
     /**
-     * Muted icon color - Very light gray
+     * Muted icon color - Light gray
      * @usage Disabled icons, inactive states
      * @examples Disabled action icons, inactive navigation icons
      */

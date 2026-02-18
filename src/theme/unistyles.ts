@@ -1,28 +1,52 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { getItem, STORAGE_KEYS } from '../utils/storage';
-import { appThemes } from './config';
+import { buildAllThemes, compositeThemeName, THEME_PRESET_NAMES } from './config';
+import type { CompositeThemeName, ThemePresetName } from './config';
 import { breakpoints } from './metrics';
-// Unistyles settings for theme configuration
-const settings = {
-  initialTheme: () => {
-    // Get preferred theme from MMKV storage
-    const result = getItem<'light' | 'dark'>(STORAGE_KEYS.preferences.theme);
 
-    // Return stored theme or default to "light"
-    return result.success && result.data ? result.data : 'light';
-  },
-};
+/**
+ * All 12 themes are registered upfront (6 presets × 2 modes).
+ * This lets us use setTheme() for flicker-free switching
+ * instead of updateTheme() which triggers re-renders.
+ */
+const allThemes = buildAllThemes();
 
-type AppBreakpoints = typeof breakpoints;
-type AppThemes = typeof appThemes;
+/**
+ * Determine the initial composite theme name from saved preferences.
+ */
+function getInitialThemeName(): CompositeThemeName {
+  const presetResult = getItem<string>(STORAGE_KEYS.preferences.themePreset);
+  const modeResult = getItem<string>(STORAGE_KEYS.preferences.theme);
+
+  let preset: ThemePresetName = 'default';
+  if (
+    presetResult.success &&
+    presetResult.data &&
+    THEME_PRESET_NAMES.includes(presetResult.data as ThemePresetName)
+  ) {
+    preset = presetResult.data as ThemePresetName;
+  }
+
+  const mode = modeResult.success && modeResult.data === 'dark' ? 'dark' : 'light';
+
+  return compositeThemeName(preset, mode);
+}
+
+type AllThemes = typeof allThemes;
 
 declare module 'react-native-unistyles' {
-  export interface UnistylesThemes extends AppThemes {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  export interface UnistylesThemes extends AllThemes {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   export interface UnistylesBreakpoints extends AppBreakpoints {}
 }
 
+type AppBreakpoints = typeof breakpoints;
+
 StyleSheet.configure({
-  settings,
+  settings: {
+    initialTheme: getInitialThemeName,
+  },
   breakpoints,
-  themes: appThemes,
+  themes: allThemes,
 });

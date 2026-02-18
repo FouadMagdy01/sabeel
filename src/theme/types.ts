@@ -500,10 +500,10 @@ export interface Theme {
  * Predefined Theme Presets
  */
 export type ThemePreset =
-  | 'emerald' // Traditional Islamic teal/emerald
-  | 'desert' // Desert sand and warm earth tones
-  | 'sapphire' // Deep blue like mosque domes
-  | 'moonlight' // Cool silver and white tones
+  | 'ocean' // Deep blue-teal inspired by Iznik tiles
+  | 'desert' // Warm terracotta and earth tones
+  | 'sapphire' // Vivid blue inspired by lapis lazuli
+  | 'rose' // Warm rose inspired by Persian gardens
   | 'royal'; // Rich purple and gold
 
 /**
