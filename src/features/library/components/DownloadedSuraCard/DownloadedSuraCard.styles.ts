@@ -11,6 +11,8 @@ export const styles = StyleSheet.create((theme) => ({
     height: 48,
     borderRadius: 12,
     backgroundColor: theme.colors.state.successBg,
+    borderWidth: 1,
+    borderColor: theme.colors.state.success,
     alignItems: 'center',
     justifyContent: 'center',
   },
