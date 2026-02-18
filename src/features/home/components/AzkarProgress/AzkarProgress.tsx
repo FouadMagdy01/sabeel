@@ -73,7 +73,7 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
           <Typography size="xs" weight="bold" color="brandPrimary">
             {percentage}%
           </Typography>
-          <CircularProgress progress={progress} color={theme.colors.state.info} />
+          <CircularProgress progress={progress} color={theme.colors.brand.primary} />
         </View>
       </View>
 
