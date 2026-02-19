@@ -25,6 +25,7 @@ const STATUS_COLORS: Record<
   success: (theme) => theme.colors.state.success,
   error: (theme) => theme.colors.state.error,
   warning: (theme) => theme.colors.state.warning,
+  info: (theme) => theme.colors.state.info,
 };
 
 /**

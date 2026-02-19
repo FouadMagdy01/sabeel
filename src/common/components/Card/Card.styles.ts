@@ -13,15 +13,22 @@ export const styles = StyleSheet.create((theme) => ({
     variants: {
       variant: {
         elevated: {
+          backgroundColor: theme.colors.background.surface,
+          borderColor: theme.colors.border.default,
+          shadowColor: theme.colors.shadow.color,
           borderWidth: 1,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
           shadowRadius: 6,
         },
         outlined: {
+          backgroundColor: theme.colors.background.surface,
+          borderColor: theme.colors.border.default,
           borderWidth: 1,
         },
-        filled: {},
+        filled: {
+          backgroundColor: theme.colors.background.surface,
+        },
         gradient: {
           backgroundColor: 'transparent',
         },
@@ -46,6 +53,7 @@ export const styles = StyleSheet.create((theme) => ({
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: theme.colors.background.disabled,
     opacity: 0.7,
     justifyContent: 'center',
     alignItems: 'center',

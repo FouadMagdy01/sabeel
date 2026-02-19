@@ -16,7 +16,7 @@ export const styles = StyleSheet.create((theme) => ({
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: theme.metrics.spacing.p8,
   },
   chipsRow: {
     flexDirection: 'row',
@@ -26,11 +26,17 @@ export const styles = StyleSheet.create((theme) => ({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: theme.metrics.spacing.p4,
     paddingHorizontal: theme.metrics.spacing.p12,
     paddingVertical: theme.metrics.spacingV.p8,
     borderRadius: 10,
     overflow: 'hidden',
+  },
+  chipCompleted: {
+    backgroundColor: theme.colors.state.successBg,
+  },
+  chipPending: {
+    backgroundColor: theme.colors.background.surfaceAlt,
   },
   pressed: {
     opacity: 0.85,

@@ -12,6 +12,8 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     borderRadius: 12,
     borderWidth: 1,
+    borderColor: theme.colors.border.default,
+    backgroundColor: theme.colors.background.input,
     gap: theme.metrics.spacing.p8,
     variants: {
       size: {
@@ -34,6 +36,7 @@ export const styles = StyleSheet.create((theme) => ({
       disabled: {
         true: {
           opacity: 0.5,
+          backgroundColor: theme.colors.background.disabled,
         },
         false: {},
       },
@@ -42,6 +45,7 @@ export const styles = StyleSheet.create((theme) => ({
   input: {
     flex: 1,
     fontFamily: theme.fonts.regular,
+    color: theme.colors.text.primary,
     padding: 0,
     variants: {
       size: {
@@ -60,7 +64,5 @@ export const styles = StyleSheet.create((theme) => ({
   clearButton: {
     padding: 2,
   },
-  loadingSpinner: {
-    // ActivityIndicator will use size prop directly
-  },
+  loadingSpinner: {},
 }));

@@ -1,15 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useMemo } from 'react';
-import {
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
+import React, { useCallback } from 'react';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 
+import { UniActivityIndicator, UniPressable } from '@/common/components/themed';
 import { RADIUS_MAP, styles } from './Card.styles';
 import type { CardProps } from './Card.types';
 
@@ -42,27 +35,9 @@ export function Card({
   style,
   children,
 }: CardProps) {
-  const { theme } = useUnistyles();
   styles.useVariants({ variant, radius, padding });
 
   const isDisabled = loading;
-
-  // Inline color styles to avoid flicker during theme switching
-  const variantColors =
-    variant === 'gradient'
-      ? {}
-      : variant === 'elevated'
-        ? {
-            backgroundColor: theme.colors.background.surface,
-            borderColor: theme.colors.border.default,
-            shadowColor: theme.colors.shadow.color,
-          }
-        : variant === 'outlined'
-          ? {
-              backgroundColor: theme.colors.background.surface,
-              borderColor: theme.colors.border.default,
-            }
-          : { backgroundColor: theme.colors.background.surface };
 
   const getPressedStyle = useCallback(
     (pressed: boolean): StyleProp<ViewStyle> => {
@@ -72,22 +47,11 @@ export function Card({
     [isDisabled]
   );
 
-  const androidRipple = useMemo(() => {
-    if (Platform.OS !== 'android' || isDisabled) return undefined;
-    return {
-      color: theme.colors.overlay.pressed,
-      borderless: false,
-      foreground: true,
-    };
-  }, [theme.colors.overlay.pressed, isDisabled]);
-
-  const loadingOverlayColor = { backgroundColor: theme.colors.background.disabled };
-
   const renderLoadingOverlay = () => {
     if (!loading) return null;
     return (
-      <View style={[styles.loadingOverlay, loadingOverlayColor]}>
-        <ActivityIndicator size="large" />
+      <View style={styles.loadingOverlay}>
+        <UniActivityIndicator size="large" />
       </View>
     );
   };
@@ -105,11 +69,10 @@ export function Card({
 
     if (onPress) {
       return (
-        <Pressable
+        <UniPressable
           onPress={onPress}
           disabled={isDisabled}
           style={({ pressed }) => [styles.container, getPressedStyle(pressed)]}
-          android_ripple={androidRipple}
         >
           <LinearGradient
             colors={gradientColors}
@@ -119,7 +82,7 @@ export function Card({
           >
             {renderContent()}
           </LinearGradient>
-        </Pressable>
+        </UniPressable>
       );
     }
 
@@ -138,16 +101,15 @@ export function Card({
   // Regular variants with optional press interaction
   if (onPress) {
     return (
-      <Pressable
+      <UniPressable
         onPress={onPress}
         disabled={isDisabled}
-        style={({ pressed }) => [styles.container, variantColors, getPressedStyle(pressed), style]}
-        android_ripple={androidRipple}
+        style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
       >
         {renderContent()}
-      </Pressable>
+      </UniPressable>
     );
   }
 
-  return <View style={[styles.container, variantColors, style]}>{renderContent()}</View>;
+  return <View style={[styles.container, style]}>{renderContent()}</View>;
 }

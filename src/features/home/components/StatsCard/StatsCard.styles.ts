@@ -11,7 +11,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
   },
   statValue: {
-    marginTop: 4,
+    marginTop: theme.metrics.spacingV.p4,
   },
   statLabel: {
     fontSize: theme.fonts.size.xxs,

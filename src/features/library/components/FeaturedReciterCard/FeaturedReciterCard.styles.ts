@@ -9,6 +9,8 @@ export const styles = StyleSheet.create((theme) => ({
     padding: theme.metrics.spacing.p16,
     gap: theme.metrics.spacingV.p4,
     overflow: 'hidden',
+    backgroundColor: theme.colors.background.surface,
+    borderColor: theme.colors.border.default,
   },
   avatarContainer: {
     width: 88,
@@ -17,6 +19,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: `${theme.colors.brand.primary}15`,
   },
   playButton: {
     position: 'absolute',
@@ -28,6 +31,8 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
+    backgroundColor: theme.colors.brand.primary,
+    borderColor: theme.colors.background.surface,
   },
   avatarWrapper: {
     position: 'relative',

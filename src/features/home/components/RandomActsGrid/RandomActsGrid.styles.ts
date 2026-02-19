@@ -16,7 +16,7 @@ export const styles = StyleSheet.create((theme) => ({
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: theme.metrics.spacing.p8,
   },
   verticalList: {
     gap: theme.metrics.spacingV.p8,
@@ -24,6 +24,12 @@ export const styles = StyleSheet.create((theme) => ({
   cardContainer: {
     borderRadius: 12,
     overflow: 'hidden',
+  },
+  cardCompleted: {
+    backgroundColor: theme.colors.state.successBg,
+  },
+  cardPending: {
+    backgroundColor: theme.colors.background.surfaceAlt,
   },
   actCard: {
     flexDirection: 'row',

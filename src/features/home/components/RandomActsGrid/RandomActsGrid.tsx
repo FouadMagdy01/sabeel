@@ -2,10 +2,11 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import React, { useMemo } from 'react';
+import { UniPressable } from '@/common/components/themed';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ViewStyle } from 'react-native';
-import { Platform, Pressable, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import type { RandomActData } from '../../types';
 import { styles } from './RandomActsGrid.styles';
@@ -16,6 +17,7 @@ interface RandomActsGridProps {
 }
 
 export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
+  // useUnistyles only for CircularProgress color prop (non-style prop)
   const { theme } = useUnistyles();
   const { t } = useTranslation();
 
@@ -31,34 +33,21 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
 
   const isIOS = Platform.OS === 'ios';
 
-  const androidRipple = useMemo(
-    () =>
-      Platform.OS === 'android'
-        ? { color: theme.colors.overlay.pressed, foreground: true, borderless: false }
-        : undefined,
-    [theme.colors.overlay.pressed]
-  );
-
   const renderActCard = (act: RandomActData): React.JSX.Element => {
     const isCompleted = act.status === 'completed';
     const isLocked = act.status === 'locked';
 
-    const cardBg = isCompleted
-      ? { backgroundColor: theme.colors.state.successBg }
-      : { backgroundColor: theme.colors.background.surfaceAlt };
-
     return (
-      <Pressable
+      <UniPressable
         key={act.id}
         style={({ pressed }) =>
           [
             styles.cardContainer,
-            cardBg,
+            isCompleted ? styles.cardCompleted : styles.cardPending,
             isIOS && pressed ? styles.pressed : undefined,
           ] as ViewStyle[]
         }
         onPress={() => onActPress(act)}
-        android_ripple={androidRipple}
       >
         <View style={styles.actCard}>
           <View style={styles.cardContent}>
@@ -66,13 +55,7 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
               familyName={act.iconFamily}
               iconName={act.iconName}
               size={22}
-              color={
-                isCompleted
-                  ? theme.colors.state.success
-                  : isLocked
-                    ? theme.colors.icon.muted
-                    : theme.colors.brand.tertiary
-              }
+              variant={isCompleted ? 'success' : isLocked ? 'muted' : 'brandTertiary'}
             />
             <View style={styles.textContainer}>
               <Typography size="sm" weight="semiBold" color={isLocked ? 'muted' : 'primary'}>
@@ -85,17 +68,11 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
               familyName="MaterialIcons"
               iconName={isCompleted ? 'check-circle' : isLocked ? 'lock' : 'radio-button-unchecked'}
               size={20}
-              color={
-                isCompleted
-                  ? theme.colors.state.success
-                  : isLocked
-                    ? theme.colors.icon.muted
-                    : theme.colors.icon.muted
-              }
+              variant={isCompleted ? 'success' : 'muted'}
             />
           </View>
         </View>
-      </Pressable>
+      </UniPressable>
     );
   };
 

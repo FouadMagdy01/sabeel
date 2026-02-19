@@ -15,28 +15,9 @@ interface CurrentPrayerCardProps {
 }
 
 export function CurrentPrayerCard({ prayers, currentPrayer, countdown }: CurrentPrayerCardProps) {
+  // useUnistyles only for gradient colors (non-style prop passed to Card)
   const { theme } = useUnistyles();
   const { t } = useTranslation();
-
-  // Inline color styles to avoid flicker during theme switching
-  const timelineLineColor = { backgroundColor: theme.colors.border.default };
-  const dotCompletedColors = {
-    backgroundColor: theme.colors.state.successBg,
-    borderColor: theme.colors.state.success,
-  };
-  const dotCurrentColors = {
-    backgroundColor: theme.colors.brand.primary,
-    shadowColor: theme.colors.brand.primary,
-  };
-  const dotCurrentInnerColor = { backgroundColor: '#FFFFFF' };
-  const dotUpcomingColors = {
-    backgroundColor: theme.colors.background.surface,
-    borderColor: theme.colors.border.default,
-  };
-  const dotUpcomingInnerColor = { backgroundColor: theme.colors.icon.muted };
-  const labelCompletedColor = { color: theme.colors.brand.secondary };
-  const labelCurrentColor = { color: theme.colors.brand.primary };
-  const labelUpcomingColor = { color: theme.colors.brand.secondary, opacity: 0.5 };
 
   return (
     <Card
@@ -59,12 +40,7 @@ export function CurrentPrayerCard({ prayers, currentPrayer, countdown }: Current
           {currentPrayer}
         </Typography>
         <View style={styles.timerRow}>
-          <Icon
-            familyName="MaterialIcons"
-            iconName="schedule"
-            size={16}
-            color={theme.colors.brand.primary}
-          />
+          <Icon familyName="MaterialIcons" iconName="schedule" size={16} variant="brandPrimary" />
           <Typography
             size="sm"
             weight="bold"
@@ -78,27 +54,27 @@ export function CurrentPrayerCard({ prayers, currentPrayer, countdown }: Current
       </View>
 
       <View style={styles.timelineContainer}>
-        <View style={[styles.timelineLine, timelineLineColor]} />
+        <View style={styles.timelineLine} />
         {prayers.map((prayer) => (
           <View key={prayer.name} style={styles.timelineItem}>
             {prayer.status === 'completed' && (
-              <View style={[styles.dotCompleted, dotCompletedColors]}>
+              <View style={styles.dotCompleted}>
                 <Icon
                   familyName="MaterialIcons"
                   iconName="check"
                   size={12}
-                  color={theme.colors.brand.secondary}
+                  variant="brandSecondary"
                 />
               </View>
             )}
             {prayer.status === 'current' && (
-              <View style={[styles.dotCurrent, dotCurrentColors]}>
-                <View style={[styles.dotCurrentInner, dotCurrentInnerColor]} />
+              <View style={styles.dotCurrent}>
+                <View style={styles.dotCurrentInner} />
               </View>
             )}
             {prayer.status === 'upcoming' && (
-              <View style={[styles.dotUpcoming, dotUpcomingColors]}>
-                <View style={[styles.dotUpcomingInner, dotUpcomingInnerColor]} />
+              <View style={styles.dotUpcoming}>
+                <View style={styles.dotUpcomingInner} />
               </View>
             )}
             <Typography
@@ -108,9 +84,8 @@ export function CurrentPrayerCard({ prayers, currentPrayer, countdown }: Current
               style={[
                 styles.prayerLabel,
                 prayer.status === 'completed' && styles.labelCompleted,
-                prayer.status === 'completed' && labelCompletedColor,
-                prayer.status === 'current' && labelCurrentColor,
-                prayer.status === 'upcoming' && labelUpcomingColor,
+                prayer.status === 'current' && styles.labelCurrent,
+                prayer.status === 'upcoming' && styles.labelUpcoming,
               ]}
             >
               {prayer.name}

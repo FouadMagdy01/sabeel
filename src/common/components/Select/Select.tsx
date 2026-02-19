@@ -1,13 +1,13 @@
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { SearchInput } from '@/common/components/SearchInput';
+import { UniActivityIndicator } from '@/common/components/themed';
 import { Typography } from '@/common/components/Typography';
 import { styles } from './Select.styles';
 import type { SelectOption, SelectProps } from './Select.types';
@@ -78,7 +78,6 @@ export function Select({
   const { t } = useTranslation();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const insets = useSafeAreaInsets();
-  const { theme } = useUnistyles();
   const [searchQuery, setSearchQuery] = useState('');
 
   // Configure variants
@@ -214,7 +213,7 @@ export function Select({
         >
           {loading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color={theme.colors.brand.primary} />
+              <UniActivityIndicator size="large" />
             </View>
           ) : (
             <>

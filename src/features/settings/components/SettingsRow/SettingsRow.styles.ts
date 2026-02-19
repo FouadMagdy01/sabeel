@@ -1,21 +1,18 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { spacing, spacingV, hs, vs } from '@/theme/metrics';
+import { hs, vs } from '@/theme/metrics';
 
 export const ICON_BG_SIZE = hs(36);
 
-/**
- * Layout-only styles. Theme colors applied inline via useUnistyles()
- * to avoid flicker during theme switching.
- */
-export const styles = StyleSheet.create(() => ({
+export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.p16,
-    paddingVertical: spacingV.p12,
+    paddingHorizontal: theme.metrics.spacing.p16,
+    paddingVertical: theme.metrics.spacingV.p12,
   },
   separator: {
     borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border.subtle,
   },
   iconContainer: {
     width: ICON_BG_SIZE,
@@ -23,7 +20,8 @@ export const styles = StyleSheet.create(() => ({
     borderRadius: hs(10),
     justifyContent: 'center',
     alignItems: 'center',
-    marginEnd: spacing.p12,
+    marginEnd: theme.metrics.spacing.p12,
+    backgroundColor: `${theme.colors.brand.primary}15`,
   },
   content: {
     flex: 1,
@@ -32,6 +30,6 @@ export const styles = StyleSheet.create(() => ({
     marginTop: vs(2),
   },
   rightContainer: {
-    marginStart: spacing.p8,
+    marginStart: theme.metrics.spacing.p8,
   },
 }));

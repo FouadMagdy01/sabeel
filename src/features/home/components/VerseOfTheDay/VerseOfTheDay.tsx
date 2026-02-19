@@ -5,7 +5,6 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
 import type { VerseData } from '../../types';
 import { styles } from './VerseOfTheDay.styles';
 
@@ -15,33 +14,17 @@ interface VerseOfTheDayProps {
 }
 
 export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
-  const { theme } = useUnistyles();
   const { t } = useTranslation();
 
-  // Inline color styles to avoid flicker during theme switching
-  const containerBorderColor = { borderTopColor: theme.colors.brand.tertiary };
-  const labelDotColor = { backgroundColor: theme.colors.brand.tertiary };
-  const shareButtonShadow = { shadowColor: theme.colors.brand.tertiary };
-
   return (
-    <Card
-      variant="elevated"
-      radius="xl"
-      padding="lg"
-      style={[styles.container, containerBorderColor]}
-    >
+    <Card variant="elevated" radius="xl" padding="lg" style={styles.container}>
       <View style={styles.decorativeIcon}>
-        <Icon
-          familyName="MaterialIcons"
-          iconName="menu-book"
-          size={140}
-          color={theme.colors.brand.secondary}
-        />
+        <Icon familyName="MaterialIcons" iconName="menu-book" size={140} variant="brandSecondary" />
       </View>
 
       <View style={styles.headerRow}>
         <View style={styles.labelRow}>
-          <View style={[styles.labelDot, labelDotColor]} />
+          <View style={styles.labelDot} />
           <Typography size="xxs" weight="bold" color="brandTertiary" uppercase style={styles.label}>
             {t('screens.home.verseOfTheDay.label')}
           </Typography>
@@ -54,7 +37,7 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
           iconVariant="inverse"
           size="medium"
           onPress={onShare}
-          style={[styles.shareButton, shareButtonShadow]}
+          style={styles.shareButton}
         />
       </View>
 

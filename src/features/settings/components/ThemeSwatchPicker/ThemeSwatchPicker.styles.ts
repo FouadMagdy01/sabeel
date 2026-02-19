@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { spacing, spacingV, hs } from '@/theme/metrics';
+import { hs } from '@/theme/metrics';
 
 const SWATCH_SIZE = hs(40);
 const SWATCH_BORDER_SIZE = hs(46);
@@ -14,9 +14,9 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: spacing.p16,
-    paddingVertical: spacingV.p16,
-    paddingHorizontal: spacing.p16,
+    gap: theme.metrics.spacing.p16,
+    paddingVertical: theme.metrics.spacingV.p16,
+    paddingHorizontal: theme.metrics.spacing.p16,
   },
   swatchOuter: {
     width: SWATCH_BORDER_SIZE,
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
   },
   label: {
-    marginTop: spacingV.p4,
+    marginTop: theme.metrics.spacingV.p4,
     textAlign: 'center',
   },
   swatchWrapper: {

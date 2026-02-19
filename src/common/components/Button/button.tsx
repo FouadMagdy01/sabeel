@@ -1,15 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
-import {
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  Text,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
+import React, { useCallback } from 'react';
+import { Platform, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 
+import { UniActivityIndicator, UniPressable } from '@/common/components/themed';
 import { styles } from './button.styles';
 import type { ButtonProps } from './button.types';
 
@@ -51,8 +43,6 @@ export function Button({
   textStyle,
   ...pressableProps
 }: ButtonProps) {
-  const { theme } = useUnistyles();
-
   const isDisabled = disabled || loading;
 
   styles.useVariants({
@@ -63,54 +53,37 @@ export function Button({
     fullWidth: fullWidth as true | false,
   });
 
-  const androidRipple = useMemo(() => {
-    if (Platform.OS !== 'android' || isDisabled) return undefined;
-
-    const rippleColor =
-      variant === 'contained' ? theme.colors.overlay.ripple : theme.colors.overlay.hover;
-
-    return {
-      color: rippleColor,
-      borderless: false,
-      foreground: true,
-    };
-  }, [variant, theme, isDisabled]);
-
-  const spinnerColor = useMemo(() => {
-    // For contained variant, use appropriate text color based on state
-    if (variant === 'contained') {
-      // When disabled (including loading + disabled), button becomes gray background
-      // Use primary text color for visibility on gray disabled background
-      if (disabled) return theme.colors.text.primary;
-      // When only loading (not disabled), button keeps its color - use inverse
-      return theme.colors.text.inverse;
-    }
-
-    // For other variants, use the button's color scheme
-    if (color === 'primary') return theme.colors.brand.primary;
-    if (color === 'secondary') return theme.colors.brand.secondary;
-    if (color === 'success') return theme.colors.state.success;
-    if (color === 'error') return theme.colors.state.error;
-    if (color === 'warning') return theme.colors.state.warning;
-    if (color === 'info') return theme.colors.state.info;
-    return theme.colors.brand.primary;
-  }, [variant, color, theme, disabled]);
-
   const getPressedStyle = useCallback(
     (pressed: boolean): StyleProp<ViewStyle> => {
       if (!pressed || isDisabled || Platform.OS === 'android') return {};
       if (variant === 'contained') return { opacity: 0.85 };
       if (variant === 'transparent') return { opacity: 0.7 };
 
-      return { backgroundColor: theme.colors.overlay.pressed };
+      return styles.pressedOverlay;
     },
-    [variant, theme, isDisabled]
+    [variant, isDisabled]
   );
 
   const renderContent = () => (
     <>
       {loading ? (
-        <ActivityIndicator size={SPINNER_SIZE[size]} color={spinnerColor} />
+        <UniActivityIndicator
+          size={SPINNER_SIZE[size]}
+          uniProps={(theme) => {
+            if (variant === 'contained') {
+              return { color: disabled ? theme.colors.text.primary : theme.colors.text.inverse };
+            }
+            const colorMap = {
+              primary: theme.colors.brand.primary,
+              secondary: theme.colors.brand.secondary,
+              success: theme.colors.state.success,
+              error: theme.colors.state.error,
+              warning: theme.colors.state.warning,
+              info: theme.colors.state.info,
+            } as const;
+            return { color: colorMap[color] };
+          }}
+        />
       ) : (
         icon && iconPosition === 'left' && icon
       )}
@@ -120,7 +93,7 @@ export function Button({
   );
 
   const renderPressable = () => (
-    <Pressable
+    <UniPressable
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.container,
@@ -128,11 +101,24 @@ export function Button({
         getPressedStyle(pressed),
         style,
       ]}
-      android_ripple={androidRipple}
+      uniProps={
+        isDisabled
+          ? undefined
+          : (theme) => ({
+              android_ripple: {
+                color:
+                  variant === 'contained'
+                    ? theme.colors.overlay.ripple
+                    : theme.colors.overlay.hover,
+                borderless: false,
+                foreground: true,
+              },
+            })
+      }
       {...pressableProps}
     >
       {renderContent()}
-    </Pressable>
+    </UniPressable>
   );
 
   if (Platform.OS === 'android') {

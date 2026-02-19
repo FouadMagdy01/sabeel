@@ -1,13 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { Alert, I18nManager, Platform, ScrollView, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useUnistyles, StyleSheet } from 'react-native-unistyles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useBottomPadding } from '@/hooks/useBottomPadding';
 import { Button } from '@/common/components/Button';
+import { SegmentedControl } from '@/common/components/SegmentedControl';
 import { Toggle } from '@/common/components/Toggle';
 import { Typography } from '@/common/components/Typography';
-import { useAuth } from '@/providers';
 import { useLogoutMutation } from '@/features/auth/hooks';
 import {
   ProfileHeader,
@@ -15,29 +9,34 @@ import {
   SettingsSection,
   ThemeSwatchPicker,
 } from '@/features/settings';
-import { SegmentedControl } from '@/common/components/SegmentedControl';
-import { setItem, STORAGE_KEYS } from '@/utils/storage';
-import { applyThemePreset, getCurrentPreset, toggleDarkMode } from '@/theme/themeManager';
+import { useBottomPadding } from '@/hooks/useBottomPadding';
+import { useAuth } from '@/providers';
 import type { ThemePresetName } from '@/theme/config';
-import { spacingV } from '@/theme/metrics';
+
+import { applyThemePreset, getCurrentPreset, toggleDarkMode } from '@/theme/themeManager';
 import { reloadApp } from '@/utils/reload';
+import { setItem, STORAGE_KEYS } from '@/utils/storage';
+import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert, I18nManager, Platform, ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 const APP_VERSION = '1.0.0';
 
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
-  const { theme } = useUnistyles();
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
   const { isAuthenticated } = useAuth();
   const logoutMutation = useLogoutMutation();
 
-  const [isDark, setIsDark] = useState(theme.colors.mode === 'dark');
+  const { rt } = useUnistyles();
+  const isDark = String(rt.themeName ?? '').endsWith('dark');
   const [currentPreset, setCurrentPreset] = useState<ThemePresetName>(getCurrentPreset);
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
 
   const handleToggleDarkMode = useCallback((value: boolean) => {
-    setIsDark(value);
     toggleDarkMode(value);
   }, []);
 
@@ -95,12 +94,9 @@ export default function SettingsScreen() {
     // Placeholder for future navigation
   }, []);
 
-  // Inline background color to avoid flicker during theme switching
-  const bgColor = { backgroundColor: theme.colors.background.app };
-
   return (
     <ScrollView
-      style={[styles.container, bgColor, { paddingTop: insets.top }]}
+      style={[styles.container, { paddingTop: insets.top }]}
       contentContainerStyle={[styles.contentContainer, { paddingBottom: bottomPadding }]}
       showsVerticalScrollIndicator={false}
     >
@@ -197,21 +193,22 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create(() => ({
+const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
+    backgroundColor: theme.colors.background.app,
   },
   contentContainer: {},
   screenTitle: {
     paddingHorizontal: 16,
-    paddingTop: spacingV.p16,
-    paddingBottom: spacingV.p20,
+    paddingTop: theme.metrics.spacingV.p16,
+    paddingBottom: theme.metrics.spacingV.p20,
   },
   signOutContainer: {
     paddingHorizontal: 16,
-    marginBottom: spacingV.p24,
+    marginBottom: theme.metrics.spacingV.p24,
   },
   version: {
-    paddingBottom: spacingV.p16,
+    paddingBottom: theme.metrics.spacingV.p16,
   },
 }));

@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native-unistyles';
 export const styles = StyleSheet.create((theme) => ({
   container: {
     borderTopWidth: 1,
+    borderTopColor: theme.colors.brand.tertiary,
   },
   decorativeIcon: {
     position: 'absolute',
@@ -19,12 +20,13 @@ export const styles = StyleSheet.create((theme) => ({
   labelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: theme.metrics.spacing.p8,
   },
   labelDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
+    backgroundColor: theme.colors.brand.tertiary,
   },
   label: {
     fontSize: theme.fonts.size.xxs,
@@ -34,6 +36,7 @@ export const styles = StyleSheet.create((theme) => ({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
+    shadowColor: theme.colors.brand.tertiary,
     elevation: 4,
   },
   contentArea: {
@@ -47,7 +50,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   translationText: {
     letterSpacing: -0.3,
-    marginBottom: 8,
+    marginBottom: theme.metrics.spacingV.p8,
   },
   referenceText: {
     fontSize: theme.fonts.size.xxs,

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { spacing, spacingV, hs } from '@/theme/metrics';
+import { hs } from '@/theme/metrics';
 
 export const styles = StyleSheet.create((theme) => ({
   container: {
@@ -9,8 +9,8 @@ export const styles = StyleSheet.create((theme) => ({
     overflow: 'hidden',
   },
   button: {
-    paddingHorizontal: spacing.p16,
-    paddingVertical: spacingV.p8,
+    paddingHorizontal: theme.metrics.spacing.p16,
+    paddingVertical: theme.metrics.spacingV.p8,
     borderRadius: hs(8),
   },
   buttonActive: {

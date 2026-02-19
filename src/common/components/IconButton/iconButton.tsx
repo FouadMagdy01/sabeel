@@ -1,24 +1,24 @@
 import React from 'react';
-import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
+import { Platform, View } from 'react-native';
 
 import type { IconColorVariant } from '@/common/components/Icon';
 import { Icon } from '@/common/components/Icon';
 import type { ICON_FAMILIES } from '@/common/components/Icon/Icon.constants';
+import { UniActivityIndicator, UniPressable } from '@/common/components/themed';
 import { ICON_SIZES, styles } from './iconButton.styles';
 import type { IconButtonColor, IconButtonProps } from './iconButton.types';
 
-const ICON_COLORS: Record<
-  IconButtonColor,
-  (theme: ReturnType<typeof useUnistyles>['theme']) => string
-> = {
-  primary: (theme) => theme.colors.brand.primary,
-  secondary: (theme) => theme.colors.brand.secondary,
-  tertiary: (theme) => theme.colors.brand.tertiary,
-  success: (theme) => theme.colors.brand.primary,
-  error: (theme) => theme.colors.state.error,
-  warning: (theme) => theme.colors.state.warning,
-  info: (theme) => theme.colors.state.info,
+/**
+ * Map IconButtonColor to IconColorVariant for direct use without theme access
+ */
+const BUTTON_COLOR_TO_ICON_VARIANT: Record<IconButtonColor, IconColorVariant> = {
+  primary: 'brandPrimary',
+  secondary: 'brandSecondary',
+  tertiary: 'brandTertiary',
+  success: 'success',
+  error: 'error',
+  warning: 'warning',
+  info: 'info',
 };
 
 /**
@@ -74,8 +74,6 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
   style,
   ...pressableProps
 }: IconButtonProps<T>) {
-  const { theme } = useUnistyles();
-
   styles.useVariants({
     variant,
     size,
@@ -83,61 +81,50 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
     disabled: disabled as true | false,
   });
 
-  // Determine icon/spinner color based on button variant
-  const getIconColor = (): { variant?: IconColorVariant; color?: string } => {
+  // Determine icon color variant
+  const getIconProps = (): { variant?: IconColorVariant; color?: string } => {
     if (iconColor) return { color: iconColor };
     if (iconVariant) return { variant: iconVariant };
-
-    // When filled variant and disabled, use primary text for visibility on gray background
     if (variant === 'filled' && disabled) return { variant: 'primary' };
     if (variant === 'filled') return { variant: 'inverse' };
-
-    // Ghost, tinted, and outlined variants all respect the color prop
-    return { color: ICON_COLORS[color](theme) };
+    return { variant: BUTTON_COLOR_TO_ICON_VARIANT[color] };
   };
 
   const iconSize = ICON_SIZES[size];
-  const resolvedIconColor = getIconColor();
-
-  // Determine spinner color - ensure it's always visible
-  const spinnerColor = (() => {
-    if (resolvedIconColor.color) return resolvedIconColor.color;
-    if (resolvedIconColor.variant === 'inverse') return theme.colors.icon.inverse;
-    if (resolvedIconColor.variant === 'primary') return theme.colors.icon.primary;
-    if (resolvedIconColor.variant === 'secondary') return theme.colors.icon.secondary;
-    if (resolvedIconColor.variant === 'tertiary') return theme.colors.icon.tertiary;
-    if (resolvedIconColor.variant === 'muted') return theme.colors.icon.muted;
-    if (resolvedIconColor.variant === 'accent') return theme.colors.icon.accent;
-    return theme.colors.icon.primary;
-  })();
-
-  const iconProps = {
-    familyName,
-    iconName,
-    size: iconSize,
-    ...(resolvedIconColor.variant ? { variant: resolvedIconColor.variant } : {}),
-    ...(resolvedIconColor.color ? { color: resolvedIconColor.color } : {}),
-  } as const;
-
-  // Render icon or loading spinner
-  const renderContent = () => {
-    if (loading) {
-      return <ActivityIndicator size="small" color={spinnerColor} />;
-    }
-    // @ts-expect-error - Generic icon props are complex
-    return <Icon {...iconProps} />;
-  };
+  const resolvedIconProps = getIconProps();
 
   const isDisabled = disabled || loading;
 
-  const androidRipple =
-    Platform.OS === 'android' && !isDisabled
-      ? {
-          color: variant === 'filled' ? theme.colors.overlay.ripple : theme.colors.overlay.hover,
-          borderless: false,
-          foreground: true,
-        }
-      : undefined;
+  // Determine spinner uniProps based on resolved icon color
+  const spinnerUniProps = (
+    theme: Parameters<NonNullable<React.ComponentProps<typeof UniActivityIndicator>['uniProps']>>[0]
+  ) => {
+    if (resolvedIconProps.color) return { color: resolvedIconProps.color };
+    const v = resolvedIconProps.variant;
+    if (v === 'inverse') return { color: theme.colors.icon.inverse };
+    if (v === 'brandPrimary') return { color: theme.colors.brand.primary };
+    if (v === 'brandSecondary') return { color: theme.colors.brand.secondary };
+    if (v === 'brandTertiary') return { color: theme.colors.brand.tertiary };
+    if (v === 'success') return { color: theme.colors.state.success };
+    if (v === 'error') return { color: theme.colors.state.error };
+    if (v === 'warning') return { color: theme.colors.state.warning };
+    if (v === 'info') return { color: theme.colors.state.info };
+    if (v === 'primary') return { color: theme.colors.icon.primary };
+    if (v === 'secondary') return { color: theme.colors.icon.secondary };
+    if (v === 'tertiary') return { color: theme.colors.icon.tertiary };
+    if (v === 'muted') return { color: theme.colors.icon.muted };
+    if (v === 'accent') return { color: theme.colors.icon.accent };
+    return { color: theme.colors.icon.primary };
+  };
+
+  const renderContent = () => {
+    if (loading) {
+      return <UniActivityIndicator size="small" uniProps={spinnerUniProps} />;
+    }
+    // Generic icon props require type assertion due to TypeScript generic inference limitations
+    const iconProps = { familyName, iconName, size: iconSize, ...resolvedIconProps };
+    return <Icon {...(iconProps as React.ComponentProps<typeof Icon>)} />;
+  };
 
   const getPressedStyle = (pressed: boolean) => {
     if (!pressed || isDisabled || Platform.OS === 'android') return {};
@@ -145,14 +132,25 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
   };
 
   const renderPressable = () => (
-    <Pressable
+    <UniPressable
       style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
       disabled={isDisabled}
-      android_ripple={androidRipple}
+      uniProps={
+        isDisabled
+          ? undefined
+          : (theme) => ({
+              android_ripple: {
+                color:
+                  variant === 'filled' ? theme.colors.overlay.ripple : theme.colors.overlay.hover,
+                borderless: false,
+                foreground: true,
+              },
+            })
+      }
       {...pressableProps}
     >
       {renderContent()}
-    </Pressable>
+    </UniPressable>
   );
 
   if (Platform.OS === 'android') {

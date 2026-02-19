@@ -16,13 +16,13 @@ export const styles = StyleSheet.create((theme) => ({
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: theme.metrics.spacing.p8,
   },
   prayerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: theme.metrics.spacing.p4,
   },
   prayerCircle: {
     alignItems: 'center',
@@ -38,6 +38,8 @@ export const styles = StyleSheet.create((theme) => ({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    backgroundColor: theme.colors.brand.primary,
+    shadowColor: theme.colors.brand.primary,
   },
   circleCurrent: {
     width: 44,
@@ -46,6 +48,8 @@ export const styles = StyleSheet.create((theme) => ({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: theme.colors.brand.primary,
+    backgroundColor: theme.colors.background.surface,
   },
   currentDot: {
     width: 8,
@@ -60,5 +64,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: theme.colors.border.default,
+    backgroundColor: theme.colors.background.surfaceAlt,
   },
 }));

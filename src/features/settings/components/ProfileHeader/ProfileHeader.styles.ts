@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { spacing, spacingV, hs } from '@/theme/metrics';
+import { hs } from '@/theme/metrics';
 
 const AVATAR_SIZE = hs(56);
 
@@ -9,10 +9,10 @@ export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.p16,
-    paddingVertical: spacingV.p20,
-    marginHorizontal: spacing.p16,
-    marginBottom: spacingV.p24,
+    paddingHorizontal: theme.metrics.spacing.p16,
+    paddingVertical: theme.metrics.spacingV.p20,
+    marginHorizontal: theme.metrics.spacing.p16,
+    marginBottom: theme.metrics.spacingV.p24,
     backgroundColor: theme.colors.background.surface,
     borderRadius: hs(12),
   },
@@ -23,12 +23,12 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: `${theme.colors.brand.primary}20`,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.p12,
+    marginRight: theme.metrics.spacing.p12,
   },
   info: {
     flex: 1,
   },
   nameText: {
-    marginBottom: spacingV.p4,
+    marginBottom: theme.metrics.spacingV.p4,
   },
 }));

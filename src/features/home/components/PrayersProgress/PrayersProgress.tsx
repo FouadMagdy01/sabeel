@@ -2,16 +2,16 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
+import { UniPressable } from '@/common/components/themed';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { useUnistyles } from 'react-native-unistyles';
 import type { PrayerData } from '../../types';
 import { styles } from './PrayersProgress.styles';
 
@@ -35,78 +35,40 @@ function PulsingDot() {
 }
 
 export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps) {
-  const { theme } = useUnistyles();
   const { t } = useTranslation();
 
   const completedCount = prayers.filter((p) => p.status === 'completed').length;
   const progress = completedCount / prayers.length;
   const percentage = Math.round(progress * 100);
 
-  /**
-   * Renders an individual prayer circle with status-based styling (completed, current, upcoming).
-   *
-   * @param prayer - The prayer data containing name, time, and status
-   * @returns A pressable circle component with conditional icons and animations
-   *
-   * @remarks
-   * This is a pure render function that accesses theme and event handlers from parent scope via closure.
-   * The function can be tested independently by providing mock PrayerData.
-   * The PulsingDot component is already extracted and used for the current prayer status.
-   */
-  // Inline color styles to avoid flicker during theme switching
-  const circleCompletedColors = {
-    backgroundColor: theme.colors.brand.primary,
-    shadowColor: theme.colors.brand.primary,
-  };
-  const circleCurrentColors = {
-    borderColor: theme.colors.brand.primary,
-    backgroundColor: theme.colors.background.surface,
-  };
-  const circleUpcomingColors = {
-    borderColor: theme.colors.border.default,
-    backgroundColor: theme.colors.background.surfaceAlt,
-  };
-
-  const renderPrayerCircle = (prayer: PrayerData): React.JSX.Element => {
-    return (
-      <Pressable
-        key={prayer.name}
-        style={styles.prayerCircle}
-        onPress={() => onPrayerPress(prayer)}
-        android_ripple={{
-          color: theme.colors.overlay.pressed,
-          borderless: true,
-          foreground: true,
-        }}
-      >
-        {prayer.status === 'completed' && (
-          <View style={[styles.circleCompleted, circleCompletedColors]}>
-            <Icon
-              familyName="MaterialIcons"
-              iconName="check"
-              size={20}
-              color={theme.colors.icon.inverse}
-            />
-          </View>
-        )}
-        {prayer.status === 'current' && (
-          <View style={[styles.circleCurrent, circleCurrentColors]}>
-            <PulsingDot />
-          </View>
-        )}
-        {prayer.status === 'upcoming' && (
-          <View style={[styles.circleUpcoming, circleUpcomingColors]}>
-            <Icon
-              familyName="MaterialCommunityIcons"
-              iconName="circle-outline"
-              size={18}
-              color={theme.colors.icon.muted}
-            />
-          </View>
-        )}
-      </Pressable>
-    );
-  };
+  const renderPrayerCircle = (prayer: PrayerData): React.JSX.Element => (
+    <UniPressable
+      key={prayer.name}
+      style={styles.prayerCircle}
+      onPress={() => onPrayerPress(prayer)}
+    >
+      {prayer.status === 'completed' && (
+        <View style={styles.circleCompleted}>
+          <Icon familyName="MaterialIcons" iconName="check" size={20} variant="inverse" />
+        </View>
+      )}
+      {prayer.status === 'current' && (
+        <View style={styles.circleCurrent}>
+          <PulsingDot />
+        </View>
+      )}
+      {prayer.status === 'upcoming' && (
+        <View style={styles.circleUpcoming}>
+          <Icon
+            familyName="MaterialCommunityIcons"
+            iconName="circle-outline"
+            size={18}
+            variant="muted"
+          />
+        </View>
+      )}
+    </UniPressable>
+  );
 
   return (
     <Card variant="elevated" padding="lg" style={styles.cardLayout}>
@@ -118,7 +80,7 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
           <Typography size="xs" weight="bold" color="brandPrimary">
             {percentage}%
           </Typography>
-          <CircularProgress progress={progress} color={theme.colors.brand.primary} />
+          <CircularProgress progress={progress} />
         </View>
       </View>
 

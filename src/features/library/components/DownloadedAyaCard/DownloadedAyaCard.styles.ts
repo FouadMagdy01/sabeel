@@ -20,6 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: `${theme.colors.brand.primary}15`,
   },
   verseLabel: {
     fontSize: theme.fonts.size.xxs,

@@ -7,7 +7,14 @@ export const styles = StyleSheet.create((theme) => ({
   label: {
     fontSize: theme.fonts.size.xs,
     fontFamily: theme.fonts.semiBold,
+    color: theme.colors.text.secondary,
     marginBottom: theme.metrics.spacingV.p4,
+  },
+  labelError: {
+    color: theme.colors.state.error,
+  },
+  labelDisabled: {
+    color: theme.colors.text.muted,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -18,14 +25,17 @@ export const styles = StyleSheet.create((theme) => ({
         outlined: {
           backgroundColor: 'transparent',
           borderWidth: 1,
+          borderColor: theme.colors.border.default,
         },
         filled: {
+          backgroundColor: theme.colors.background.input,
           borderWidth: 1,
           borderColor: 'transparent',
         },
         underlined: {
           backgroundColor: 'transparent',
           borderBottomWidth: 1,
+          borderBottomColor: theme.colors.border.default,
           borderRadius: 0,
         },
       },
@@ -91,12 +101,78 @@ export const styles = StyleSheet.create((theme) => ({
           borderRadius: 0,
         },
       },
+      // Error state borders
+      {
+        variant: 'outlined',
+        error: true,
+        styles: {
+          borderColor: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'filled',
+        error: true,
+        styles: {
+          borderColor: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'underlined',
+        error: true,
+        styles: {
+          borderBottomColor: theme.colors.state.error,
+        },
+      },
+      // Success state borders
+      {
+        variant: 'outlined',
+        success: true,
+        styles: {
+          borderColor: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'filled',
+        success: true,
+        styles: {
+          borderColor: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'underlined',
+        success: true,
+        styles: {
+          borderBottomColor: theme.colors.state.success,
+        },
+      },
+      // Focused state borders (only when not error/success)
+      {
+        variant: 'outlined',
+        focused: true,
+        styles: {
+          borderColor: theme.colors.border.focus,
+        },
+      },
+      {
+        variant: 'filled',
+        focused: true,
+        styles: {
+          borderColor: theme.colors.border.focus,
+        },
+      },
+      {
+        variant: 'underlined',
+        focused: true,
+        styles: {
+          borderBottomColor: theme.colors.border.focus,
+        },
+      },
     ],
   },
   input: {
     flex: 1,
     fontFamily: theme.fonts.regular,
-    // color applied inline to avoid flicker
+    color: theme.colors.text.primary,
     padding: 0,
     variants: {
       size: {
@@ -121,15 +197,24 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
   },
   helperText: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
     fontFamily: theme.fonts.regular,
+    color: theme.colors.text.muted,
+  },
+  helperTextError: {
+    color: theme.colors.state.error,
+  },
+  helperTextSuccess: {
+    color: theme.colors.state.success,
   },
   requiredIndicator: {
+    color: theme.colors.state.error,
     marginLeft: 2,
   },
   charCount: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
     fontFamily: theme.fonts.regular,
+    color: theme.colors.text.muted,
     marginTop: theme.metrics.spacingV.p4,
   },
   helperTextRow: {

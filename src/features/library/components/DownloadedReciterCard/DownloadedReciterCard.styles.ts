@@ -13,6 +13,8 @@ export const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: `${theme.colors.brand.primary}15`,
+    borderColor: `${theme.colors.brand.primary}30`,
   },
   content: {
     flex: 1,

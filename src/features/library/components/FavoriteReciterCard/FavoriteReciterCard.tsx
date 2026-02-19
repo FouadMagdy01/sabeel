@@ -6,7 +6,6 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
 
 import type { FavoriteReciter } from '../../types';
 import { styles } from './FavoriteReciterCard.styles';
@@ -17,23 +16,11 @@ interface FavoriteReciterCardProps {
 
 const FavoriteReciterCard: React.FC<FavoriteReciterCardProps> = ({ reciter }) => {
   const { t } = useTranslation();
-  const { theme } = useUnistyles();
-
-  // Inline color styles to avoid flicker during theme switching
-  const avatarColors = {
-    backgroundColor: `${theme.colors.brand.primary}15`,
-    borderColor: `${theme.colors.brand.primary}30`,
-  };
 
   return (
     <Card variant="outlined" style={styles.cardLayout}>
-      <View style={[styles.avatar, avatarColors]}>
-        <Icon
-          familyName="MaterialIcons"
-          iconName="person"
-          size={24}
-          color={theme.colors.brand.primary}
-        />
+      <View style={styles.avatar}>
+        <Icon familyName="MaterialIcons" iconName="person" size={24} variant="brandPrimary" />
       </View>
       <View style={styles.content}>
         <Typography size="sm" weight="bold">

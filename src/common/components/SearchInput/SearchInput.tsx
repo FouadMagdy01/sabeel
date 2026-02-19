@@ -1,8 +1,8 @@
 import { Icon } from '@/common/components/Icon';
 import React, { useCallback } from 'react';
-import { ActivityIndicator, Pressable, TextInput, View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
+import { View } from 'react-native';
 
+import { UniActivityIndicator, UniPressable, UniTextInput } from '@/common/components/themed';
 import { SEARCH_INPUT_ICON_SIZES, styles } from './SearchInput.styles';
 import type { SearchInputProps } from './SearchInput.types';
 
@@ -44,8 +44,6 @@ export function SearchInput({
   disabled = false,
   ...textInputProps
 }: SearchInputProps) {
-  const { theme } = useUnistyles();
-
   styles.useVariants({
     size,
     disabled: disabled as true | false,
@@ -60,32 +58,15 @@ export function SearchInput({
   const shouldShowClear = showClearButton ?? Boolean(value && value.length > 0);
   const iconSize = SEARCH_INPUT_ICON_SIZES[size];
 
-  // Inline color styles to avoid flicker during theme switching
-  const containerColors = {
-    backgroundColor: disabled ? theme.colors.background.disabled : theme.colors.background.input,
-    borderColor: theme.colors.border.default,
-  };
-  const inputColor = { color: theme.colors.text.primary };
-
   return (
-    <View style={[styles.container, containerColors, containerStyle]}>
+    <View style={[styles.container, containerStyle]}>
       {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={theme.colors.brand.primary}
-          style={styles.loadingSpinner}
-        />
+        <UniActivityIndicator size="small" style={styles.loadingSpinner} />
       ) : (
-        <Icon
-          familyName="Feather"
-          iconName="search"
-          size={iconSize}
-          color={theme.colors.icon.tertiary}
-        />
+        <Icon familyName="Feather" iconName="search" size={iconSize} variant="tertiary" />
       )}
-      <TextInput
-        style={[styles.input, inputColor, style]}
-        placeholderTextColor={theme.colors.text.muted}
+      <UniTextInput
+        style={[styles.input, style]}
         value={value}
         editable={!disabled}
         onSubmitEditing={handleSubmitEditing}
@@ -93,14 +74,9 @@ export function SearchInput({
         {...textInputProps}
       />
       {shouldShowClear && onClear && !disabled && (
-        <Pressable onPress={onClear} style={styles.clearButton} hitSlop={8}>
-          <Icon
-            familyName="Feather"
-            iconName="x"
-            size={iconSize - 2}
-            color={theme.colors.icon.muted}
-          />
-        </Pressable>
+        <UniPressable onPress={onClear} style={styles.clearButton} hitSlop={8}>
+          <Icon familyName="Feather" iconName="x" size={iconSize - 2} variant="muted" />
+        </UniPressable>
       )}
     </View>
   );

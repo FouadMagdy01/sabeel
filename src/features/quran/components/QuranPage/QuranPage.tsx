@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
-import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+import { StyleSheet, withUnistyles } from 'react-native-unistyles';
 import { scheduleOnRN } from 'react-native-worklets';
 import { useAyahBounds } from '../../hooks/useAyahBounds';
 import type { AyahBound } from '../../services/quranDatabase';
@@ -34,6 +34,10 @@ const PHI = 1.618;
 const LONG_PRESS_DURATION = 500;
 
 const BUNDLED_PAGE_1 = require('../../../../../assets/quran/pages/1.png') as ImageSource;
+
+const UniPath = withUnistyles(Path, (theme) => ({
+  fill: theme.colors.overlay.pressed,
+}));
 
 /** Find which bound index contains the given (x, y) point */
 function hitTest(bounds: AyahBound[], x: number, y: number, ratio: number): number {
@@ -151,7 +155,6 @@ export function QuranPage({
   const { width: screenWidth } = useWindowDimensions();
   const { bounds } = useAyahBounds(page);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
-  const { theme } = useUnistyles();
   const { t } = useTranslation();
 
   const ratio = screenWidth / IMG_WIDTH;
@@ -249,10 +252,6 @@ export function QuranPage({
   const selectionPath = buildSelectionPath(bounds, selectedKeys, ratio);
   const hasSelection = selectedKeys.size > 0;
   const imageSource = imageUri ? { uri: imageUri } : BUNDLED_PAGE_1;
-  const imageColors = {
-    backgroundColor: theme.colors.background.app,
-    tintColor: theme.colors.text.primary,
-  };
 
   const selectedAyahs = useMemo(() => {
     if (!hasSelection) return [];
@@ -307,7 +306,7 @@ export function QuranPage({
       <View style={styles.container}>
         <Image
           source={imageSource}
-          style={[styles.image, imageColors, { width: screenWidth, height: pageHeight }]}
+          style={[styles.image, { width: screenWidth, height: pageHeight }]}
           contentFit="contain"
           pointerEvents="none"
         />
@@ -319,7 +318,7 @@ export function QuranPage({
             height={pageHeight}
             pointerEvents="none"
           >
-            <Path d={selectionPath} fill={theme.colors.overlay.pressed} />
+            <UniPath d={selectionPath} />
           </Svg>
         )}
 
@@ -338,11 +337,14 @@ export function QuranPage({
   );
 }
 
-const styles = StyleSheet.create(() => ({
+const styles = StyleSheet.create((theme) => ({
   container: {
     position: 'relative',
   },
-  image: {},
+  image: {
+    backgroundColor: theme.colors.background.app,
+    tintColor: theme.colors.text.primary,
+  },
   svgOverlay: {
     position: 'absolute',
     top: 0,

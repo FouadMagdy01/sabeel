@@ -10,7 +10,14 @@ export type IconColorVariant =
   | 'tertiary'
   | 'muted'
   | 'inverse'
-  | 'accent';
+  | 'accent'
+  | 'brandPrimary'
+  | 'brandSecondary'
+  | 'brandTertiary'
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info';
 
 // Extract icon name types from each icon family
 export type IconName<T extends keyof typeof ICON_FAMILIES> = ComponentProps<

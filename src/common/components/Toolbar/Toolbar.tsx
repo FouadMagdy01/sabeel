@@ -1,9 +1,10 @@
 import React from 'react';
-import { Platform, Pressable, Text, View } from 'react-native';
-import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+import { Platform, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 
 import { Icon } from '@/common/components/Icon';
 import type { IconProps } from '@/common/components/Icon';
+import { UniPressable } from '@/common/components/themed';
 
 export type ToolbarAction = {
   key: string;
@@ -20,44 +21,34 @@ type ToolbarProps = {
 };
 
 export function Toolbar({ actions, showLabels = false, style }: ToolbarProps) {
-  const { theme } = useUnistyles();
-
-  // Inline color styles to avoid flicker during theme switching
-  const containerColors = {
-    backgroundColor: theme.colors.brand.secondary,
-    shadowColor: theme.colors.shadow.color,
-  };
-  const labelColor = { color: theme.colors.text.inverse };
-
   return (
-    <View style={[styles.container, containerColors, style]}>
-      {actions.map((action) => {
-        const androidRipple =
-          Platform.OS === 'android' && !action.disabled
-            ? { color: theme.colors.overlay.ripple, borderless: true }
-            : undefined;
-
-        return (
-          <Pressable
-            key={action.key}
-            onPress={action.onPress}
-            disabled={action.disabled}
-            android_ripple={androidRipple}
-            style={({ pressed }) => [
-              styles.action,
-              pressed && !action.disabled && Platform.OS !== 'android' && styles.actionPressed,
-              action.disabled && styles.actionDisabled,
-            ]}
-          >
-            <Icon {...action.icon} size={20} variant={action.disabled ? 'muted' : 'inverse'} />
-            {showLabels && action.label != null && (
-              <Text style={[styles.label, labelColor]} numberOfLines={1}>
-                {action.label}
-              </Text>
-            )}
-          </Pressable>
-        );
-      })}
+    <View style={[styles.container, style]}>
+      {actions.map((action) => (
+        <UniPressable
+          key={action.key}
+          onPress={action.onPress}
+          disabled={action.disabled}
+          uniProps={
+            action.disabled
+              ? undefined
+              : (theme) => ({
+                  android_ripple: { color: theme.colors.overlay.ripple, borderless: true },
+                })
+          }
+          style={({ pressed }) => [
+            styles.action,
+            pressed && !action.disabled && Platform.OS !== 'android' && styles.actionPressed,
+            action.disabled && styles.actionDisabled,
+          ]}
+        >
+          <Icon {...action.icon} size={20} variant={action.disabled ? 'muted' : 'inverse'} />
+          {showLabels && action.label != null && (
+            <Text style={styles.label} numberOfLines={1}>
+              {action.label}
+            </Text>
+          )}
+        </UniPressable>
+      ))}
     </View>
   );
 }
@@ -67,6 +58,8 @@ const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 12,
+    backgroundColor: theme.colors.brand.secondary,
+    shadowColor: theme.colors.shadow.color,
     paddingVertical: theme.metrics.spacingV.p4,
     paddingHorizontal: theme.metrics.spacing.p4,
     gap: theme.metrics.spacing.p4,
@@ -89,6 +82,7 @@ const styles = StyleSheet.create((theme) => ({
   label: {
     fontSize: theme.fonts.size.xxs,
     fontFamily: theme.fonts.medium,
+    color: theme.colors.text.inverse,
     marginTop: 2,
   },
 }));

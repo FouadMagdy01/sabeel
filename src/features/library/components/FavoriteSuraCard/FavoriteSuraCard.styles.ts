@@ -12,6 +12,7 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: `${theme.colors.brand.primary}15`,
   },
   content: {
     flex: 1,

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 /**
  * Status-based color variants for CircularProgress.
  */
-export type CircularProgressStatus = 'normal' | 'success' | 'error' | 'warning';
+export type CircularProgressStatus = 'normal' | 'success' | 'error' | 'warning' | 'info';
 
 /**
  * Props for the CircularProgress component.

@@ -401,6 +401,9 @@ export const styles = StyleSheet.create((theme) => ({
       },
     ],
   },
+  pressedOverlay: {
+    backgroundColor: theme.colors.overlay.pressed,
+  },
   androidWrapper: {
     borderRadius: 8,
     overflow: 'hidden',

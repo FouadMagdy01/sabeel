@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
+import { Text, View } from 'react-native';
 
 import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
+import { UniTextInput } from '@/common/components/themed';
 import { styles } from './Input.styles';
 import type { InputProps } from './Input.types';
 
@@ -69,7 +69,6 @@ export function Input({
   onChangeText,
   ...textInputProps
 }: InputProps) {
-  const { theme } = useUnistyles();
   const [isFocused, setIsFocused] = useState(false);
 
   styles.useVariants({
@@ -101,44 +100,11 @@ export function Input({
     onChangeText?.('');
   }, [onChangeText]);
 
-  // Inline color styles to avoid flicker during theme switching
-  const inputContainerColors = (() => {
-    if (error) return { borderColor: theme.colors.state.error };
-    if (success) return { borderColor: theme.colors.state.success };
-    if (isFocused)
-      return variant === 'underlined'
-        ? { borderBottomColor: theme.colors.border.focus }
-        : { borderColor: theme.colors.border.focus };
-    return variant === 'outlined'
-      ? { borderColor: theme.colors.border.default }
-      : variant === 'filled'
-        ? { backgroundColor: theme.colors.background.input }
-        : { borderBottomColor: theme.colors.border.default };
-  })();
-  const inputTextColor = { color: theme.colors.text.primary };
-  const helperTextColor = {
-    color: error
-      ? theme.colors.state.error
-      : success
-        ? theme.colors.state.success
-        : theme.colors.text.muted,
-  };
-  const requiredColor = { color: theme.colors.state.error };
-  const charCountColor = { color: theme.colors.text.muted };
-  const labelColor = {
-    color: error
-      ? theme.colors.state.error
-      : disabled
-        ? theme.colors.text.muted
-        : theme.colors.text.secondary,
-  };
-
   const displayHelperText = error && errorText ? errorText : helperText;
   const showClearButton = clearable && value && value.length > 0;
   const currentLength = value?.length ?? 0;
   const charCountText = maxLength ? `${currentLength}/${maxLength}` : `${currentLength}`;
 
-  // Determine right element (clear button takes precedence over custom rightElement when clearable is true)
   const effectiveRightElement = showClearButton ? (
     <View style={styles.clearButton}>
       <IconButton
@@ -161,20 +127,24 @@ export function Input({
           size="xs"
           weight="semiBold"
           color="secondary"
-          style={[labelColor, labelStyle]}
+          style={[
+            styles.label,
+            error && styles.labelError,
+            disabled && styles.labelDisabled,
+            labelStyle,
+          ]}
         >
           {label}
-          {required && <Text style={[styles.requiredIndicator, requiredColor]}> *</Text>}
+          {required && <Text style={styles.requiredIndicator}> *</Text>}
         </Typography>
       )}
 
-      <View style={[styles.inputContainer, inputContainerColors, inputContainerStyle]}>
+      <View style={[styles.inputContainer, inputContainerStyle]}>
         {leftElement && <View style={styles.leftElement}>{leftElement}</View>}
 
-        <TextInput
-          style={[styles.input, inputTextColor, style]}
+        <UniTextInput
+          style={[styles.input, style]}
           editable={!disabled}
-          placeholderTextColor={theme.colors.text.muted}
           onFocus={handleFocus}
           onBlur={handleBlur}
           value={value}
@@ -189,11 +159,18 @@ export function Input({
       {(Boolean(displayHelperText) || showCount) && (
         <View style={styles.helperTextRow}>
           {displayHelperText && (
-            <Text style={[styles.helperText, helperTextColor, helperTextStyle]}>
+            <Text
+              style={[
+                styles.helperText,
+                error && styles.helperTextError,
+                success && styles.helperTextSuccess,
+                helperTextStyle,
+              ]}
+            >
               {displayHelperText}
             </Text>
           )}
-          {showCount && <Text style={[styles.charCount, charCountColor]}>{charCountText}</Text>}
+          {showCount && <Text style={styles.charCount}>{charCountText}</Text>}
         </View>
       )}
     </View>

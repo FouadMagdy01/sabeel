@@ -10,13 +10,13 @@ export const styles = StyleSheet.create((theme) => ({
     opacity: 0.6,
   },
   prayerName: {
-    marginTop: 4,
+    marginTop: theme.metrics.spacingV.p4,
   },
   timerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginTop: 8,
+    gap: theme.metrics.spacing.p8,
+    marginTop: theme.metrics.spacingV.p8,
   },
   timerText: {
     letterSpacing: 1,
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: theme.metrics.spacing.p4,
   },
   timelineLine: {
     position: 'absolute',
@@ -35,6 +35,7 @@ export const styles = StyleSheet.create((theme) => ({
     right: 0,
     height: 1,
     opacity: 0.5,
+    backgroundColor: theme.colors.border.default,
   },
   timelineItem: {
     alignItems: 'center',
@@ -48,6 +49,8 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
+    backgroundColor: theme.colors.state.successBg,
+    borderColor: theme.colors.state.success,
   },
   dotCurrent: {
     width: 28,
@@ -59,11 +62,14 @@ export const styles = StyleSheet.create((theme) => ({
     shadowOpacity: 0.4,
     shadowRadius: 8,
     elevation: 6,
+    backgroundColor: theme.colors.brand.primary,
+    shadowColor: theme.colors.brand.primary,
   },
   dotCurrentInner: {
     width: 8,
     height: 8,
     borderRadius: 4,
+    backgroundColor: theme.colors.text.inverse,
   },
   dotUpcoming: {
     width: 28,
@@ -72,11 +78,14 @@ export const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: theme.colors.background.surface,
+    borderColor: theme.colors.border.default,
   },
   dotUpcomingInner: {
     width: 6,
     height: 6,
     borderRadius: 3,
+    backgroundColor: theme.colors.icon.muted,
   },
   prayerLabel: {
     fontSize: theme.fonts.size.xxs,
@@ -84,7 +93,13 @@ export const styles = StyleSheet.create((theme) => ({
   },
   labelCompleted: {
     opacity: 0.4,
+    color: theme.colors.brand.secondary,
   },
-  labelCurrent: {},
-  labelUpcoming: {},
+  labelCurrent: {
+    color: theme.colors.brand.primary,
+  },
+  labelUpcoming: {
+    color: theme.colors.brand.secondary,
+    opacity: 0.5,
+  },
 }));

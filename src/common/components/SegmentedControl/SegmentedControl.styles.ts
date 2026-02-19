@@ -39,16 +39,13 @@ export const SIZE_CONFIG = {
   },
 } as const;
 
-/**
- * Module-level stylesheet - layout and metrics only.
- * Theme COLORS are applied inline via useUnistyles() to avoid
- * flicker during theme switching (race between JSI style update and React re-render).
- */
 export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
+    backgroundColor: theme.colors.background.surface,
+    borderColor: theme.colors.border.default,
   },
   containerFullWidth: {
     alignSelf: 'stretch',
@@ -64,7 +61,14 @@ export const styles = StyleSheet.create((theme) => ({
   segmentFullWidth: {
     flex: 1,
   },
+  test: {
+    width: 40,
+    height: 40,
+    backgroundColor: theme.colors.brand.primary,
+  },
   segmentActive: {
+    backgroundColor: theme.colors.brand.primary,
+    shadowColor: theme.colors.brand.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -80,9 +84,14 @@ export const styles = StyleSheet.create((theme) => ({
   segmentText: {
     fontFamily: theme.fonts.semiBold,
     textAlign: 'center',
+    color: theme.colors.text.muted,
   },
   segmentTextActive: {
     fontFamily: theme.fonts.bold,
+    color: theme.colors.text.inverse,
+  },
+  segmentTextDisabled: {
+    color: theme.colors.state.disabled,
   },
 }));
 
@@ -110,75 +119,3 @@ export function getSizeStyles(size: ComponentSize) {
     fontSize: config.fontSize,
   };
 }
-
-/**
- * @deprecated Use styles + getSizeStyles() instead.
- * Kept for backward compatibility only.
- */
-export const createStyles = ({
-  size,
-  fullWidth,
-  disabled,
-}: {
-  size: ComponentSize;
-  fullWidth: boolean;
-  disabled: boolean;
-}) => {
-  const config = SIZE_CONFIG[size];
-
-  return StyleSheet.create((theme) => ({
-    container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: theme.colors.background.surface,
-      borderRadius: config.borderRadius,
-      borderWidth: 1,
-      borderColor: theme.colors.border.default,
-      padding: config.containerPadding,
-      alignSelf: fullWidth ? 'stretch' : 'flex-start',
-      opacity: disabled ? 0.5 : 1,
-    },
-    segment: {
-      flex: fullWidth ? 1 : 0,
-      paddingVertical: config.segmentPaddingVertical,
-      paddingHorizontal: config.segmentPaddingHorizontal,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: config.segmentBorderRadius,
-      flexDirection: 'row',
-      minWidth: fullWidth ? undefined : 80,
-    },
-    segmentActive: {
-      backgroundColor: theme.colors.brand.primary,
-      shadowColor: theme.colors.brand.primary,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      elevation: theme.colors.shadow.elevationMedium,
-    },
-    segmentDisabled: {
-      opacity: 0.4,
-    },
-    iconContainer: {
-      marginRight: config.iconSpacing,
-      width: config.iconSize,
-      height: config.iconSize,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    segmentText: {
-      fontSize: theme.fonts.size[config.fontSize],
-      fontFamily: theme.fonts.semiBold,
-      color: theme.colors.text.muted,
-      textAlign: 'center',
-    },
-    segmentTextActive: {
-      fontSize: theme.fonts.size[config.fontSize],
-      fontFamily: theme.fonts.bold,
-      color: theme.colors.text.inverse,
-    },
-    segmentTextDisabled: {
-      color: theme.colors.state.disabled,
-    },
-  }));
-};
