@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
 import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
-import { UniTextInput } from '@/common/components/themed';
 import { styles } from './Input.styles';
 import type { InputProps } from './Input.types';
 
@@ -69,6 +69,7 @@ export function Input({
   onChangeText,
   ...textInputProps
 }: InputProps) {
+  const { theme } = useUnistyles();
   const [isFocused, setIsFocused] = useState(false);
 
   styles.useVariants({
@@ -142,8 +143,9 @@ export function Input({
       <View style={[styles.inputContainer, inputContainerStyle]}>
         {leftElement && <View style={styles.leftElement}>{leftElement}</View>}
 
-        <UniTextInput
+        <TextInput
           style={[styles.input, style]}
+          placeholderTextColor={theme.colors.text.muted}
           editable={!disabled}
           onFocus={handleFocus}
           onBlur={handleBlur}

@@ -2,10 +2,10 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import { UniPressable } from '@/common/components/themed';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 import type { AzkarData } from '../../types';
 import { styles } from './AzkarProgress.styles';
 
@@ -15,6 +15,7 @@ interface AzkarProgressProps {
 }
 
 export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
+  const { theme } = useUnistyles();
   const { t } = useTranslation();
 
   const completedCount = azkar.filter((a) => a.status === 'completed').length;
@@ -27,7 +28,7 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
     const isCompleted = item.status === 'completed';
 
     return (
-      <UniPressable
+      <Pressable
         key={item.type}
         style={({ pressed }) => [
           styles.chip,
@@ -35,6 +36,11 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
           isIOS && pressed ? styles.pressed : undefined,
         ]}
         onPress={() => onAzkarPress(item)}
+        android_ripple={{
+          color: theme.colors.overlay.pressed,
+          foreground: true,
+          borderless: false,
+        }}
       >
         <Icon
           familyName="MaterialIcons"
@@ -45,7 +51,7 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
         <Typography size="xs" weight="semiBold" color={isCompleted ? 'primary' : 'secondary'}>
           {item.type}
         </Typography>
-      </UniPressable>
+      </Pressable>
     );
   };
 

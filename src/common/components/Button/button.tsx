@@ -1,7 +1,15 @@
 import React, { useCallback } from 'react';
-import { Platform, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
-import { UniActivityIndicator, UniPressable } from '@/common/components/themed';
 import { styles } from './button.styles';
 import type { ButtonProps } from './button.types';
 
@@ -43,6 +51,7 @@ export function Button({
   textStyle,
   ...pressableProps
 }: ButtonProps) {
+  const { theme } = useUnistyles();
   const isDisabled = disabled || loading;
 
   styles.useVariants({
@@ -64,26 +73,25 @@ export function Button({
     [variant, isDisabled]
   );
 
+  const getSpinnerColor = () => {
+    if (variant === 'contained') {
+      return disabled ? theme.colors.text.primary : theme.colors.text.inverse;
+    }
+    const colorMap = {
+      primary: theme.colors.brand.primary,
+      secondary: theme.colors.brand.secondary,
+      success: theme.colors.state.success,
+      error: theme.colors.state.error,
+      warning: theme.colors.state.warning,
+      info: theme.colors.state.info,
+    } as const;
+    return colorMap[color];
+  };
+
   const renderContent = () => (
     <>
       {loading ? (
-        <UniActivityIndicator
-          size={SPINNER_SIZE[size]}
-          uniProps={(theme) => {
-            if (variant === 'contained') {
-              return { color: disabled ? theme.colors.text.primary : theme.colors.text.inverse };
-            }
-            const colorMap = {
-              primary: theme.colors.brand.primary,
-              secondary: theme.colors.brand.secondary,
-              success: theme.colors.state.success,
-              error: theme.colors.state.error,
-              warning: theme.colors.state.warning,
-              info: theme.colors.state.info,
-            } as const;
-            return { color: colorMap[color] };
-          }}
-        />
+        <ActivityIndicator size={SPINNER_SIZE[size]} color={getSpinnerColor()} />
       ) : (
         icon && iconPosition === 'left' && icon
       )}
@@ -93,7 +101,7 @@ export function Button({
   );
 
   const renderPressable = () => (
-    <UniPressable
+    <Pressable
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.container,
@@ -101,24 +109,20 @@ export function Button({
         getPressedStyle(pressed),
         style,
       ]}
-      uniProps={
+      android_ripple={
         isDisabled
           ? undefined
-          : (theme) => ({
-              android_ripple: {
-                color:
-                  variant === 'contained'
-                    ? theme.colors.overlay.ripple
-                    : theme.colors.overlay.hover,
-                borderless: false,
-                foreground: true,
-              },
-            })
+          : {
+              color:
+                variant === 'contained' ? theme.colors.overlay.ripple : theme.colors.overlay.hover,
+              borderless: false,
+              foreground: true,
+            }
       }
       {...pressableProps}
     >
       {renderContent()}
-    </UniPressable>
+    </Pressable>
   );
 
   if (Platform.OS === 'android') {

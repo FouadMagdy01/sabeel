@@ -1,8 +1,8 @@
 import { Icon } from '@/common/components/Icon';
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, Pressable, TextInput, View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
-import { UniActivityIndicator, UniPressable, UniTextInput } from '@/common/components/themed';
 import { SEARCH_INPUT_ICON_SIZES, styles } from './SearchInput.styles';
 import type { SearchInputProps } from './SearchInput.types';
 
@@ -44,6 +44,8 @@ export function SearchInput({
   disabled = false,
   ...textInputProps
 }: SearchInputProps) {
+  const { theme } = useUnistyles();
+
   styles.useVariants({
     size,
     disabled: disabled as true | false,
@@ -61,12 +63,17 @@ export function SearchInput({
   return (
     <View style={[styles.container, containerStyle]}>
       {loading ? (
-        <UniActivityIndicator size="small" style={styles.loadingSpinner} />
+        <ActivityIndicator
+          size="small"
+          color={theme.colors.brand.primary}
+          style={styles.loadingSpinner}
+        />
       ) : (
         <Icon familyName="Feather" iconName="search" size={iconSize} variant="tertiary" />
       )}
-      <UniTextInput
+      <TextInput
         style={[styles.input, style]}
+        placeholderTextColor={theme.colors.text.muted}
         value={value}
         editable={!disabled}
         onSubmitEditing={handleSubmitEditing}
@@ -74,9 +81,18 @@ export function SearchInput({
         {...textInputProps}
       />
       {shouldShowClear && onClear && !disabled && (
-        <UniPressable onPress={onClear} style={styles.clearButton} hitSlop={8}>
+        <Pressable
+          onPress={onClear}
+          style={styles.clearButton}
+          hitSlop={8}
+          android_ripple={{
+            color: theme.colors.overlay.pressed,
+            borderless: false,
+            foreground: true,
+          }}
+        >
           <Icon familyName="Feather" iconName="x" size={iconSize - 2} variant="muted" />
-        </UniPressable>
+        </Pressable>
       )}
     </View>
   );

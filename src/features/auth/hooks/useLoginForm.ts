@@ -21,7 +21,7 @@ export function useLoginForm() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: 'fouad.magdy7515@gmail.com', password: 'FouadMagdy2024@' },
   });
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

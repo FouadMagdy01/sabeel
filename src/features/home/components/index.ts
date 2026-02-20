@@ -6,3 +6,5 @@ export { RandomActsGrid } from './RandomActsGrid';
 export { VerseOfTheDay } from './VerseOfTheDay';
 export { DailyTodos } from './DailyTodos';
 export { QuickAccess } from './QuickAccess';
+export { HomeHeader } from './HomeHeader';
+export { PrayerTimesError } from './PrayerTimesError';

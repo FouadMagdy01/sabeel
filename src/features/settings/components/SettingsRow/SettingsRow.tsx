@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import { UniPressable } from '@/common/components/themed';
 import { styles, ICON_BG_SIZE } from './SettingsRow.styles';
 import type { SettingsRowProps } from './SettingsRow.types';
 
@@ -16,6 +16,7 @@ export function SettingsRow({
   showChevron = true,
   isLast = false,
 }: SettingsRowProps) {
+  const { theme } = useUnistyles();
   const getPressedStyle = useCallback((pressed: boolean): StyleProp<ViewStyle> => {
     if (!pressed || Platform.OS === 'android') return undefined;
     return { opacity: 0.85 };
@@ -54,9 +55,17 @@ export function SettingsRow({
 
   if (onPress) {
     return (
-      <UniPressable onPress={onPress} style={({ pressed }) => getPressedStyle(pressed)}>
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => getPressedStyle(pressed)}
+        android_ripple={{
+          color: theme.colors.overlay.pressed,
+          borderless: false,
+          foreground: true,
+        }}
+      >
         {content}
-      </UniPressable>
+      </Pressable>
     );
   }
 

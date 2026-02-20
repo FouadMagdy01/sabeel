@@ -2,16 +2,16 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import { UniPressable } from '@/common/components/themed';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { useUnistyles } from 'react-native-unistyles';
 import type { PrayerData } from '../../types';
 import { styles } from './PrayersProgress.styles';
 
@@ -35,6 +35,7 @@ function PulsingDot() {
 }
 
 export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps) {
+  const { theme } = useUnistyles();
   const { t } = useTranslation();
 
   const completedCount = prayers.filter((p) => p.status === 'completed').length;
@@ -42,10 +43,11 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
   const percentage = Math.round(progress * 100);
 
   const renderPrayerCircle = (prayer: PrayerData): React.JSX.Element => (
-    <UniPressable
+    <Pressable
       key={prayer.name}
       style={styles.prayerCircle}
       onPress={() => onPrayerPress(prayer)}
+      android_ripple={{ color: theme.colors.overlay.pressed, borderless: true, foreground: true }}
     >
       {prayer.status === 'completed' && (
         <View style={styles.circleCompleted}>
@@ -67,7 +69,7 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
           />
         </View>
       )}
-    </UniPressable>
+    </Pressable>
   );
 
   return (

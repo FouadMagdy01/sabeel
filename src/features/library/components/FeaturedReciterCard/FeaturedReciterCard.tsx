@@ -1,19 +1,21 @@
 import { Icon } from '@/common/components/Icon';
-import { UniPressable } from '@/common/components/themed';
 import { Typography } from '@/common/components/Typography';
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
 import { styles } from './FeaturedReciterCard.styles';
 import type { FeaturedReciterCardProps } from './FeaturedReciterCard.types';
 
 const FeaturedReciterCard: React.FC<FeaturedReciterCardProps> = ({ reciter }) => {
+  const { theme } = useUnistyles();
   const isIOS = Platform.OS === 'ios';
 
   return (
-    <UniPressable
+    <Pressable
       style={({ pressed }) => [styles.container, isIOS && pressed && { opacity: 0.85 }]}
       onPress={() => console.warn('Play featured reciter:', reciter.name)}
+      android_ripple={{ color: theme.colors.overlay.pressed, borderless: false, foreground: true }}
     >
       <View style={styles.avatarWrapper}>
         <View style={styles.avatarContainer}>
@@ -37,7 +39,7 @@ const FeaturedReciterCard: React.FC<FeaturedReciterCardProps> = ({ reciter }) =>
       >
         {reciter.style}
       </Typography>
-    </UniPressable>
+    </Pressable>
   );
 };
 

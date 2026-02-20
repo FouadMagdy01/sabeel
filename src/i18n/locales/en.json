@@ -124,10 +124,34 @@
     "library": "Library",
     "settings": "Settings"
   },
+  "prayers": {
+    "names": {
+      "Fajr": "Fajr",
+      "Sunrise": "Sunrise",
+      "Dhuhr": "Dhuhr",
+      "Asr": "Asr",
+      "Maghrib": "Maghrib",
+      "Isha": "Isha"
+    },
+    "notification": {
+      "title": "{{prayer}} Prayer",
+      "body": "It's now time for {{prayer}} prayer based on your location"
+    }
+  },
+  "permissions": {
+    "location": {
+      "title": "Location Permission",
+      "message": "We need your location to calculate accurate prayer times"
+    },
+    "notification": {
+      "title": "Notification Permission",
+      "message": "Enable notifications to get prayer time reminders"
+    }
+  },
   "screens": {
     "home": {
       "title": "Home",
-      "testButton": "Test",
+      "greeting": "Assalamu Alaikum",
       "stats": {
         "dayStreak": "Day Streak",
         "totalPoints": "Total Points",
@@ -135,7 +159,18 @@
       },
       "currentPrayer": {
         "label": "Current Prayer",
-        "endsIn": "Ends in {{countdown}}"
+        "nextLabel": "Next Prayer",
+        "selectedLabel": "Prayer Time",
+        "endsIn": "Ends in {{countdown}}",
+        "startsIn": "Starts in {{countdown}}",
+        "staleHint": "Enable location for accurate times",
+        "refresh": "Refresh"
+      },
+      "prayerTimes": {
+        "locationRequired": "Location permission is required for prayer times",
+        "error": "Could not load prayer times",
+        "loading": "Loading prayer times...",
+        "retry": "Retry"
       },
       "dailyTodos": {
         "sectionTitle": "Daily Todos",

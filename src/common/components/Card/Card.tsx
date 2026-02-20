@@ -1,8 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
-import { UniActivityIndicator, UniPressable } from '@/common/components/themed';
 import { RADIUS_MAP, styles } from './Card.styles';
 import type { CardProps } from './Card.types';
 
@@ -35,6 +42,7 @@ export function Card({
   style,
   children,
 }: CardProps) {
+  const { theme } = useUnistyles();
   styles.useVariants({ variant, radius, padding });
 
   const isDisabled = loading;
@@ -51,7 +59,7 @@ export function Card({
     if (!loading) return null;
     return (
       <View style={styles.loadingOverlay}>
-        <UniActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={theme.colors.brand.primary} />
       </View>
     );
   };
@@ -69,7 +77,7 @@ export function Card({
 
     if (onPress) {
       return (
-        <UniPressable
+        <Pressable
           onPress={onPress}
           disabled={isDisabled}
           style={({ pressed }) => [styles.container, getPressedStyle(pressed)]}
@@ -82,7 +90,7 @@ export function Card({
           >
             {renderContent()}
           </LinearGradient>
-        </UniPressable>
+        </Pressable>
       );
     }
 
@@ -101,13 +109,13 @@ export function Card({
   // Regular variants with optional press interaction
   if (onPress) {
     return (
-      <UniPressable
+      <Pressable
         onPress={onPress}
         disabled={isDisabled}
         style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
       >
         {renderContent()}
-      </UniPressable>
+      </Pressable>
     );
   }
 

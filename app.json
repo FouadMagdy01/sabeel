@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.Sabeel"
+      "bundleIdentifier": "com.Sabeel",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Sabeel needs your location to calculate accurate prayer times for your area."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -56,11 +59,31 @@
           ]
         }
       ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Sabeel needs your location to calculate accurate prayer times for your area."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png"
+        }
+      ],
       "expo-sqlite",
       [
         "expo-asset",
         {
           "assets": ["./assets/quran/quran_ayah_bounds.db"]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "15.5"
+          }
         }
       ]
     ],

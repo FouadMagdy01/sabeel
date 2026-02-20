@@ -2,11 +2,10 @@ import { Card } from '@/common/components/Card';
 import { CircularProgress } from '@/common/components/CircularProgress';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
-import { UniPressable } from '@/common/components/themed';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ViewStyle } from 'react-native';
-import { Platform, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import type { RandomActData } from '../../types';
 import { styles } from './RandomActsGrid.styles';
@@ -38,7 +37,7 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
     const isLocked = act.status === 'locked';
 
     return (
-      <UniPressable
+      <Pressable
         key={act.id}
         style={({ pressed }) =>
           [
@@ -48,6 +47,11 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
           ] as ViewStyle[]
         }
         onPress={() => onActPress(act)}
+        android_ripple={{
+          color: theme.colors.overlay.pressed,
+          borderless: false,
+          foreground: true,
+        }}
       >
         <View style={styles.actCard}>
           <View style={styles.cardContent}>
@@ -72,7 +76,7 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
             />
           </View>
         </View>
-      </UniPressable>
+      </Pressable>
     );
   };
 

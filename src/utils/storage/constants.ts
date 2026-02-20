@@ -9,4 +9,7 @@ export const STORAGE_KEYS = {
     downloadResume: 'quran_download_resume',
     lastPage: 'quran_last_page',
   },
+  prayers: {
+    yearlyData: 'prayers_yearly_data',
+  },
 } as const;

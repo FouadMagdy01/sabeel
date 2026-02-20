@@ -1,10 +1,9 @@
 import React from 'react';
-import { Platform, Text, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Platform, Pressable, Text, View } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '@/common/components/Icon';
 import type { IconProps } from '@/common/components/Icon';
-import { UniPressable } from '@/common/components/themed';
 
 export type ToolbarAction = {
   key: string;
@@ -21,19 +20,19 @@ type ToolbarProps = {
 };
 
 export function Toolbar({ actions, showLabels = false, style }: ToolbarProps) {
+  const { theme } = useUnistyles();
+
   return (
     <View style={[styles.container, style]}>
       {actions.map((action) => (
-        <UniPressable
+        <Pressable
           key={action.key}
           onPress={action.onPress}
           disabled={action.disabled}
-          uniProps={
+          android_ripple={
             action.disabled
               ? undefined
-              : (theme) => ({
-                  android_ripple: { color: theme.colors.overlay.ripple, borderless: true },
-                })
+              : { color: theme.colors.overlay.ripple, borderless: false, foreground: true }
           }
           style={({ pressed }) => [
             styles.action,
@@ -47,7 +46,7 @@ export function Toolbar({ actions, showLabels = false, style }: ToolbarProps) {
               {action.label}
             </Text>
           )}
-        </UniPressable>
+        </Pressable>
       ))}
     </View>
   );

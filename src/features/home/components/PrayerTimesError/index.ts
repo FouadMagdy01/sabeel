@@ -1,0 +1,1 @@
+export { PrayerTimesError } from './PrayerTimesError';

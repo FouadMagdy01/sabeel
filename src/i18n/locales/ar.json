@@ -124,10 +124,34 @@
     "library": "المكتبة",
     "settings": "الإعدادات"
   },
+  "prayers": {
+    "names": {
+      "Fajr": "الفجر",
+      "Sunrise": "الشروق",
+      "Dhuhr": "الظهر",
+      "Asr": "العصر",
+      "Maghrib": "المغرب",
+      "Isha": "العشاء"
+    },
+    "notification": {
+      "title": "صلاة {{prayer}}",
+      "body": "حان الآن موعد صلاة {{prayer}} حسب موقعك"
+    }
+  },
+  "permissions": {
+    "location": {
+      "title": "إذن الموقع",
+      "message": "نحتاج إلى موقعك لحساب مواقيت الصلاة بدقة"
+    },
+    "notification": {
+      "title": "إذن الإشعارات",
+      "message": "فعّل الإشعارات لتلقي تذكيرات بمواقيت الصلاة"
+    }
+  },
   "screens": {
     "home": {
       "title": "الرئيسية",
-      "testButton": "اختبار",
+      "greeting": "السلام عليكم",
       "stats": {
         "dayStreak": "أيام متتالية",
         "totalPoints": "إجمالي النقاط",
@@ -135,7 +159,18 @@
       },
       "currentPrayer": {
         "label": "الصلاة الحالية",
-        "endsIn": "ينتهي في {{countdown}}"
+        "nextLabel": "الصلاة القادمة",
+        "selectedLabel": "وقت الصلاة",
+        "endsIn": "ينتهي في {{countdown}}",
+        "startsIn": "تبدأ في {{countdown}}",
+        "staleHint": "فعّل الموقع لمواقيت دقيقة",
+        "refresh": "تحديث"
+      },
+      "prayerTimes": {
+        "locationRequired": "يلزم إذن الموقع لعرض مواقيت الصلاة",
+        "error": "تعذر تحميل مواقيت الصلاة",
+        "loading": "جاري تحميل مواقيت الصلاة...",
+        "retry": "إعادة المحاولة"
       },
       "dailyTodos": {
         "sectionTitle": "المهام اليومية",

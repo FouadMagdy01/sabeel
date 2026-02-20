@@ -1,10 +1,10 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 
 import type { IconColorVariant } from '@/common/components/Icon';
 import { Icon } from '@/common/components/Icon';
 import type { ICON_FAMILIES } from '@/common/components/Icon/Icon.constants';
-import { UniActivityIndicator, UniPressable } from '@/common/components/themed';
 import { ICON_SIZES, styles } from './iconButton.styles';
 import type { IconButtonColor, IconButtonProps } from './iconButton.types';
 
@@ -74,6 +74,8 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
   style,
   ...pressableProps
 }: IconButtonProps<T>) {
+  const { theme } = useUnistyles();
+
   styles.useVariants({
     variant,
     size,
@@ -95,31 +97,28 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
 
   const isDisabled = disabled || loading;
 
-  // Determine spinner uniProps based on resolved icon color
-  const spinnerUniProps = (
-    theme: Parameters<NonNullable<React.ComponentProps<typeof UniActivityIndicator>['uniProps']>>[0]
-  ) => {
-    if (resolvedIconProps.color) return { color: resolvedIconProps.color };
+  const getSpinnerColor = () => {
+    if (resolvedIconProps.color) return resolvedIconProps.color;
     const v = resolvedIconProps.variant;
-    if (v === 'inverse') return { color: theme.colors.icon.inverse };
-    if (v === 'brandPrimary') return { color: theme.colors.brand.primary };
-    if (v === 'brandSecondary') return { color: theme.colors.brand.secondary };
-    if (v === 'brandTertiary') return { color: theme.colors.brand.tertiary };
-    if (v === 'success') return { color: theme.colors.state.success };
-    if (v === 'error') return { color: theme.colors.state.error };
-    if (v === 'warning') return { color: theme.colors.state.warning };
-    if (v === 'info') return { color: theme.colors.state.info };
-    if (v === 'primary') return { color: theme.colors.icon.primary };
-    if (v === 'secondary') return { color: theme.colors.icon.secondary };
-    if (v === 'tertiary') return { color: theme.colors.icon.tertiary };
-    if (v === 'muted') return { color: theme.colors.icon.muted };
-    if (v === 'accent') return { color: theme.colors.icon.accent };
-    return { color: theme.colors.icon.primary };
+    if (v === 'inverse') return theme.colors.icon.inverse;
+    if (v === 'brandPrimary') return theme.colors.brand.primary;
+    if (v === 'brandSecondary') return theme.colors.brand.secondary;
+    if (v === 'brandTertiary') return theme.colors.brand.tertiary;
+    if (v === 'success') return theme.colors.state.success;
+    if (v === 'error') return theme.colors.state.error;
+    if (v === 'warning') return theme.colors.state.warning;
+    if (v === 'info') return theme.colors.state.info;
+    if (v === 'primary') return theme.colors.icon.primary;
+    if (v === 'secondary') return theme.colors.icon.secondary;
+    if (v === 'tertiary') return theme.colors.icon.tertiary;
+    if (v === 'muted') return theme.colors.icon.muted;
+    if (v === 'accent') return theme.colors.icon.accent;
+    return theme.colors.icon.primary;
   };
 
   const renderContent = () => {
     if (loading) {
-      return <UniActivityIndicator size="small" uniProps={spinnerUniProps} />;
+      return <ActivityIndicator size="small" color={getSpinnerColor()} />;
     }
     // Generic icon props require type assertion due to TypeScript generic inference limitations
     const iconProps = { familyName, iconName, size: iconSize, ...resolvedIconProps };
@@ -132,25 +131,23 @@ export function IconButton<T extends keyof typeof ICON_FAMILIES>({
   };
 
   const renderPressable = () => (
-    <UniPressable
+    <Pressable
       style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
       disabled={isDisabled}
-      uniProps={
+      android_ripple={
         isDisabled
           ? undefined
-          : (theme) => ({
-              android_ripple: {
-                color:
-                  variant === 'filled' ? theme.colors.overlay.ripple : theme.colors.overlay.hover,
-                borderless: false,
-                foreground: true,
-              },
-            })
+          : {
+              color:
+                variant === 'filled' ? theme.colors.overlay.ripple : theme.colors.overlay.hover,
+              borderless: false,
+              foreground: true,
+            }
       }
       {...pressableProps}
     >
       {renderContent()}
-    </UniPressable>
+    </Pressable>
   );
 
   if (Platform.OS === 'android') {
