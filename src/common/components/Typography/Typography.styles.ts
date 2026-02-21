@@ -4,6 +4,7 @@ export const styles = StyleSheet.create((theme) => ({
   base: {
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.primary,
+    textAlign: 'left',
     variants: {
       type: {
         heading: {
@@ -30,7 +31,6 @@ export const styles = StyleSheet.create((theme) => ({
           fontFamily: theme.fonts.bold,
           color: theme.colors.text.tertiary,
           textTransform: 'uppercase',
-          letterSpacing: 3, // Typography-specific spacing for overline text
         },
       },
       size: {

@@ -239,9 +239,48 @@
       "explore": {
         "featuredReciters": "قراء مميزون",
         "recommendedForYou": "موصى به لك",
+        "rewayat": "روايات",
+        "reciters": "القراء",
         "seeAll": "عرض الكل",
         "surasAvailable": "{{count}} سورة متاحة",
-        "play": "تشغيل"
+        "surahCount": "{{count}} سور",
+        "moshafCount": "{{count}} مصحف",
+        "play": "تشغيل",
+        "error": "فشل تحميل البيانات",
+        "retry": "إعادة المحاولة",
+        "allReciters": {
+          "title": "جميع القراء",
+          "searchPlaceholder": "ابحث عن قارئ...",
+          "noResults": "لا يوجد قراء",
+          "error": "فشل تحميل القراء",
+          "retry": "إعادة المحاولة",
+          "filterSort": {
+            "title": "تصفية وترتيب",
+            "filterByRewayah": "تصفية حسب الرواية",
+            "allRewayat": "جميع الروايات",
+            "sortBy": "ترتيب حسب",
+            "nameAsc": "الاسم (أ-ي)",
+            "nameDesc": "الاسم (ي-أ)",
+            "surahCountDesc": "الأكثر سورًا",
+            "surahCountAsc": "الأقل سورًا",
+            "apply": "تطبيق",
+            "reset": "إعادة تعيين"
+          },
+          "moshafSelection": {
+            "title": "اختر المصحف",
+            "surahCount": "{{count}} سور"
+          }
+        }
+      },
+      "reciterSurahs": {
+        "searchPlaceholder": "ابحث عن سورة...",
+        "noResults": "لا توجد سور",
+        "surahCount": "{{count}} سور",
+        "verses": "{{count}} آيات",
+        "makkah": "مكية",
+        "madinah": "مدنية",
+        "suraList": "قائمة السور",
+        "playAll": "تشغيل الكل"
       }
     },
     "settings": {
@@ -275,7 +314,8 @@
     },
     "language": {
       "restartRequired": "إعادة التشغيل مطلوبة",
-      "restartMessage": "يرجى إعادة تشغيل التطبيق لتطبيق تغيير اللغة بالكامل."
+      "restartMessage": "يحتاج التطبيق إلى إعادة التشغيل لتطبيق اللغة واتجاه التخطيط الجديد.",
+      "restartNow": "إعادة التشغيل"
     },
     "support": {
       "privacy": "سياسة الخصوصية",

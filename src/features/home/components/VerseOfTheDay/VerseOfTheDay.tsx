@@ -46,7 +46,7 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
           size="3xl"
           weight="bold"
           color="brandSecondary"
-          align="right"
+          align="center"
           style={styles.arabicText}
         >
           {verse.arabic}

@@ -40,6 +40,5 @@ export const styles = StyleSheet.create((theme) => ({
   },
   styleText: {
     fontSize: theme.fonts.size.xxs,
-    letterSpacing: 1,
   },
 }));

@@ -6,7 +6,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   header: {
     fontSize: theme.metrics.fontSize.xxs,
-    letterSpacing: 2,
   },
   grid: {
     flexDirection: 'row',

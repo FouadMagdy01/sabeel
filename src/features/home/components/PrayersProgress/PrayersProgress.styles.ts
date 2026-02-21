@@ -10,9 +10,7 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     marginBottom: theme.metrics.spacingV.p24,
   },
-  title: {
-    letterSpacing: -0.3,
-  },
+  title: {},
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',

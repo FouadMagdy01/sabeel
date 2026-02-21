@@ -80,6 +80,11 @@ export function Card({
         <Pressable
           onPress={onPress}
           disabled={isDisabled}
+          android_ripple={
+            isDisabled
+              ? undefined
+              : { color: theme.colors.overlay.pressed, borderless: false, foreground: true }
+          }
           style={({ pressed }) => [styles.container, getPressedStyle(pressed)]}
         >
           <LinearGradient
@@ -112,6 +117,11 @@ export function Card({
       <Pressable
         onPress={onPress}
         disabled={isDisabled}
+        android_ripple={
+          isDisabled
+            ? undefined
+            : { color: theme.colors.overlay.pressed, borderless: false, foreground: true }
+        }
         style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
       >
         {renderContent()}

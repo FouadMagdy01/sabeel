@@ -21,7 +21,6 @@ export const styles = StyleSheet.create((theme) => ({
   surasText: {
     fontSize: theme.fonts.size.xxs,
     marginTop: 2,
-    letterSpacing: 0.5,
   },
   actionsRow: {
     flexDirection: 'row',

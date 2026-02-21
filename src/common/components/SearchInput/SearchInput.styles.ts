@@ -46,6 +46,7 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.primary,
+    textAlign: 'right',
     padding: 0,
     variants: {
       size: {

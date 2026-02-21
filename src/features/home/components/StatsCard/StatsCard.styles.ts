@@ -15,7 +15,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   statLabel: {
     fontSize: theme.fonts.size.xxs,
-    letterSpacing: -0.3,
     marginTop: 2,
   },
 }));

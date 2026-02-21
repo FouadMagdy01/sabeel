@@ -239,9 +239,48 @@
       "explore": {
         "featuredReciters": "Featured Reciters",
         "recommendedForYou": "Recommended for You",
+        "rewayat": "Rewayat",
+        "reciters": "Reciters",
         "seeAll": "See All",
         "surasAvailable": "{{count}} Surahs Available",
-        "play": "Play"
+        "surahCount": "{{count}} Surahs",
+        "moshafCount": "{{count}} Moshaf",
+        "play": "Play",
+        "error": "Failed to load data",
+        "retry": "Retry",
+        "allReciters": {
+          "title": "All Reciters",
+          "searchPlaceholder": "Search reciters...",
+          "noResults": "No reciters found",
+          "error": "Failed to load reciters",
+          "retry": "Retry",
+          "filterSort": {
+            "title": "Filter & Sort",
+            "filterByRewayah": "Filter by Rewayah",
+            "allRewayat": "All Rewayat",
+            "sortBy": "Sort By",
+            "nameAsc": "Name (A-Z)",
+            "nameDesc": "Name (Z-A)",
+            "surahCountDesc": "Most Surahs",
+            "surahCountAsc": "Fewest Surahs",
+            "apply": "Apply",
+            "reset": "Reset"
+          },
+          "moshafSelection": {
+            "title": "Select Moshaf",
+            "surahCount": "{{count}} Surahs"
+          }
+        }
+      },
+      "reciterSurahs": {
+        "searchPlaceholder": "Search surahs...",
+        "noResults": "No surahs found",
+        "surahCount": "{{count}} Surahs",
+        "verses": "{{count}} Verses",
+        "makkah": "Makkah",
+        "madinah": "Madinah",
+        "suraList": "Sura List",
+        "playAll": "Play All"
       }
     },
     "settings": {
@@ -275,7 +314,8 @@
     },
     "language": {
       "restartRequired": "Restart Required",
-      "restartMessage": "Please restart the app for the language change to take full effect."
+      "restartMessage": "The app needs to restart to apply the new language and layout direction.",
+      "restartNow": "Restart"
     },
     "support": {
       "privacy": "Privacy Policy",

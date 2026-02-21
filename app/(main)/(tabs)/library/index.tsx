@@ -33,8 +33,8 @@ export default function LibraryScreen() {
         />
       </View>
 
-      <View style={[screenStyles.content, { paddingBottom: bottomPadding }]}>
-        {selectedTab === 'explore' && <ExploreContent />}
+      <View style={screenStyles.content}>
+        {selectedTab === 'explore' && <ExploreContent bottomPadding={bottomPadding} />}
         {selectedTab === 'favorites' && <FavoritesContent />}
         {selectedTab === 'downloads' && <DownloadsContent />}
       </View>

@@ -5,8 +5,6 @@ import type {
   FavoriteAya,
   FavoriteReciter,
   FavoriteSura,
-  FeaturedReciter,
-  RecommendedReciter,
 } from '../types';
 
 export const DUMMY_FAVORITE_SURAS: FavoriteSura[] = [
@@ -51,48 +49,6 @@ export const DUMMY_FAVORITE_RECITERS: FavoriteReciter[] = [
     name: 'Saad Al-Ghamdi',
     surasCount: 114,
     nationality: 'Saudi Arabia',
-  },
-];
-
-export const DUMMY_FEATURED_RECITERS: FeaturedReciter[] = [
-  {
-    id: 'f1',
-    name: 'Mishary Rashid',
-    style: "Hafs 'an 'Asim",
-    isFeatured: true,
-  },
-  {
-    id: 'f2',
-    name: 'Abdul Rahman',
-    style: 'Sudaissi',
-    isFeatured: false,
-  },
-  {
-    id: 'f3',
-    name: 'Maher Muaiqly',
-    style: "Hafs 'an 'Asim",
-    isFeatured: false,
-  },
-];
-
-export const DUMMY_RECOMMENDED_RECITERS: RecommendedReciter[] = [
-  {
-    id: 'r1',
-    name: 'Saud Al-Shuraim',
-    surasAvailable: 114,
-    isStarred: false,
-  },
-  {
-    id: 'r2',
-    name: 'Yasser Al-Dosari',
-    surasAvailable: 98,
-    isStarred: true,
-  },
-  {
-    id: 'r3',
-    name: 'Islam Sobhi',
-    surasAvailable: 45,
-    isStarred: false,
   },
 ];
 

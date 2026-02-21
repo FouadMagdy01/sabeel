@@ -6,7 +6,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   currentLabel: {
     fontSize: theme.fonts.size.xxs,
-    letterSpacing: 3,
     opacity: 0.6,
   },
   nameTimeRow: {
@@ -24,9 +23,7 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.metrics.spacing.p4,
     marginTop: theme.metrics.spacingV.p4,
   },
-  timerText: {
-    letterSpacing: 1,
-  },
+  timerText: {},
   timelineContainer: {
     position: 'relative',
     flexDirection: 'row',
@@ -107,7 +104,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   prayerLabel: {
     fontSize: theme.fonts.size.xxs,
-    letterSpacing: -0.3,
   },
   labelCompleted: {
     opacity: 0.4,

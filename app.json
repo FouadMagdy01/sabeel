@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.Sabeel",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Sabeel needs your location to calculate accurate prayer times for your area."
+        "NSLocationWhenInUseUsageDescription": "Sabeel needs your location to calculate accurate prayer times for your area.",
+        "CFBundleAllowMixedLocalizations": true
       }
     },
     "android": {
@@ -30,7 +31,19 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "extra": {
+      "supportsRTL": true
+    },
     "plugins": [
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": ["en", "ar"],
+            "android": ["en", "ar"]
+          }
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",

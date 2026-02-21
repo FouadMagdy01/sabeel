@@ -25,6 +25,5 @@ export const styles = StyleSheet.create((theme) => ({
   },
   metaText: {
     fontSize: theme.fonts.size.xxs,
-    letterSpacing: 0.3,
   },
 }));

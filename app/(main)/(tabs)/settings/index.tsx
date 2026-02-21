@@ -14,6 +14,7 @@ import { useAuth } from '@/providers';
 import type { ThemePresetName } from '@/theme/config';
 
 import { applyThemePreset, getCurrentPreset, toggleDarkMode } from '@/theme/themeManager';
+
 import { reloadApp } from '@/utils/reload';
 import { setItem, STORAGE_KEYS } from '@/utils/storage';
 import React, { useCallback, useState } from 'react';
@@ -50,30 +51,29 @@ export default function SettingsScreen() {
       const isArabic = language === 'ar';
       const needsRTLChange = isArabic !== I18nManager.isRTL;
 
-      if (Platform.OS === 'android' && needsRTLChange) {
-        // On Android, defer language change until user confirms restart
-        // because Android needs a full restart for RTL to take effect
+      if (needsRTLChange && Platform.OS !== 'web') {
         Alert.alert(t('settings.language.restartRequired'), t('settings.language.restartMessage'), [
           { text: t('common.cancel'), style: 'cancel' },
           {
-            text: t('common.restart'),
+            text: t('settings.language.restartNow'),
             onPress: () => {
-              setCurrentLanguage(language);
-              void i18n.changeLanguage(language);
+              // Persist language preference
               setItem(STORAGE_KEYS.preferences.language, language);
+              void i18n.changeLanguage(language);
+
+              // Apply RTL direction change
+              I18nManager.allowRTL(isArabic);
               I18nManager.forceRTL(isArabic);
-              reloadApp();
+
+              // Reload the app so the native layout direction takes effect
+              void reloadApp();
             },
           },
         ]);
       } else {
-        // On iOS or when no RTL change needed, apply immediately
         setCurrentLanguage(language);
         void i18n.changeLanguage(language);
         setItem(STORAGE_KEYS.preferences.language, language);
-        if (needsRTLChange) {
-          I18nManager.forceRTL(isArabic);
-        }
       }
     },
     [t, i18n]

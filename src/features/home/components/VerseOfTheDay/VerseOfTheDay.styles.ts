@@ -30,7 +30,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   label: {
     fontSize: theme.fonts.size.xxs,
-    letterSpacing: 3,
   },
   shareButton: {
     shadowOffset: { width: 0, height: 4 },
@@ -49,7 +48,6 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
   },
   translationText: {
-    letterSpacing: -0.3,
     marginBottom: theme.metrics.spacingV.p8,
   },
   referenceText: {
