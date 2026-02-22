@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const styles = StyleSheet.create((theme) => ({
   background: {
-    backgroundColor: theme.colors.overlay.modal,
+    backgroundColor: theme.colors.background.modal,
   },
   indicator: {
     backgroundColor: theme.colors.border.subtle,

@@ -1,12 +1,13 @@
 import { Toolbar } from '@/common/components/Toolbar';
 import type { ToolbarAction } from '@/common/components/Toolbar';
-import { Image, type ImageSource } from 'expo-image';
+import { isBookmarked } from '@/features/quran/services/bookmarksService';
+import { Image } from 'expo-image';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
-import { StyleSheet, withUnistyles } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { scheduleOnRN } from 'react-native-worklets';
 import { useAyahBounds } from '../../hooks/useAyahBounds';
 import type { AyahBound } from '../../services/quranDatabase';
@@ -24,20 +25,17 @@ type QuranPageProps = {
   onTafseer?: (ayahs: SelectedAyah[]) => void;
   onShare?: (ayahs: SelectedAyah[]) => void;
   onPlay?: (ayahs: SelectedAyah[]) => void;
-  onPlaybackSettings?: (ayahs: SelectedAyah[]) => void;
   onBookmark?: (ayahs: SelectedAyah[]) => void;
+  onTap?: () => void;
+  isPagePlaying?: boolean;
   showToolbarLabels?: boolean;
+  /** Pre-populated highlight keys (e.g. from search) — user tap clears them */
+  initialHighlightKeys?: Set<string>;
 };
 
 const IMG_WIDTH = 1024;
 const PHI = 1.618;
 const LONG_PRESS_DURATION = 500;
-
-const BUNDLED_PAGE_1 = require('../../../../../assets/quran/pages/1.png') as ImageSource;
-
-const UniPath = withUnistyles(Path, (theme) => ({
-  fill: theme.colors.overlay.pressed,
-}));
 
 /** Find which bound index contains the given (x, y) point */
 function hitTest(bounds: AyahBound[], x: number, y: number, ratio: number): number {
@@ -148,13 +146,18 @@ export function QuranPage({
   onTafseer,
   onShare,
   onPlay,
-  onPlaybackSettings,
   onBookmark,
+  onTap,
+  isPagePlaying = false,
   showToolbarLabels = false,
+  initialHighlightKeys,
 }: QuranPageProps) {
   const { width: screenWidth } = useWindowDimensions();
+  const { theme } = useUnistyles();
   const { bounds } = useAyahBounds(page);
-  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(
+    () => initialHighlightKeys ?? new Set()
+  );
   const { t } = useTranslation();
 
   const ratio = screenWidth / IMG_WIDTH;
@@ -187,9 +190,10 @@ export function QuranPage({
     [onAyahSelect]
   );
 
-  const clearSelection = useCallback(() => {
+  const handlePageTap = useCallback(() => {
     setSelectedKeys(new Set());
-  }, []);
+    onTap?.();
+  }, [onTap]);
 
   const handleLongPressStart = useCallback(
     (x: number, y: number) => {
@@ -243,15 +247,15 @@ export function QuranPage({
       });
 
     const tap = Gesture.Tap().onStart(() => {
-      scheduleOnRN(clearSelection);
+      scheduleOnRN(handlePageTap);
     });
 
     return Gesture.Exclusive(dragSelect, tap);
-  }, [handleLongPressStart, handleDrag, handleDragEnd, clearSelection]);
+  }, [handleLongPressStart, handleDrag, handleDragEnd, handlePageTap]);
 
   const selectionPath = buildSelectionPath(bounds, selectedKeys, ratio);
   const hasSelection = selectedKeys.size > 0;
-  const imageSource = imageUri ? { uri: imageUri } : BUNDLED_PAGE_1;
+  const imageSource = imageUri ? { uri: imageUri } : undefined;
 
   const selectedAyahs = useMemo(() => {
     if (!hasSelection) return [];
@@ -260,6 +264,24 @@ export function QuranPage({
       return { sura, ayah };
     });
   }, [selectedKeys, hasSelection]);
+
+  // Track whether selected ayahs are all bookmarked (for icon toggle)
+  const [selectionBookmarked, setSelectionBookmarked] = useState(false);
+
+  useEffect(() => {
+    if (!hasSelection) {
+      setSelectionBookmarked(false);
+      return;
+    }
+    const allBookmarked = Array.from(selectedKeys).every((key) => isBookmarked(key));
+    setSelectionBookmarked(allBookmarked);
+  }, [selectedKeys, hasSelection]);
+
+  const handleBookmarkPress = useCallback(() => {
+    onBookmark?.(selectedAyahs);
+    // Toggle local state so icon updates immediately
+    setSelectionBookmarked((prev) => !prev);
+  }, [onBookmark, selectedAyahs]);
 
   const toolbarActions = useMemo(
     (): ToolbarAction[] => [
@@ -277,24 +299,32 @@ export function QuranPage({
       },
       {
         key: 'play',
-        icon: { familyName: 'Ionicons', iconName: 'play' },
-        label: t('screens.quran.toolbar.play'),
-        onPress: () => onPlay?.(selectedAyahs),
-      },
-      {
-        key: 'settings',
-        icon: { familyName: 'Feather', iconName: 'sliders' },
-        label: t('screens.quran.toolbar.settings'),
-        onPress: () => onPlaybackSettings?.(selectedAyahs),
+        icon: { familyName: 'Ionicons', iconName: isPagePlaying ? 'pause' : 'play' },
+        label: isPagePlaying ? t('screens.quran.verses.pause') : t('screens.quran.toolbar.play'),
+        onPress: () => {
+          onPlay?.(selectedAyahs);
+        },
       },
       {
         key: 'bookmark',
-        icon: { familyName: 'Feather', iconName: 'bookmark' },
+        icon: {
+          familyName: 'Ionicons',
+          iconName: selectionBookmarked ? 'bookmark' : 'bookmark-outline',
+        },
         label: t('screens.quran.toolbar.bookmark'),
-        onPress: () => onBookmark?.(selectedAyahs),
+        onPress: handleBookmarkPress,
       },
     ],
-    [selectedAyahs, onTafseer, onShare, onPlay, onPlaybackSettings, onBookmark, t]
+    [
+      selectedAyahs,
+      onTafseer,
+      onShare,
+      onPlay,
+      isPagePlaying,
+      handleBookmarkPress,
+      selectionBookmarked,
+      t,
+    ]
   );
 
   const toolbarTopY = hasSelection ? getSelectionTopY(bounds, selectedKeys, ratio) : 0;
@@ -302,38 +332,40 @@ export function QuranPage({
   const TOOLBAR_MARGIN = 8;
 
   return (
-    <GestureDetector gesture={gesture}>
-      <View style={styles.container}>
-        <Image
-          source={imageSource}
-          style={[styles.image, { width: screenWidth, height: pageHeight }]}
-          contentFit="contain"
-          pointerEvents="none"
-        />
-
-        {selectionPath !== '' && (
-          <Svg
-            style={styles.svgOverlay}
-            width={screenWidth}
-            height={pageHeight}
+    <View style={styles.container}>
+      <GestureDetector gesture={gesture}>
+        <View>
+          <Image
+            source={imageSource}
+            style={[styles.image, { width: screenWidth, height: pageHeight }]}
+            contentFit="contain"
             pointerEvents="none"
-          >
-            <UniPath d={selectionPath} />
-          </Svg>
-        )}
+          />
 
-        {hasSelection && (
-          <View
-            style={[
-              styles.toolbarContainer,
-              { top: Math.max(0, toolbarTopY - TOOLBAR_HEIGHT - TOOLBAR_MARGIN) },
-            ]}
-          >
-            <Toolbar actions={toolbarActions} showLabels={showToolbarLabels} />
-          </View>
-        )}
-      </View>
-    </GestureDetector>
+          {selectionPath !== '' && (
+            <Svg
+              style={styles.svgOverlay}
+              width={screenWidth}
+              height={pageHeight}
+              pointerEvents="none"
+            >
+              <Path d={selectionPath} fill={theme.colors.overlay.pressed} />
+            </Svg>
+          )}
+        </View>
+      </GestureDetector>
+
+      {hasSelection && (
+        <View
+          style={[
+            styles.toolbarContainer,
+            { top: Math.max(0, toolbarTopY - TOOLBAR_HEIGHT - TOOLBAR_MARGIN) },
+          ]}
+        >
+          <Toolbar actions={toolbarActions} showLabels={showToolbarLabels} />
+        </View>
+      )}
+    </View>
   );
 }
 

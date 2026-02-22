@@ -1,6 +1,8 @@
+import { usePlayerStore } from '@/features/quran/stores/playerStore';
 import { CommonActions } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
-import { Platform, Pressable, Text, View } from 'react-native';
+import { useCallback } from 'react';
+import { Platform, Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 import { styles } from './CustomTabBar.styles';
@@ -21,8 +23,20 @@ export function CustomTabBar({ state, descriptors, navigation }: CustomTabBarPro
   const { theme } = useUnistyles();
   const isDark = theme.colors.mode === 'dark';
   const { bottom } = useSafeAreaInsets();
+  const setTabBarHeight = usePlayerStore((s) => s.setTabBarHeight);
+
+  const handleLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      setTabBarHeight(e.nativeEvent.layout.height);
+    },
+    [setTabBarHeight]
+  );
+
   return (
-    <View style={[styles.container, { paddingBottom: bottom + theme.metrics.spacingV.p8 }]}>
+    <View
+      style={[styles.container, { paddingBottom: bottom + theme.metrics.spacingV.p8 }]}
+      onLayout={handleLayout}
+    >
       <BlurView
         experimentalBlurMethod="dimezisBlurView"
         intensity={Platform.OS === 'ios' ? 40 : 80}

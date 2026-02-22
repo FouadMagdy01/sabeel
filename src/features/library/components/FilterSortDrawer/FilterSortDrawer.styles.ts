@@ -20,7 +20,6 @@ export const styles = StyleSheet.create((theme, rt) => ({
   },
   drawer: {
     position: 'absolute',
-    backgroundColor: theme.colors.overlay.modal,
     top: 0,
     bottom: 0,
     right: 0,

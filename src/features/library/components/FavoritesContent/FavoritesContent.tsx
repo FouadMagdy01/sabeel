@@ -3,15 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useWindowDimensions } from 'react-native';
 import { TabView } from 'react-native-tab-view';
 
-import { FavoriteAyaCard } from '../FavoriteAyaCard';
 import { FavoriteReciterCard } from '../FavoriteReciterCard';
 import { FavoriteSuraCard } from '../FavoriteSuraCard';
 import { LibraryList } from '../LibraryList';
 import { LibraryTabBar } from '../LibraryTabBar';
 
-import { DUMMY_FAVORITE_AYAS, DUMMY_FAVORITE_RECITERS, DUMMY_FAVORITE_SURAS } from '../../data';
+import { DUMMY_FAVORITE_RECITERS, DUMMY_FAVORITE_SURAS } from '../../data';
 
-import type { FavoriteAya, FavoriteReciter, FavoriteSura } from '../../types';
+import type { FavoriteReciter, FavoriteSura } from '../../types';
 
 const renderScene = ({ route }: { route: { key: string } }) => {
   switch (route.key) {
@@ -33,14 +32,6 @@ const renderScene = ({ route }: { route: { key: string } }) => {
           keyExtractor={(item: FavoriteReciter) => item.id}
         />
       );
-    case 'ayas':
-      return (
-        <LibraryList
-          data={DUMMY_FAVORITE_AYAS}
-          renderItem={({ item }: { item: FavoriteAya }) => <FavoriteAyaCard aya={item} />}
-          keyExtractor={(item: FavoriteAya) => item.id}
-        />
-      );
     default:
       return null;
   }
@@ -55,7 +46,6 @@ export const FavoritesContent = () => {
     () => [
       { key: 'suras', title: t('screens.library.subtabs.suras') },
       { key: 'reciters', title: t('screens.library.subtabs.reciters') },
-      { key: 'ayas', title: t('screens.library.subtabs.ayas') },
     ],
     [t]
   );

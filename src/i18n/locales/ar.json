@@ -210,6 +210,51 @@
         "play": "تشغيل",
         "settings": "إعدادات",
         "bookmark": "علامة"
+      },
+      "tabs": {
+        "surah": "السور",
+        "juz": "الجزء",
+        "bookmarks": "العلامات"
+      },
+      "search": {
+        "placeholder": "ابحث عن آية...",
+        "noResults": "لا توجد نتائج"
+      },
+      "verses": {
+        "bismillah": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+        "nextSurah": "السورة التالية",
+        "previousSurah": "السورة السابقة",
+        "makkah": "مكية",
+        "madinah": "مدنية",
+        "versesCount": "{{count}} آيات",
+        "save": "حفظ",
+        "share": "مشاركة",
+        "tafseer": "تفسير",
+        "play": "تشغيل",
+        "pause": "إيقاف"
+      },
+      "settings": {
+        "title": "الإعدادات",
+        "selectReciter": "اختيار القارئ",
+        "playbackOptions": "خيارات التشغيل",
+        "repeatMode": "وضع التكرار",
+        "repeatOff": "إيقاف",
+        "repeatOne": "تكرار الآية",
+        "repeatAll": "تكرار الكل",
+        "loopCount": "عدد التكرار",
+        "speed": "سرعة التشغيل"
+      },
+      "player": {
+        "playing": "قيد التشغيل",
+        "surahAyah": "{{surah}} - آية {{ayah}}"
+      },
+      "continueReading": {
+        "title": "متابعة القراءة",
+        "page": "صفحة {{page}}"
+      },
+      "bookmarks": {
+        "empty": "لا توجد علامات بعد",
+        "emptyHint": "اضغط مطولاً على آية لإضافتها للعلامات"
       }
     },
     "prayers": {

@@ -1,15 +1,31 @@
 import { PlaybackService } from '@/services/PlaybackService';
 import 'expo-router/entry';
-import TrackPlayer, { Capability } from 'react-native-track-player';
+import TrackPlayer, {
+  AppKilledPlaybackBehavior,
+  Capability,
+  IOSCategory,
+  IOSCategoryMode,
+  IOSCategoryOptions,
+} from 'react-native-track-player';
 import './src/i18n/config';
 import './src/theme/unistyles'; // <-- file that initializes Unistyles
+
 async function setupPlayer() {
   try {
-    // Register the playback service
+    console.log('[TrackPlayer] registering playback service...');
     TrackPlayer.registerPlaybackService(() => PlaybackService);
 
-    // Setup the player
-    await TrackPlayer.setupPlayer();
+    console.log('[TrackPlayer] setting up player...');
+    await TrackPlayer.setupPlayer({
+      iosCategory: IOSCategory.Playback,
+      iosCategoryMode: IOSCategoryMode.SpokenAudio,
+      iosCategoryOptions: [
+        IOSCategoryOptions.DuckOthers,
+        IOSCategoryOptions.InterruptSpokenAudioAndMixWithOthers,
+      ],
+      autoHandleInterruptions: true,
+    });
+    console.log('[TrackPlayer] player setup complete');
 
     TrackPlayer.updateOptions({
       capabilities: [
@@ -18,11 +34,21 @@ async function setupPlayer() {
         Capability.SkipToNext,
         Capability.SkipToPrevious,
         Capability.Stop,
+        Capability.SeekTo,
       ],
-      notificationCapabilities: [Capability.Play, Capability.Pause],
+      notificationCapabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
+      ],
+      android: {
+        appKilledPlaybackBehavior: AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
+      },
     });
+    console.log('[TrackPlayer] options updated');
   } catch (e) {
-    console.error('Failed to setup TrackPlayer:', e);
+    console.error('[TrackPlayer] setup FAILED:', e);
   }
 }
 

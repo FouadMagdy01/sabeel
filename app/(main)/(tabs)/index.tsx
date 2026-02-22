@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native-unistyles';
-
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
@@ -89,9 +88,7 @@ export default function HomeScreen() {
         <HomeHeader hijriDate={hijriDate} />
 
         <StatsCard stats={DUMMY_STATS} />
-
         {renderPrayerCard()}
-
         <QuickAccess
           items={QUICK_ACCESS_ITEMS}
           onItemPress={(item) => console.warn(t('screens.home.quickAccess.sectionTitle'), item.id)}

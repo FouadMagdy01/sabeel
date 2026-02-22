@@ -8,6 +8,9 @@ export const STORAGE_KEYS = {
     downloadStatus: 'quran_download_status',
     downloadResume: 'quran_download_resume',
     lastPage: 'quran_last_page',
+    bookmarks: 'quran_bookmarks',
+    selectedReciter: 'quran_selected_reciter',
+    playbackSettings: 'quran_playback_settings',
   },
   prayers: {
     yearlyData: 'prayers_yearly_data',

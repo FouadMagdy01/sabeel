@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Button } from '@/common/components/Button';
 import CircularProgress from '@/common/components/CircularProgress/CircularProgress';
+import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
 import { useQuranDownload } from '../../hooks/useQuranDownload';
 
@@ -18,47 +19,50 @@ export function QuranDownloadPrompt({ onReady }: { onReady: () => void }) {
 
   return (
     <View style={styles.container}>
-      {status === 'loading' && (
-        <CircularProgress progress={0} size={40} strokeWidth={4} indeterminate />
-      )}
+      <View style={styles.card}>
+        {status === 'loading' && (
+          <CircularProgress progress={0} size={40} strokeWidth={4} indeterminate />
+        )}
 
-      {status === 'idle' && (
-        <>
-          <Typography type="heading" size="md" style={styles.title}>
-            {t('screens.quran.download.title')}
-          </Typography>
-          <Typography type="body" size="sm" style={styles.subtitle}>
-            {t('screens.quran.download.subtitle')}
-          </Typography>
-          {error && (
-            <Typography type="body" size="sm" style={styles.error}>
-              {error}
+        {status === 'idle' && (
+          <>
+            <Icon familyName="MaterialIcons" iconName="menu-book" size={64} variant="muted" />
+            <Typography type="heading" size="md" style={styles.title}>
+              {t('screens.quran.download.title')}
             </Typography>
-          )}
-          <Button onPress={startDownload}>{t('screens.quran.download.button')}</Button>
-        </>
-      )}
+            <Typography type="body" size="sm" style={styles.subtitle}>
+              {t('screens.quran.download.subtitle')}
+            </Typography>
+            {error && (
+              <Typography type="body" size="sm" style={styles.error}>
+                {error}
+              </Typography>
+            )}
+            <Button onPress={startDownload}>{t('screens.quran.download.button')}</Button>
+          </>
+        )}
 
-      {status === 'downloading' && (
-        <>
-          <CircularProgress progress={progress} size={80} strokeWidth={6} showLabel />
-          <Typography type="body" size="sm" style={styles.subtitle}>
-            {t('screens.quran.download.downloading')}
-          </Typography>
-          <Button variant="outlined" color="error" onPress={cancelDownload}>
-            {t('screens.quran.download.cancelButton')}
-          </Button>
-        </>
-      )}
+        {status === 'downloading' && (
+          <>
+            <CircularProgress progress={progress} size={80} strokeWidth={6} showLabel />
+            <Typography type="body" size="sm" style={styles.subtitle}>
+              {t('screens.quran.download.downloading')}
+            </Typography>
+            <Button variant="outlined" color="error" onPress={cancelDownload}>
+              {t('screens.quran.download.cancelButton')}
+            </Button>
+          </>
+        )}
 
-      {status === 'extracting' && (
-        <>
-          <CircularProgress progress={0} size={80} strokeWidth={6} indeterminate />
-          <Typography type="body" size="sm" style={styles.subtitle}>
-            {t('screens.quran.download.extracting')}
-          </Typography>
-        </>
-      )}
+        {status === 'extracting' && (
+          <>
+            <CircularProgress progress={0} size={80} strokeWidth={6} indeterminate />
+            <Typography type="body" size="sm" style={styles.subtitle}>
+              {t('screens.quran.download.extracting')}
+            </Typography>
+          </>
+        )}
+      </View>
     </View>
   );
 }
@@ -68,8 +72,15 @@ const styles = StyleSheet.create((theme) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 32,
-    gap: 16,
+    padding: theme.metrics.spacing.p24,
+  },
+  card: {
+    alignItems: 'center',
+    backgroundColor: theme.colors.background.surfaceAlt,
+    borderRadius: 16,
+    padding: theme.metrics.spacing.p32,
+    gap: theme.metrics.spacingV.p16,
+    width: '100%',
   },
   title: {
     textAlign: 'center',

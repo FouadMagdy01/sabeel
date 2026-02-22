@@ -210,6 +210,51 @@
         "play": "Play",
         "settings": "Settings",
         "bookmark": "Bookmark"
+      },
+      "tabs": {
+        "surah": "Surahs",
+        "juz": "Juz",
+        "bookmarks": "Bookmarks"
+      },
+      "search": {
+        "placeholder": "Search ayah...",
+        "noResults": "No results found"
+      },
+      "verses": {
+        "bismillah": "In the name of Allah, the Most Gracious, the Most Merciful",
+        "nextSurah": "Next Surah",
+        "previousSurah": "Previous Surah",
+        "makkah": "Makkah",
+        "madinah": "Madinah",
+        "versesCount": "{{count}} Verses",
+        "save": "Save",
+        "share": "Share",
+        "tafseer": "Tafseer",
+        "play": "Play",
+        "pause": "Pause"
+      },
+      "settings": {
+        "title": "Settings",
+        "selectReciter": "Select Reciter",
+        "playbackOptions": "Playback Options",
+        "repeatMode": "Repeat Mode",
+        "repeatOff": "Off",
+        "repeatOne": "Repeat Ayah",
+        "repeatAll": "Repeat All",
+        "loopCount": "Loop Count",
+        "speed": "Playback Speed"
+      },
+      "player": {
+        "playing": "Now Playing",
+        "surahAyah": "{{surah}} - Ayah {{ayah}}"
+      },
+      "continueReading": {
+        "title": "Continue Reading",
+        "page": "Page {{page}}"
+      },
+      "bookmarks": {
+        "empty": "No bookmarks yet",
+        "emptyHint": "Long press on a verse to bookmark it"
       }
     },
     "prayers": {

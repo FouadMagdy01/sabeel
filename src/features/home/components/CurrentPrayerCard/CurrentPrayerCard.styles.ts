@@ -1,6 +1,16 @@
 import { StyleSheet } from 'react-native-unistyles';
 
 export const styles = StyleSheet.create((theme) => ({
+  cardContainer: {
+    overflow: 'hidden',
+  },
+  bgImage: {
+    flex: 1,
+    padding: theme.metrics.spacing.p16,
+  },
+  bgImageInner: {
+    opacity: 0.15,
+  },
   topSection: {
     marginBottom: theme.metrics.spacingV.p16,
   },

@@ -1,9 +1,12 @@
+import { MiniPlayer } from '@/common/components/MiniPlayer';
+import { useInitQuranPlayer } from '@/features/quran/hooks/useQuranPlayer';
 import i18n from '@/i18n/config';
 import { AuthProvider, QueryProvider, useAuth } from '@/providers';
 import { initializeTheme } from '@/theme/themeManager';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
 import { ActivityIndicator, I18nManager, Platform, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { StyleSheet } from 'react-native-unistyles';
 
@@ -43,16 +46,29 @@ function RootNavigator() {
   );
 }
 
+function AppContent() {
+  useInitQuranPlayer();
+
+  return (
+    <>
+      <RootNavigator />
+      <MiniPlayer />
+      <Toast />
+    </>
+  );
+}
+
 export default function RootLayout() {
   return (
-    <QueryProvider>
-      <AuthProvider>
-        <BottomSheetModalProvider>
-          <RootNavigator />
-          <Toast />
-        </BottomSheetModalProvider>
-      </AuthProvider>
-    </QueryProvider>
+    <GestureHandlerRootView>
+      <QueryProvider>
+        <AuthProvider>
+          <BottomSheetModalProvider>
+            <AppContent />
+          </BottomSheetModalProvider>
+        </AuthProvider>
+      </QueryProvider>
+    </GestureHandlerRootView>
   );
 }
 

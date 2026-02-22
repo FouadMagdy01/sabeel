@@ -54,9 +54,9 @@ const ReciterSurahsScreen: React.FC<ReciterSurahsScreenProps> = ({
     const query = searchQuery.toLowerCase().trim();
     return surahs.filter(
       (surah) =>
-        surah.name_arabic.includes(query) ||
-        surah.name_simple.toLowerCase().includes(query) ||
-        surah.translated_name.name.toLowerCase().includes(query)
+        surah.nameArabic.includes(query) ||
+        surah.nameSimple.toLowerCase().includes(query) ||
+        surah.translatedName.name.toLowerCase().includes(query)
     );
   }, [surahs, searchQuery]);
 
@@ -65,11 +65,11 @@ const ReciterSurahsScreen: React.FC<ReciterSurahsScreenProps> = ({
   }, []);
 
   const handleSurahPress = useCallback((surah: Surah) => {
-    console.warn('Selected surah:', surah.name_simple);
+    console.warn('Selected surah:', surah.nameSimple);
   }, []);
 
   const handlePlayPress = useCallback((surah: Surah) => {
-    console.warn('Play surah:', surah.name_simple);
+    console.warn('Play surah:', surah.nameSimple);
   }, []);
 
   const handlePlayAll = useCallback(() => {

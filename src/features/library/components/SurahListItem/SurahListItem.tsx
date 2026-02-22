@@ -13,10 +13,10 @@ const SurahListItem: React.FC<SurahListItemProps> = React.memo(
     const { t, i18n } = useTranslation();
 
     const isArabic = i18n.language === 'ar';
-    const surahName = isArabic ? surah.name_arabic : surah.name_simple;
+    const surahName = isArabic ? surah.nameArabic : surah.nameSimple;
 
     const revelationPlace =
-      surah.revelation_place === 'makkah'
+      surah.revelationPlace === 'makkah'
         ? t('screens.library.reciterSurahs.makkah')
         : t('screens.library.reciterSurahs.madinah');
 
@@ -54,7 +54,7 @@ const SurahListItem: React.FC<SurahListItemProps> = React.memo(
           </Typography>
           <View style={styles.metaRow}>
             <Typography size="xs" color="secondary" style={styles.metaText}>
-              {t('screens.library.reciterSurahs.verses', { count: surah.verses_count })}
+              {t('screens.library.reciterSurahs.verses', { count: surah.versesCount })}
             </Typography>
             <Typography size="xs" color="muted" style={styles.separator}>
               {'·'}
