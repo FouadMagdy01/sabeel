@@ -62,12 +62,19 @@ const QuranSearchResults: React.FC<QuranSearchResultsProps> = React.memo(
       let cancelled = false;
       setLoading(true);
 
-      void searchVerses(db, query.trim()).then((data) => {
-        if (!cancelled) {
-          setResults(data);
-          setLoading(false);
-        }
-      });
+      void searchVerses(db, query.trim())
+        .then((data) => {
+          if (!cancelled) {
+            setResults(data);
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setResults([]);
+            setLoading(false);
+          }
+        });
 
       return () => {
         cancelled = true;

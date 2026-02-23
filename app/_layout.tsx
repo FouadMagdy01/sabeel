@@ -50,11 +50,11 @@ function AppContent() {
   useInitQuranPlayer();
 
   return (
-    <>
+    <View style={styles.appContainer}>
       <RootNavigator />
       <MiniPlayer />
       <Toast />
-    </>
+    </View>
   );
 }
 
@@ -73,6 +73,9 @@ export default function RootLayout() {
 }
 
 const styles = StyleSheet.create((_theme) => ({
+  appContainer: {
+    flex: 1,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

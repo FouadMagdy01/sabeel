@@ -1,49 +1,46 @@
-import { MINI_PLAYER_HEIGHT } from './MiniPlayer.types';
+import { spacing } from '@/theme/metrics';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const styles = StyleSheet.create((theme) => ({
+export const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: theme.metrics.spacing.p8,
-    right: theme.metrics.spacing.p8,
-    height: MINI_PLAYER_HEIGHT,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.metrics.spacing.p12,
-    gap: theme.metrics.spacing.p12,
+    left: spacing.p8,
+    right: spacing.p8,
     borderRadius: 16,
     overflow: 'hidden',
     zIndex: 1000,
     elevation: 1000,
+    alignItems: 'center',
+    paddingTop: spacing.p8,
+    paddingBottom: spacing.p4,
   },
   blur: {
     ...StyleSheet.absoluteFillObject,
     borderRadius: 16,
     overflow: 'hidden',
   },
-  progressBar: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 3,
-    borderRadius: 1.5,
-  },
-  progressFill: {
-    height: 3,
-    borderRadius: 1.5,
-  },
-  controls: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.metrics.spacing.p4,
-  },
   info: {
-    flex: 1,
     alignItems: 'center',
     gap: 2,
+    paddingHorizontal: spacing.p12,
+  },
+  slider: {
+    width: '90%',
+    height: 20,
+    marginVertical: spacing.p4,
+  },
+  controls: {
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginBottom: spacing.p4,
   },
   closeButton: {
-    padding: theme.metrics.spacing.p4,
+    position: 'absolute',
+    top: spacing.p8,
+    right: spacing.p8,
+    padding: spacing.p4,
+    zIndex: 1,
   },
-}));
+});

@@ -31,7 +31,22 @@
       "Bash(git stash:*)",
       "WebSearch",
       "WebFetch(domain:www.unistyl.es)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "WebFetch(domain:www.mp3quran.net)",
+      "WebFetch(domain:mp3quran.net)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:geekyants.com)",
+      "Bash(npm ls:*)",
+      "Bash(jq:*)",
+      "WebFetch(domain:docs.expo.dev)",
+      "Bash(npx expo prebuild:*)",
+      "Bash(git status:*)",
+      "Bash(sqlite3:*)",
+      "Bash(node scripts/generate-quran-db.mjs:*)",
+      "WebFetch(domain:quranjs.com)",
+      "WebFetch(domain:api-docs.quran.foundation)",
+      "WebFetch(domain:api.quran.com)"
     ],
     "deny": [],
     "ask": []
