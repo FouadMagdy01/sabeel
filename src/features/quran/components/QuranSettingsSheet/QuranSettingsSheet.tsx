@@ -99,6 +99,7 @@ const QuranSettingsSheet = forwardRef<BottomSheetModal>((_props, ref) => {
       snapPoints={snapPoints}
       enablePanDownToClose
       backdropComponent={renderBackdrop}
+      containerStyle={styles.sheetContainer}
       backgroundStyle={styles.background}
       handleIndicatorStyle={styles.indicator}
     >
@@ -130,7 +131,7 @@ const QuranSettingsSheet = forwardRef<BottomSheetModal>((_props, ref) => {
         </View>
 
         {isLoading ? (
-          <ActivityIndicator style={styles.loadingContainer} />
+          <ActivityIndicator color={theme.colors.brand.primary} style={styles.loadingContainer} />
         ) : (
           recitations?.map((recitation) => {
             if (recitation.id == null) return null;

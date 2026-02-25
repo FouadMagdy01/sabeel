@@ -3,11 +3,10 @@ import { Typography } from '@/common/components/Typography';
 import { getSurahById } from '@/features/library/data/surahData';
 import { usePlayerStore } from '@/features/quran/stores/playerStore';
 import Slider from '@react-native-community/slider';
-import { BlurView } from 'expo-blur';
 import { useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { I18nManager, Platform, Pressable, View } from 'react-native';
+import { I18nManager, Pressable, View } from 'react-native';
 import { useProgress } from 'react-native-track-player';
 import { useUnistyles } from 'react-native-unistyles';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -38,7 +37,6 @@ export function MiniPlayer() {
 
   const { position, duration } = useProgress(200);
 
-  const isDark = theme.colors.mode === 'dark';
   const isRTL = I18nManager.isRTL;
 
   const isOnTabScreen = segments.includes('(tabs)' as never);
@@ -92,11 +90,8 @@ export function MiniPlayer() {
         }
       }}
     >
-      <BlurView
-        experimentalBlurMethod="dimezisBlurView"
-        intensity={Platform.OS === 'ios' ? 40 : 80}
-        tint={isDark ? 'dark' : 'light'}
-        style={styles.blur}
+      <View
+        style={[styles.blur, { backgroundColor: theme.colors.background.section }]}
         pointerEvents="none"
       />
 

@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View, useWindowDimensions } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 import { TabView } from 'react-native-tab-view';
 
 import { FavoriteReciterCard } from '../FavoriteReciterCard';
@@ -24,6 +25,7 @@ import { styles } from './FavoritesContent.styles';
 
 export const FavoritesContent = () => {
   const { t, i18n } = useTranslation();
+  const { theme } = useUnistyles();
   const layout = useWindowDimensions();
   const router = useRouter();
   const [tabIndex, setTabIndex] = useState(0);
@@ -220,7 +222,7 @@ export const FavoritesContent = () => {
           if (loadingSurahs) {
             return (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator />
+                <ActivityIndicator color={theme.colors.brand.primary} />
               </View>
             );
           }
@@ -244,7 +246,7 @@ export const FavoritesContent = () => {
           if (loadingReciters) {
             return (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator />
+                <ActivityIndicator color={theme.colors.brand.primary} />
               </View>
             );
           }

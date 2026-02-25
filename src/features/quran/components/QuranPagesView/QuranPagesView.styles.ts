@@ -5,6 +5,9 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     backgroundColor: theme.colors.background.app,
   },
+  hidden: {
+    opacity: 0,
+  },
   page: {
     flex: 1,
     alignItems: 'center',

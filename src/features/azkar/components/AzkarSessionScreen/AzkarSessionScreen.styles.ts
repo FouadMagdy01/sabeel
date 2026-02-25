@@ -42,7 +42,8 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.metrics.spacing.p16,
   },
   arabicText: {
-    lineHeight: 42,
+    width: '100%',
+    writingDirection: 'rtl',
     paddingVertical: theme.metrics.spacingV.p8,
   },
   divider: {

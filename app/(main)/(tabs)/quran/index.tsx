@@ -5,8 +5,6 @@ import { BookmarksTab } from '@/features/quran/components/BookmarksTab';
 import { ContinueReadingCard } from '@/features/quran/components/ContinueReadingCard';
 import type { LastReadInfo } from '@/features/quran/components/ContinueReadingCard';
 import { QuranSearchResults } from '@/features/quran/components/QuranSearchResults';
-import type { ViewType } from '@/features/quran/components/FABViewToggle';
-import { arePagesReady } from '@/features/quran/services/quranDownloadService';
 import { getPageForVerse } from '@/features/quran/services/quranTextDatabase';
 import { juzData } from '@/features/quran/data/juzData';
 import { SURAHS } from '@/features/library/data/surahData';
@@ -34,15 +32,10 @@ function QuranBrowsingContent() {
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
   const [searchQuery, setSearchQuery] = useState('');
-  const [pagesReady, setPagesReady] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
   const [lastRead, setLastRead] = useState<LastReadInfo | null>(null);
   const refreshKeyRef = useRef(0);
   const [bookmarksRefreshKey, setBookmarksRefreshKey] = useState(0);
-
-  useEffect(() => {
-    void arePagesReady().then(setPagesReady);
-  }, []);
 
   // Refresh last read + bookmarks on screen focus (user may return from reader)
   useFocusEffect(
@@ -67,10 +60,10 @@ function QuranBrowsingContent() {
     (surahId: number) => {
       const surah = SURAHS.find((s) => s.id === surahId);
       const page = surah?.pages[0] ?? 1;
+      console.log('[QuranTab] handleSurahPress surahId=%d page=%d surahName=%s', surahId, page, surah?.nameSimple);
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
-          viewType: 'pages',
           surahId: String(surahId),
           page: String(page),
         },
@@ -90,13 +83,14 @@ function QuranBrowsingContent() {
 
       const page = await getPageForVerse(db, firstSurahId, firstAyah);
       const fallbackPage = SURAHS.find((s) => s.id === firstSurahId)?.pages[0] ?? 1;
+      const resolvedPage = page ?? fallbackPage;
 
+      console.log('[QuranTab] handleJuzPress juz=%d surahId=%d page=%d ayah=%d', juzNumber, firstSurahId, resolvedPage, firstAyah);
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
-          viewType: 'pages',
           surahId: String(firstSurahId),
-          page: String(page ?? fallbackPage),
+          page: String(resolvedPage),
           ayah: String(firstAyah),
         },
       });
@@ -106,37 +100,39 @@ function QuranBrowsingContent() {
 
   const handleBookmarkPress = useCallback(
     (surahId: number, page: number, ayah: number) => {
+      console.log('[QuranTab] handleBookmarkPress surahId=%d page=%d ayah=%d', surahId, page, ayah);
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
-          viewType: pagesReady ? 'pages' : 'verses',
           surahId: String(surahId),
           page: String(page),
           ayah: String(ayah),
         },
       });
     },
-    [router, pagesReady]
+    [router]
   );
 
   const handleContinueReading = useCallback(() => {
     if (!lastRead) return;
+    const page = Math.max(1, Math.min(604, lastRead.page));
+    const surahId = Math.max(1, Math.min(114, lastRead.surahId));
+    console.log('[QuranTab] handleContinueReading surahId=%d page=%d', surahId, page);
     router.push({
       pathname: '/(main)/quran-reader',
       params: {
-        viewType: pagesReady ? 'pages' : 'verses',
-        surahId: String(lastRead.surahId),
-        page: String(lastRead.page),
+        surahId: String(surahId),
+        page: String(page),
       },
     });
-  }, [router, pagesReady, lastRead]);
+  }, [router, lastRead]);
 
   const handleSearchResultPress = useCallback(
-    (surahId: number, page: number, viewType: ViewType, ayahNumber: number) => {
+    (surahId: number, page: number, ayahNumber: number) => {
+      console.log('[QuranTab] handleSearchResultPress surahId=%d page=%d ayah=%d', surahId, page, ayahNumber);
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
-          viewType,
           surahId: String(surahId),
           page: String(page),
           ayah: String(ayahNumber),
@@ -176,7 +172,7 @@ function QuranBrowsingContent() {
     (props: React.ComponentProps<typeof TabBar>) => (
       <TabBar
         {...props}
-        style={{ backgroundColor: theme.colors.background.surface }}
+        style={{ backgroundColor: theme.colors.background.surface, elevation: 0, shadowOpacity: 0 }}
         indicatorStyle={{ backgroundColor: theme.colors.brand.primary }}
         activeColor={theme.colors.brand.primary}
         inactiveColor={theme.colors.text.secondary}
@@ -202,7 +198,6 @@ function QuranBrowsingContent() {
         <QuranSearchResults
           query={searchQuery}
           onResultPress={handleSearchResultPress}
-          pagesReady={pagesReady}
         />
       ) : (
         <>

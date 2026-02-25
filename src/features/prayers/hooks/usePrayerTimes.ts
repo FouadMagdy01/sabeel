@@ -262,7 +262,8 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
 
   // ── Resync notification language on app open ──
   useEffect(() => {
-    void checkAndResyncNotificationLanguage(yearlyData, prayerNames);
+    const adhanSound = getAdhanSound();
+    void checkAndResyncNotificationLanguage(yearlyData, prayerNames, adhanSound);
   }, [prayerNames, yearlyData]);
 
   // ── Tick every minute for countdown ──

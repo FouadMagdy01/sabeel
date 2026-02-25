@@ -63,7 +63,15 @@
       "WebFetch(domain:lifewithallah.com)",
       "WebFetch(domain:sunnah.com)",
       "WebFetch(domain:myislam.org)",
-      "WebFetch(domain:ahadith.co.uk)"
+      "WebFetch(domain:ahadith.co.uk)",
+      "Bash(du:*)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:api.quran-tafseer.com)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "Bash(echo Cannot determine font name programmatically:*)",
+      "Bash(node:*)",
+      "WebFetch(domain:legendapp.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "ask": []

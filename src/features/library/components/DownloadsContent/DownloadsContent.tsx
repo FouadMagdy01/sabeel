@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View, useWindowDimensions } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 import { TabView } from 'react-native-tab-view';
 
 import { DownloadedReciterCard } from '../DownloadedReciterCard';
@@ -23,6 +24,7 @@ import { styles } from './DownloadsContent.styles';
 
 export const DownloadsContent = () => {
   const { t, i18n } = useTranslation();
+  const { theme } = useUnistyles();
   const layout = useWindowDimensions();
   const router = useRouter();
   const [tabIndex, setTabIndex] = useState(0);
@@ -140,7 +142,7 @@ export const DownloadsContent = () => {
           if (loadingSurahs) {
             return (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator />
+                <ActivityIndicator color={theme.colors.brand.primary} />
               </View>
             );
           }
@@ -162,7 +164,7 @@ export const DownloadsContent = () => {
           if (loadingReciters) {
             return (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator />
+                <ActivityIndicator color={theme.colors.brand.primary} />
               </View>
             );
           }

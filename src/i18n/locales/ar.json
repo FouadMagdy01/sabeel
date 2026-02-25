@@ -186,7 +186,8 @@
         "azkarDua": "أذكار ودعاء",
         "qibla": "القبلة",
         "tasbeeh": "تسبيح",
-        "mushaf": "مصحف"
+        "mushaf": "مصحف",
+        "sunnahBooks": "كتب السنة"
       },
       "verseOfTheDay": {
         "label": "آية اليوم"
@@ -233,6 +234,15 @@
         "tafseer": "تفسير",
         "play": "تشغيل",
         "pause": "إيقاف"
+      },
+      "tafseer": {
+        "title": "التفسير",
+        "localTafseer": "التفسير الميسر",
+        "loading": "جاري تحميل التفسير...",
+        "error": "فشل تحميل التفسير",
+        "retry": "إعادة المحاولة",
+        "shareWithTafseer": "مشاركة مع التفسير",
+        "ayah": "آية"
       },
       "settings": {
         "title": "الإعدادات",
@@ -416,6 +426,19 @@
     },
     "settings": {
       "title": "الإعدادات"
+    },
+    "sunnahBooks": {
+      "title": "كتب السنة",
+      "subtitle": "اكتشف مجموعات الأحاديث النبوية الشريفة الموثقة",
+      "hadithCount": "{{count}} أحاديث",
+      "booksCount": "{{count}} كتاب",
+      "hadithLabel": "حديث",
+      "loading": "جاري تحميل المجموعات...",
+      "loadingMore": "جاري تحميل المزيد...",
+      "error": "فشل تحميل البيانات",
+      "retry": "إعادة المحاولة",
+      "noResults": "لا توجد نتائج",
+      "copied": "تم نسخ الحديث!"
     },
     "azkar": {
       "hub": {

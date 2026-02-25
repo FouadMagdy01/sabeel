@@ -25,4 +25,10 @@ export const QUICK_ACCESS_ITEMS: QuickAccessItem[] = [
     iconFamily: 'MaterialIcons',
     iconName: 'menu-book',
   },
+  {
+    id: 'sunnah-books',
+    labelKey: 'screens.home.quickAccess.sunnahBooks',
+    iconFamily: 'MaterialCommunityIcons',
+    iconName: 'book-open-page-variant',
+  },
 ];

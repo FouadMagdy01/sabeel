@@ -1,18 +1,21 @@
 import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
-import { getAllSurahsForPage } from '@/features/library/data/surahData';
+import { getAllSurahsForPage, getSurahById } from '@/features/library/data/surahData';
 import { QuranDownloadPrompt } from '@/features/quran/components/QuranDownloadPrompt';
 import { QuranPagesView } from '@/features/quran/components/QuranPagesView';
-import { QuranVersesView } from '@/features/quran/components/QuranVersesView';
-import { FABViewToggle, type ViewType } from '@/features/quran/components/FABViewToggle';
+import type { QuranPagesViewRef } from '@/features/quran/components/QuranPagesView';
+import type { SelectedAyah } from '@/features/quran/components/QuranPagesView/QuranPagesView.types';
 import { QuranSettingsSheet } from '@/features/quran/components/QuranSettingsSheet';
+import { TafseerSheet, type TafseerSheetRef } from '@/features/quran/components/TafseerSheet';
 import { arePagesReady } from '@/features/quran/services/quranDownloadService';
+import { getVerse } from '@/features/quran/services/quranTextDatabase';
+import { shareAyah } from '@/features/quran/services/shareService';
 import { usePlayerStore } from '@/features/quran/stores/playerStore';
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import type { LastReadInfo } from '@/features/quran/components/ContinueReadingCard';
 import { setItem } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/utils/storage/constants';
-import { SQLiteProvider } from 'expo-sqlite';
+import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +28,6 @@ const QURAN_DATA_DB = require('../../assets/quran/quran_data.db') as number;
 
 function ReaderContent() {
   const params = useLocalSearchParams<{
-    viewType?: string;
     surahId?: string;
     page?: string;
     ayah?: string;
@@ -35,26 +37,54 @@ function ReaderContent() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const [viewType, setViewType] = useState<ViewType>((params.viewType as ViewType) ?? 'pages');
-  const [currentPage, setCurrentPage] = useState(Number(params.page) || 1);
+  const clampPage = (val: unknown) => {
+    const n = Number(val);
+    return Number.isNaN(n) || n < 1 ? 1 : Math.min(604, n);
+  };
+  const clampSurah = (val: unknown) => {
+    const n = Number(val);
+    return Number.isNaN(n) || n < 1 ? 1 : Math.min(114, n);
+  };
+
+  // Stable initial page — only changes when route params change, NOT on swipe.
+  // This prevents QuranPagesView from remounting on every page swipe.
+  const initialPageRef = useRef(clampPage(params.page));
+  const pagesViewRef = useRef<QuranPagesViewRef>(null);
+
+  console.log('[QuranReader] render params.page=%s params.surahId=%s initialPageRef=%d', params.page, params.surahId, initialPageRef.current);
+
+  const [currentPage, setCurrentPage] = useState(clampPage(params.page));
+  const [currentSurahId, setCurrentSurahId] = useState(clampSurah(params.surahId));
   const [chromeVisible, setChromeVisible] = useState(true);
+
+  // Save last read position to MMKV
+  const savedPageRef = useRef<number>(clampPage(params.page));
+
+  // Sync state when params change (e.g. navigating to a different surah)
+  useEffect(() => {
+    const paramPage = clampPage(params.page);
+    const paramSurahId = clampSurah(params.surahId);
+    console.log('[QuranReader] params sync effect: paramPage=%d paramSurahId=%d oldInitialPage=%d pagesViewRef=%s', paramPage, paramSurahId, initialPageRef.current, pagesViewRef.current ? 'mounted' : 'null');
+    initialPageRef.current = paramPage;
+    setCurrentPage(paramPage);
+    setCurrentSurahId(paramSurahId);
+    savedPageRef.current = paramPage;
+    // Scroll to the new page if QuranPagesView is already mounted
+    pagesViewRef.current?.scrollToPage(paramPage);
+  }, [params.page, params.surahId]);
 
   const [pagesDownloaded, setPagesDownloaded] = useState(false);
   const [checkingPages, setCheckingPages] = useState(true);
 
-  const isPlayerVisible = usePlayerStore((s) => s.isVisible);
-  const miniPlayerHeight = usePlayerStore((s) => s.miniPlayerHeight);
   const setMiniPlayerHidden = usePlayerStore((s) => s.setMiniPlayerHidden);
 
   useEffect(() => {
+    console.log('[QuranReader] checking pages download status...');
     void arePagesReady().then((ready) => {
+      console.log('[QuranReader] arePagesReady=%s, initialPageRef=%d', ready, initialPageRef.current);
       setPagesDownloaded(ready);
       setCheckingPages(false);
     });
-  }, []);
-
-  const handleToggleView = useCallback(() => {
-    setViewType((prev) => (prev === 'pages' ? 'verses' : 'pages'));
   }, []);
 
   const handlePageChange = useCallback((page: number) => {
@@ -74,34 +104,57 @@ function ReaderContent() {
   }, [setMiniPlayerHidden]);
 
   const settingsSheetRef = useRef<BottomSheetModal>(null);
+  const tafseerSheetRef = useRef<TafseerSheetRef>(null);
+  const db = useSQLiteContext();
 
-  const [currentSurahId, setCurrentSurahId] = useState(Number(params.surahId) || 1);
+  const handleTafseer = useCallback((ayahs: SelectedAyah[]) => {
+    if (ayahs.length === 0) return;
+    tafseerSheetRef.current?.present(ayahs);
+  }, []);
 
-  // Save last read position to MMKV
-  const savedPageRef = useRef<number>(0);
-  useEffect(() => {
-    if (currentPage !== savedPageRef.current) {
-      savedPageRef.current = currentPage;
-      const lastRead: LastReadInfo = {
-        page: currentPage,
-        surahId: currentSurahId,
-        timestamp: Date.now(),
-      };
-      setItem(STORAGE_KEYS.quran.lastPage, lastRead);
-    }
-  }, [currentPage, currentSurahId]);
+  const handleShare = useCallback(
+    async (ayahs: SelectedAyah[]) => {
+      if (ayahs.length === 0) return;
+      const first = ayahs[0];
+      const verse = await getVerse(db, first.sura, first.ayah);
+      if (!verse) return;
+      const info = getSurahById(first.sura);
+      const name = i18n.language === 'ar' ? info?.nameArabic : info?.nameSimple;
+      shareAyah(verse, name ?? '');
+    },
+    [db, i18n.language]
+  );
 
-  // Derive surah from current page — keep current surah if still on page (boundary pages)
-  const isArabic = i18n.language === 'ar';
+  // Fix A: Pure derivation — no side effects in useMemo
   const surah = useMemo(() => {
     const allSurahs = getAllSurahsForPage(currentPage);
     if (allSurahs.length === 0) return undefined;
-    const match = allSurahs.find((s) => s.id === currentSurahId);
-    if (match) return match;
-    // Scrolled past the current surah — update to first surah on page
-    setCurrentSurahId(allSurahs[0].id);
-    return allSurahs[0];
+    return allSurahs.find((s) => s.id === currentSurahId) ?? allSurahs[0];
   }, [currentPage, currentSurahId]);
+
+  // Sync surahId in effect (safe, runs after render)
+  useEffect(() => {
+    if (surah && surah.id !== currentSurahId) {
+      setCurrentSurahId(surah.id);
+    }
+  }, [surah, currentSurahId]);
+
+  // Fix B: Debounce MMKV save (500ms)
+  useEffect(() => {
+    if (currentPage === savedPageRef.current) return;
+    const timer = setTimeout(() => {
+      savedPageRef.current = currentPage;
+      const lastRead: LastReadInfo = {
+        page: currentPage,
+        surahId: surah?.id ?? currentSurahId,
+        timestamp: Date.now(),
+      };
+      setItem(STORAGE_KEYS.quran.lastPage, lastRead);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [currentPage, currentSurahId, surah]);
+
+  const isArabic = i18n.language === 'ar';
   const surahName = isArabic ? surah?.nameArabic : surah?.nameSimple;
   const revelationPlace =
     surah?.revelationPlace === 'makkah'
@@ -109,12 +162,8 @@ function ReaderContent() {
       : t('screens.quran.verses.madinah');
 
   const highlightAyah = params.ayah
-    ? { sura: Number(params.surahId) || 1, ayah: Number(params.ayah) }
+    ? { sura: clampSurah(params.surahId), ayah: Number(params.ayah) || 1 }
     : undefined;
-
-  // Compute FAB bottom offset to sit above MiniPlayer when visible
-  // MiniPlayer sits at bottom: insets.bottom on non-tab screens
-  const fabBottomOffset = isPlayerVisible && chromeVisible ? miniPlayerHeight + insets.bottom : 0;
 
   if (checkingPages) {
     return <View style={readerStyles.container} />;
@@ -154,35 +203,28 @@ function ReaderContent() {
           onPress={() => settingsSheetRef.current?.present()}
         />
       </View>
-      {viewType === 'pages' && !pagesDownloaded ? (
+      {!pagesDownloaded ? (
         <QuranDownloadPrompt onReady={handlePagesReady} />
-      ) : viewType === 'pages' ? (
+      ) : (
         <SQLiteProvider
           databaseName="quran_ayah_bounds.db"
           assetSource={{ assetId: AYAH_BOUNDS_DB }}
           onError={(err) => console.error('[SQLiteProvider ayah_bounds] Error:', err)}
         >
+          {console.log('[QuranReader] rendering QuranPagesView with initialPage=%d', initialPageRef.current) as undefined}
           <QuranPagesView
-            initialPage={currentPage}
+            ref={pagesViewRef}
+            initialPage={initialPageRef.current}
             onPageChange={handlePageChange}
             highlightAyah={highlightAyah}
             onTap={handleTap}
+            onTafseer={handleTafseer}
+            onShare={(ayahs) => void handleShare(ayahs)}
           />
         </SQLiteProvider>
-      ) : (
-        <QuranVersesView
-          initialPage={currentPage}
-          onPageChange={handlePageChange}
-          highlightAyah={highlightAyah}
-        />
       )}
-      <FABViewToggle
-        viewType={viewType}
-        onToggle={handleToggleView}
-        visible={chromeVisible}
-        bottomOffset={fabBottomOffset}
-      />
       <QuranSettingsSheet ref={settingsSheetRef} />
+      <TafseerSheet ref={tafseerSheetRef} />
     </View>
   );
 }

@@ -32,5 +32,6 @@ export const STORAGE_KEYS = {
     currentItemIndex: 'azkar_current_item_index',
     currentRepeatCount: 'azkar_current_repeat_count',
     hapticsEnabled: 'azkar_haptics_enabled',
+    completedItems: 'azkar_completed_items',
   },
 } as const;

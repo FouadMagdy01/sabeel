@@ -11,7 +11,7 @@ import { getVersesByPage, type Verse } from '@/features/quran/services/quranText
 import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, I18nManager, ScrollView, Share, View, useWindowDimensions } from 'react-native';
+import { FlatList, I18nManager, ScrollView, Share, View, useWindowDimensions, type ViewToken } from 'react-native';
 
 import { useSQLiteContext } from 'expo-sqlite';
 
@@ -301,35 +301,37 @@ const VersePage = React.memo(({ pageNum, width, highlightAyah }: VersePageProps)
 });
 VersePage.displayName = 'VersePage';
 
+const VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 50 };
+
 const QuranVersesView: React.FC<QuranVersesViewProps> = React.memo(
   ({ initialPage = 1, onPageChange, highlightAyah }) => {
     const { width } = useWindowDimensions();
     const listRef = useRef<FlatList<number>>(null);
 
-    const lastReportedPage = useRef(initialPage);
+    // Track the latest onPageChange callback in a ref to avoid re-creating onViewableItemsChanged
+    const onPageChangeRef = useRef(onPageChange);
+    onPageChangeRef.current = onPageChange;
 
-    const handleMomentumEnd = useCallback(
-      (e: { nativeEvent: { contentOffset: { x: number } } }) => {
-        const offsetX = e.nativeEvent.contentOffset.x;
-        const pageIndex = Math.round(offsetX / width);
-        const page = TOTAL_PAGES - pageIndex;
-
-        if (page !== lastReportedPage.current && page >= 1 && page <= TOTAL_PAGES) {
-          lastReportedPage.current = page;
-          onPageChange?.(page);
+    // Primary page detection — uses viewable items, works correctly with inverted + RTL
+    const onViewableItemsChanged = useRef(
+      ({ viewableItems }: { viewableItems: ViewToken<number>[] }) => {
+        if (viewableItems.length > 0) {
+          const page = viewableItems[0].item; // item IS the page number
+          onPageChangeRef.current?.(page);
         }
-      },
-      [width, onPageChange]
-    );
+      }
+    ).current;
 
     const renderItem = useCallback(
-      ({ item }: { item: number }) => (
-        <VersePage
-          pageNum={item}
-          width={width}
-          highlightAyah={item === initialPage ? highlightAyah : undefined}
-        />
-      ),
+      ({ item }: { item: number }) => {
+        return (
+          <VersePage
+            pageNum={item}
+            width={width}
+            highlightAyah={item === initialPage ? highlightAyah : undefined}
+          />
+        );
+      },
       [width, initialPage, highlightAyah]
     );
 
@@ -344,8 +346,7 @@ const QuranVersesView: React.FC<QuranVersesViewProps> = React.memo(
 
     const keyExtractor = useCallback((item: number) => `verse-page-${String(item)}`, []);
 
-    // Convert page number to index (RTL aware)
-    const initialIndex = I18nManager.isRTL ? initialPage - 1 : TOTAL_PAGES - initialPage;
+    const initialScrollIndex = Math.max(0, Math.min(initialPage - 1, TOTAL_PAGES - 1));
 
     return (
       <FlatList
@@ -358,13 +359,14 @@ const QuranVersesView: React.FC<QuranVersesViewProps> = React.memo(
         pagingEnabled
         inverted={!I18nManager.isRTL}
         showsHorizontalScrollIndicator={false}
+        style={styles.container}
+        initialScrollIndex={initialScrollIndex}
+        viewabilityConfig={VIEWABILITY_CONFIG}
+        onViewableItemsChanged={onViewableItemsChanged}
         initialNumToRender={1}
         maxToRenderPerBatch={2}
         windowSize={3}
         removeClippedSubviews
-        style={styles.container}
-        initialScrollIndex={Math.max(0, Math.min(initialIndex, TOTAL_PAGES - 1))}
-        onMomentumScrollEnd={handleMomentumEnd}
       />
     );
   }

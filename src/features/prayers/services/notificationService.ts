@@ -1,6 +1,6 @@
-import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
 import i18n from '@/i18n/config';
+import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
 
 import type { DayPrayerTimes, PrayerKey, YearlyPrayerData } from '../types';
 import { NOTIFIABLE_PRAYERS } from '../types';
@@ -8,7 +8,7 @@ import { NOTIFIABLE_PRAYERS } from '../types';
 // iOS caps at ~64, Android at 500. Stay well under both.
 const MAX_SCHEDULED = 50;
 
-const PRAYER_CHANNEL_ID = 'prayer_times';
+const PRAYER_CHANNEL_PREFIX = 'prayer_times';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -20,25 +20,45 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function ensureAndroidChannel(soundFilename?: string): Promise<void> {
-  if (Platform.OS !== 'android') return;
+/**
+ * Android caches notification channel sound settings even after deletion.
+ * Recreating a channel with the same ID keeps the old sound.
+ * To work around this, we use a unique channel ID per sound selection
+ * (e.g. "prayer_times_adhan_mansour") and clean up old channels.
+ */
+function getPrayerChannelId(soundFilename?: string): string {
+  return soundFilename
+    ? `${PRAYER_CHANNEL_PREFIX}_${soundFilename}`
+    : `${PRAYER_CHANNEL_PREFIX}_default`;
+}
 
-  const soundValue = soundFilename ? `${soundFilename}.mp3` : 'default';
+async function ensureAndroidChannel(soundFilename?: string): Promise<string> {
+  const channelId = getPrayerChannelId(soundFilename);
+  if (Platform.OS !== 'android') return channelId;
 
-  // Delete existing channel and recreate with potentially new sound
+  const soundName = soundFilename ? `${soundFilename}.mp3` : 'default';
+
+  // Clean up old prayer channels that use a different sound
   try {
-    await Notifications.deleteNotificationChannelAsync(PRAYER_CHANNEL_ID);
+    const channels = await Notifications.getNotificationChannelsAsync();
+    for (const ch of channels) {
+      if (ch.id.startsWith(PRAYER_CHANNEL_PREFIX) && ch.id !== channelId) {
+        await Notifications.deleteNotificationChannelAsync(ch.id);
+      }
+    }
   } catch {
-    // Channel may not exist yet
+    // Channels may not exist yet
   }
 
-  await Notifications.setNotificationChannelAsync(PRAYER_CHANNEL_ID, {
+  await Notifications.setNotificationChannelAsync(channelId, {
     name: 'Prayer Times',
     importance: Notifications.AndroidImportance.HIGH,
-    sound: soundValue,
+    sound: soundName,
     vibrationPattern: [0, 250, 250, 250],
     enableLights: true,
   });
+
+  return channelId;
 }
 
 export async function requestNotificationPermission(): Promise<boolean> {
@@ -106,7 +126,7 @@ export async function scheduleYearlyPrayerNotifications(
   const soundFilename = adhanSound && adhanSound !== 'default' ? adhanSound : undefined;
   const notificationSound = soundFilename ? `${soundFilename}.mp3` : 'default';
 
-  await ensureAndroidChannel(soundFilename);
+  const channelId = await ensureAndroidChannel(soundFilename);
   await cancelAllPrayerNotifications();
 
   const lang = i18n.language;
@@ -121,11 +141,11 @@ export async function scheduleYearlyPrayerNotifications(
           body: i18n.t('prayers.notification.body', { prayer: name }),
           sound: notificationSound,
           data: { lang, prayerKey },
-          ...(Platform.OS === 'android' && { channelId: PRAYER_CHANNEL_ID }),
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,
           date,
+          ...(Platform.OS === 'android' && { channelId }),
         },
       });
     } catch {
@@ -136,7 +156,8 @@ export async function scheduleYearlyPrayerNotifications(
 
 export async function checkAndResyncNotificationLanguage(
   yearlyData: YearlyPrayerData | null,
-  prayerNames: Record<PrayerKey, string>
+  prayerNames: Record<PrayerKey, string>,
+  adhanSound?: string
 ): Promise<void> {
   if (!yearlyData) return;
 
@@ -149,5 +170,5 @@ export async function checkAndResyncNotificationLanguage(
 
   if (scheduledLang === currentLang) return;
 
-  await scheduleYearlyPrayerNotifications(yearlyData, prayerNames);
+  await scheduleYearlyPrayerNotifications(yearlyData, prayerNames, adhanSound);
 }

@@ -36,12 +36,26 @@ export function QuickAccess({ items, onItemPress }: QuickAccessProps) {
     </Card>
   );
 
+  const topRow = items.slice(0, 3);
+  const bottomRow = items.slice(3);
+
   return (
     <View style={styles.container}>
       <Typography size="xxs" weight="bold" color="tertiary" uppercase style={styles.header}>
         {t('screens.home.quickAccess.sectionTitle')}
       </Typography>
-      <View style={styles.grid}>{items.map(renderItem)}</View>
+      <View style={styles.gridContainer}>
+        <View style={styles.grid}>{topRow.map(renderItem)}</View>
+        {bottomRow.length > 0 && (
+          <View style={styles.gridBottomRow}>
+            {bottomRow.map((item) => (
+              <View key={item.id} style={styles.gridBottomRowItem}>
+                {renderItem(item)}
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
     </View>
   );
 }

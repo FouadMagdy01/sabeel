@@ -7,9 +7,20 @@ export const styles = StyleSheet.create((theme) => ({
   header: {
     fontSize: theme.metrics.fontSize.xxs,
   },
+  gridContainer: {
+    gap: theme.metrics.spacingV.p12,
+  },
   grid: {
     flexDirection: 'row',
     gap: theme.metrics.spacing.p12,
+  },
+  gridBottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: theme.metrics.spacing.p12,
+  },
+  gridBottomRowItem: {
+    width: '30%',
   },
   itemCard: {
     flex: 1,

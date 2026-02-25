@@ -46,7 +46,7 @@ const ResultItem = React.memo(({ verse, onPress }: ResultItemProps) => {
 ResultItem.displayName = 'ResultItem';
 
 const QuranSearchResults: React.FC<QuranSearchResultsProps> = React.memo(
-  ({ query, onResultPress, pagesReady }) => {
+  ({ query, onResultPress }) => {
     const { t } = useTranslation();
     const { theme } = useUnistyles();
     const db = useSQLiteContext();
@@ -83,9 +83,9 @@ const QuranSearchResults: React.FC<QuranSearchResultsProps> = React.memo(
 
     const handleResultPress = useCallback(
       (surahId: number, page: number, ayahNumber: number) => {
-        onResultPress(surahId, page, pagesReady ? 'pages' : 'verses', ayahNumber);
+        onResultPress(surahId, page, ayahNumber);
       },
-      [onResultPress, pagesReady]
+      [onResultPress]
     );
 
     const renderItem = useCallback(

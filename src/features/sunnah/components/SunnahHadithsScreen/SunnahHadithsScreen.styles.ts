@@ -1,0 +1,125 @@
+import { StyleSheet } from 'react-native-unistyles';
+
+export const styles = StyleSheet.create((theme) => ({
+  screen: {
+    flex: 1,
+    backgroundColor: theme.colors.background.app,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p12,
+    paddingVertical: theme.metrics.spacingV.p12,
+    paddingHorizontal: theme.metrics.spacing.p16,
+  },
+  headerTitle: {
+    flex: 1,
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  listContent: {
+    paddingHorizontal: theme.metrics.spacing.p24,
+    gap: theme.metrics.spacingV.p16,
+  },
+  hadithCard: {
+    gap: theme.metrics.spacingV.p12,
+  },
+  hadithTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  hadithNumberContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p8,
+  },
+  hadithNumberBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: theme.colors.brand.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: theme.colors.border.default,
+    opacity: 0.5,
+  },
+  hadithBody: {
+    lineHeight: 26,
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: theme.metrics.spacing.p8,
+  },
+  gradeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: theme.colors.background.surface,
+    paddingHorizontal: theme.metrics.spacing.p8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: theme.colors.border.default,
+  },
+  collectionTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    opacity: 0.6,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.metrics.spacingV.p12,
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.metrics.spacingV.p16,
+    paddingHorizontal: theme.metrics.spacing.p32,
+  },
+  errorIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: theme.colors.background.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  footerLoader: {
+    paddingVertical: theme.metrics.spacingV.p24,
+    alignItems: 'center',
+    gap: theme.metrics.spacingV.p8,
+  },
+  copiedToast: {
+    position: 'absolute',
+    bottom: 100,
+    alignSelf: 'center',
+    backgroundColor: theme.colors.brand.primary,
+    paddingHorizontal: theme.metrics.spacing.p20,
+    paddingVertical: theme.metrics.spacingV.p8,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    shadowColor: theme.colors.brand.primary,
+    elevation: 6,
+  },
+}));

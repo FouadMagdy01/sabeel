@@ -20,7 +20,8 @@
     "prepare": "husky",
     "validate": "npm run type-check && npm run lint && npm run format:check",
     "build:android": "npx expo prebuild --platform android && cd android && ./gradlew assembleRelease",
-    "build:ios": "npx expo prebuild --platform ios && cd ios && xcodebuild -workspace *.xcworkspace -scheme Sabeel -configuration Release"
+    "build:ios": "npx expo prebuild --platform ios && cd ios && xcodebuild -workspace *.xcworkspace -scheme Sabeel -configuration Release",
+    "generate-assets": "node scripts/generate-assets.js"
   },
   "expo": {
     "doctor": {
@@ -35,6 +36,7 @@
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
+    "@legendapp/list": "^2.0.19",
     "@quranjs/api": "^2.1.0",
     "@react-native-community/slider": "5.0.1",
     "@react-native-masked-view/masked-view": "0.3.2",
@@ -42,6 +44,7 @@
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
     "@react-navigation/stack": "^7.6.13",
+    "@shopify/flash-list": "2.0.2",
     "@supabase/supabase-js": "^2.91.1",
     "@tanstack/query-async-storage-persister": "^5.90.22",
     "@tanstack/react-query": "^5.90.20",
@@ -51,9 +54,10 @@
     "country-state-city": "^3.2.1",
     "expo": "~54.0.33",
     "expo-asset": "~12.0.12",
-    "expo-av": "~16.0.8",
+    "expo-audio": "~1.1.1",
     "expo-blur": "~15.0.8",
     "expo-build-properties": "~1.0.10",
+    "expo-clipboard": "~8.0.8",
     "expo-constants": "~18.0.10",
     "expo-file-system": "~19.0.21",
     "expo-font": "~14.0.9",
@@ -125,6 +129,7 @@
     "lint-staged": "^16.2.7",
     "patch-package": "^8.0.1",
     "prettier": "^3.8.1",
+    "sharp": "^0.34.5",
     "typescript": "~5.9.2"
   },
   "private": true

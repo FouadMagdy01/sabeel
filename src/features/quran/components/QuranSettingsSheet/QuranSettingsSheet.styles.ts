@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native-unistyles';
 
 export const styles = StyleSheet.create((theme) => ({
+  sheetContainer: {
+    zIndex: 2000,
+  },
   background: {
     backgroundColor: theme.colors.background.modal,
   },

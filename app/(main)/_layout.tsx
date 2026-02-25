@@ -12,6 +12,9 @@ export default function MainStackLayout() {
       <Stack.Screen name="adhan-sound" options={{ headerShown: false }} />
       <Stack.Screen name="azkar-hub" options={{ headerShown: false }} />
       <Stack.Screen name="azkar-session" options={{ headerShown: false }} />
+      <Stack.Screen name="sunnah-collections" options={{ headerShown: false }} />
+      <Stack.Screen name="sunnah-books" options={{ headerShown: false }} />
+      <Stack.Screen name="sunnah-hadiths" options={{ headerShown: false }} />
     </Stack>
   );
 }

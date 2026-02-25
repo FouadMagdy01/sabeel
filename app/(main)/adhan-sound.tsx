@@ -1,6 +1,6 @@
-import { Audio } from 'expo-av';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -35,7 +35,13 @@ export default function AdhanSoundScreen() {
   });
 
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const soundRef = useRef<Audio.Sound | null>(null);
+  const player = useAudioPlayer(null);
+  const status = useAudioPlayerStatus(player);
+
+  // Detect when playback finishes to reset playingId
+  if (status.playing === false && status.currentTime > 0 && playingId !== null) {
+    setPlayingId(null);
+  }
 
   const prayerNames = useMemo<Record<PrayerKey, string>>(
     () => ({
@@ -49,43 +55,23 @@ export default function AdhanSoundScreen() {
     [t]
   );
 
-  const stopPreview = useCallback(async () => {
-    if (soundRef.current) {
-      try {
-        await soundRef.current.unloadAsync();
-      } catch {
-        // Ignore cleanup errors
-      }
-      soundRef.current = null;
-    }
+  const stopPreview = useCallback(() => {
+    player.pause();
+    player.seekTo(0);
     setPlayingId(null);
-  }, []);
+  }, [player]);
 
   const playPreview = useCallback(
-    async (soundId: string) => {
-      await stopPreview();
+    (soundId: string) => {
+      stopPreview();
 
       if (soundId === 'default' || !SOUND_FILES[soundId]) return;
 
-      try {
-        const { sound } = await Audio.Sound.createAsync(SOUND_FILES[soundId]);
-        soundRef.current = sound;
-        setPlayingId(soundId);
-
-        sound.setOnPlaybackStatusUpdate((status) => {
-          if ('didJustFinish' in status && status.didJustFinish) {
-            setPlayingId(null);
-            void sound.unloadAsync();
-            soundRef.current = null;
-          }
-        });
-
-        await sound.playAsync();
-      } catch {
-        setPlayingId(null);
-      }
+      player.replace(SOUND_FILES[soundId]);
+      player.play();
+      setPlayingId(soundId);
     },
-    [stopPreview]
+    [stopPreview, player]
   );
 
   const handleSelect = useCallback(
@@ -110,8 +96,8 @@ export default function AdhanSoundScreen() {
     [prayerNames]
   );
 
-  const handleBack = useCallback(async () => {
-    await stopPreview();
+  const handleBack = useCallback(() => {
+    stopPreview();
     router.back();
   }, [stopPreview, router]);
 
@@ -163,9 +149,9 @@ export default function AdhanSoundScreen() {
               <Pressable
                 onPress={() => {
                   if (isPlaying) {
-                    void stopPreview();
+                    stopPreview();
                   } else {
-                    void playPreview(item.id);
+                    playPreview(item.id);
                   }
                 }}
                 hitSlop={8}
@@ -201,7 +187,7 @@ export default function AdhanSoundScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.app }]}>
       <View style={[styles.header, { paddingTop: insets.top }]}>
-        <Pressable onPress={() => void handleBack()} hitSlop={8}>
+        <Pressable onPress={handleBack} hitSlop={8}>
           <Icon
             familyName="Ionicons"
             iconName="arrow-back"

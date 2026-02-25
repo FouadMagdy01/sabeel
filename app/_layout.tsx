@@ -8,7 +8,7 @@ import { Stack } from 'expo-router';
 import { ActivityIndicator, I18nManager, Platform, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 // Initialize theme from persisted preferences (synchronous)
 initializeTheme();
@@ -25,11 +25,12 @@ if (Platform.OS !== 'web') {
 
 function RootNavigator() {
   const { isAuthenticated, isLoading } = useAuth();
+  const { theme } = useUnistyles();
 
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={theme.colors.brand.primary} />
       </View>
     );
   }

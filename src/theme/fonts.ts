@@ -7,4 +7,5 @@ export const FONTS = {
   black: 'Cairo-Black',
   extraBold: 'Cairo-ExtraBold',
   medium: 'Cairo-Medium',
+  quran: 'Amiri-Quran',
 };

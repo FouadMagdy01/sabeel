@@ -1,8 +1,10 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { create } from 'zustand';
 
+import i18n from '@/i18n/config';
 import { usePlayerStore } from '@/features/quran/stores/playerStore';
 
+import { resolveReciterNames } from '../services/mp3QuranApi';
 import {
   addDownloadedSurah,
   deleteAllDownloadsForReciter,
@@ -94,12 +96,19 @@ export const useDownloadStore = create<DownloadStoreState>((set, get) => ({
     }));
 
     try {
+      const resolvedNames = await resolveReciterNames(
+        reciterId,
+        moshafId,
+        names.reciterNameAr || names.reciterNameEn,
+        names.moshafNameAr || names.moshafNameEn,
+        i18n.language
+      );
       const { filePath, fileSize } = await downloadSurah(reciterId, moshafId, surahId, server);
       await addDownloadedSurah({
         reciterId,
         moshafId,
         surahId,
-        ...names,
+        ...resolvedNames,
         server,
         surahList,
         filePath,
@@ -127,6 +136,14 @@ export const useDownloadStore = create<DownloadStoreState>((set, get) => ({
     const surahIds = surahList.split(',').map(Number);
     const total = surahIds.length;
 
+    const resolvedNames = await resolveReciterNames(
+      reciterId,
+      moshafId,
+      names.reciterNameAr || names.reciterNameEn,
+      names.moshafNameAr || names.moshafNameEn,
+      i18n.language
+    );
+
     set({
       cancelFlag: false,
       bulkDownload: { reciterId, moshafId, completed: 0, total, isActive: true },
@@ -152,7 +169,7 @@ export const useDownloadStore = create<DownloadStoreState>((set, get) => ({
             reciterId,
             moshafId,
             surahId: currentSurahId,
-            ...names,
+            ...resolvedNames,
             server,
             surahList,
             filePath,

@@ -56,6 +56,7 @@ const PhraseSelector = forwardRef<BottomSheetModal, PhraseSelectorProps>(
         snapPoints={snapPoints}
         enablePanDownToClose
         backdropComponent={renderBackdrop}
+        containerStyle={styles.sheetContainer}
         backgroundStyle={styles.background}
         handleIndicatorStyle={styles.indicator}
       >

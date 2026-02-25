@@ -186,7 +186,8 @@
         "azkarDua": "Azkar & Dua",
         "qibla": "Qibla",
         "tasbeeh": "Tasbeeh",
-        "mushaf": "Mushaf"
+        "mushaf": "Mushaf",
+        "sunnahBooks": "Sunnah Books"
       },
       "verseOfTheDay": {
         "label": "Verse of the Day"
@@ -233,6 +234,15 @@
         "tafseer": "Tafseer",
         "play": "Play",
         "pause": "Pause"
+      },
+      "tafseer": {
+        "title": "Tafseer",
+        "localTafseer": "Al-Muyassar",
+        "loading": "Loading tafseer...",
+        "error": "Failed to load tafseer",
+        "retry": "Retry",
+        "shareWithTafseer": "Share with Tafseer",
+        "ayah": "Ayah"
       },
       "settings": {
         "title": "Settings",
@@ -416,6 +426,19 @@
     },
     "settings": {
       "title": "Settings"
+    },
+    "sunnahBooks": {
+      "title": "Sunnah Books",
+      "subtitle": "Explore authentic hadith collections from the Prophet's traditions",
+      "hadithCount": "{{count}} Hadiths",
+      "booksCount": "{{count}} Books",
+      "hadithLabel": "Hadith",
+      "loading": "Loading collections...",
+      "loadingMore": "Loading more hadiths...",
+      "error": "Failed to load data",
+      "retry": "Retry",
+      "noResults": "No results found",
+      "copied": "Hadith copied!"
     },
     "azkar": {
       "hub": {

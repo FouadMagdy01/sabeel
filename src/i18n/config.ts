@@ -1,4 +1,5 @@
 import i18n from 'i18next';
+import { getLocales } from 'expo-localization';
 import { initReactI18next } from 'react-i18next';
 import { getItem, STORAGE_KEYS } from '@/utils/storage';
 import ar from './locales/ar.json';
@@ -14,7 +15,16 @@ declare module 'i18next' {
 }
 
 const savedLang = getItem<string>(STORAGE_KEYS.preferences.language);
-const initialLang = savedLang.success && savedLang.data ? savedLang.data : 'en';
+
+let initialLang = 'en';
+if (savedLang.success && savedLang.data) {
+  initialLang = savedLang.data;
+} else {
+  const deviceLocale = getLocales()[0]?.languageCode;
+  if (deviceLocale === 'ar') {
+    initialLang = 'ar';
+  }
+}
 
 i18n.use(initReactI18next).init({
   compatibilityJSON: 'v4',

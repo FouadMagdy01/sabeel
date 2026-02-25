@@ -12,7 +12,9 @@ import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Toggle } from '@/common/components/Toggle';
 import { Typography } from '@/common/components/Typography';
+import type { TypographySize } from '@/common/components/Typography';
 import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
+import { rf } from '@/theme/metrics';
 
 import { AZKAR_CATEGORIES } from '../../constants';
 import { getItemsByCategory } from '../../data';
@@ -21,6 +23,14 @@ import { useAzkarSessionStore } from '../../stores';
 import type { AzkarCategory } from '../../types';
 import { AzkarCounter } from '../AzkarCounter';
 import { styles } from './AzkarSessionScreen.styles';
+
+function getArabicTextStyle(text: string): { size: TypographySize; lineHeight: number } {
+  const len = text.length;
+  if (len < 50) return { size: '3xl', lineHeight: rf(52) };
+  if (len < 100) return { size: '2xl', lineHeight: rf(44) };
+  if (len < 200) return { size: 'xl', lineHeight: rf(38) };
+  return { size: 'lg', lineHeight: rf(32) };
+}
 
 export function AzkarSessionScreen() {
   const insets = useSafeAreaInsets();
@@ -57,6 +67,10 @@ export function AzkarSessionScreen() {
   const isSessionComplete = completedItems.length >= items.length;
   const categoryMeta = AZKAR_CATEGORIES.find((c) => c.id === categoryId);
   const sessionProgress = items.length > 0 ? completedItems.length / items.length : 0;
+  const arabicStyle = useMemo(
+    () => (currentItem ? getArabicTextStyle(currentItem.arabic) : null),
+    [currentItem]
+  );
 
   useEffect(() => {
     loadFromStorage();
@@ -140,10 +154,10 @@ export function AzkarSessionScreen() {
           <View style={styles.contentCard}>
             <Typography
               type="heading"
-              size="3xl"
+              size={arabicStyle?.size ?? '3xl'}
               weight="bold"
               align="center"
-              style={styles.arabicText}
+              style={[styles.arabicText, { lineHeight: arabicStyle?.lineHeight }]}
             >
               {currentItem.arabic}
             </Typography>
@@ -162,10 +176,10 @@ export function AzkarSessionScreen() {
               <View
                 style={[
                   styles.ayahBadge,
-                  { backgroundColor: theme.colors.brand.secondaryVariant },
+                  { backgroundColor: theme.colors.brand.primary },
                 ]}
               >
-                <Typography size="sm" weight="semiBold" color="brandSecondary">
+                <Typography size="sm" weight="semiBold" color="inverse">
                   {t('screens.azkar.session.ayah', {
                     ref: currentItem.source.replace('Quran ', ''),
                   })}
@@ -183,7 +197,7 @@ export function AzkarSessionScreen() {
 
             {currentItem.virtue && (
               <View style={[styles.virtueCard, { backgroundColor: theme.colors.state.successBg }]}>
-                <Typography size="sm" style={{ color: theme.colors.state.success }}>
+                <Typography size="sm" color="success">
                   {t(currentItem.virtue as never)}
                 </Typography>
               </View>
@@ -202,7 +216,7 @@ export function AzkarSessionScreen() {
         {/* Session Complete Banner */}
         {isSessionComplete && (
           <View style={[styles.banner, { backgroundColor: theme.colors.state.successBg }]}>
-            <Typography size="sm" weight="semiBold" style={{ color: theme.colors.state.success }}>
+            <Typography size="sm" weight="semiBold" color="success">
               {t('screens.azkar.session.sessionComplete')}
             </Typography>
           </View>

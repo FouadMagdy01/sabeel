@@ -56,18 +56,11 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
       pendingAction.current = null;
       if (!action) return;
 
-      // Delay navigation to allow the backdrop fade-out animation to fully
-      // complete. Without this, the BlurView in MiniPlayer amplifies the
-      // still-fading backdrop into a visible white overlay during the
-      // screen transition.
-      const BACKDROP_SETTLE_MS = 2000; // TODO: revert to 100 after testing
-      setTimeout(() => {
-        if (action.type === 'select') {
-          onSelect(action.moshaf);
-        } else if (action.type === 'play') {
-          onPlay?.(action.moshaf);
-        }
-      }, BACKDROP_SETTLE_MS);
+      if (action.type === 'select') {
+        onSelect(action.moshaf);
+      } else if (action.type === 'play') {
+        onPlay?.(action.moshaf);
+      }
     }, [onSelect, onPlay]);
 
     const handleSelect = useCallback(
@@ -93,9 +86,11 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
     return (
       <BottomSheetModal
         ref={ref}
+        style={{}}
         snapPoints={snapPoints}
         enablePanDownToClose
         backdropComponent={renderBackdrop}
+        containerStyle={styles.sheetContainer}
         backgroundStyle={styles.background}
         handleIndicatorStyle={styles.indicator}
         onDismiss={handleSheetDismiss}

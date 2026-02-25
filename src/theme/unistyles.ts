@@ -1,3 +1,4 @@
+import { Appearance } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 import { getItem, STORAGE_KEYS } from '../utils/storage';
 import { buildAllThemes, compositeThemeName, THEME_PRESET_NAMES } from './config';
@@ -27,7 +28,14 @@ function getInitialThemeName(): CompositeThemeName {
     preset = presetResult.data as ThemePresetName;
   }
 
-  const mode = modeResult.success && modeResult.data === 'dark' ? 'dark' : 'light';
+  const mode =
+    modeResult.success && modeResult.data
+      ? modeResult.data === 'dark'
+        ? 'dark'
+        : 'light'
+      : Appearance.getColorScheme() === 'dark'
+        ? 'dark'
+        : 'light';
 
   return compositeThemeName(preset, mode);
 }

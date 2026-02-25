@@ -1,0 +1,1 @@
+export { SunnahCollectionsScreen } from './SunnahCollectionsScreen';

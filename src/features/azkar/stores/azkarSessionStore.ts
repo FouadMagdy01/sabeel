@@ -22,6 +22,7 @@ export const useAzkarSessionStore = create<AzkarSessionStore>((set, get) => ({
     setItem(STORAGE_KEYS.azkar.currentCategory, categoryId);
     setItem(STORAGE_KEYS.azkar.currentItemIndex, 0);
     setItem(STORAGE_KEYS.azkar.currentRepeatCount, 0);
+    setItem(STORAGE_KEYS.azkar.completedItems, [] as string[]);
   },
 
   incrementRepeat: () => {
@@ -46,12 +47,14 @@ export const useAzkarSessionStore = create<AzkarSessionStore>((set, get) => ({
         });
         setItem(STORAGE_KEYS.azkar.currentItemIndex, nextIndex);
         setItem(STORAGE_KEYS.azkar.currentRepeatCount, 0);
+        setItem(STORAGE_KEYS.azkar.completedItems, newCompleted);
       } else {
         set({
           currentRepeatCount: newCount,
           completedItems: newCompleted,
         });
         setItem(STORAGE_KEYS.azkar.currentRepeatCount, newCount);
+        setItem(STORAGE_KEYS.azkar.completedItems, newCompleted);
       }
     } else {
       set({ currentRepeatCount: newCount });
@@ -60,24 +63,49 @@ export const useAzkarSessionStore = create<AzkarSessionStore>((set, get) => ({
   },
 
   nextItem: () => {
-    const { categoryId, currentItemIndex } = get();
+    const { categoryId, currentItemIndex, completedItems } = get();
     if (!categoryId) return;
 
     const items = getItemsByCategory(categoryId);
     const nextIndex = Math.min(currentItemIndex + 1, items.length - 1);
+    if (nextIndex === currentItemIndex) return;
 
-    set({ currentItemIndex: nextIndex, currentRepeatCount: 0 });
+    const currentItem = items[currentItemIndex];
+    let newCompleted = completedItems;
+
+    if (currentItem && !completedItems.includes(currentItem.id)) {
+      newCompleted = [...completedItems, currentItem.id];
+    }
+
+    const nextItemData = items[nextIndex];
+    const isNextCompleted = nextItemData ? newCompleted.includes(nextItemData.id) : false;
+    const nextRepeatCount = isNextCompleted && nextItemData ? nextItemData.repeatCount : 0;
+
+    set({
+      currentItemIndex: nextIndex,
+      currentRepeatCount: nextRepeatCount,
+      completedItems: newCompleted,
+    });
     setItem(STORAGE_KEYS.azkar.currentItemIndex, nextIndex);
-    setItem(STORAGE_KEYS.azkar.currentRepeatCount, 0);
+    setItem(STORAGE_KEYS.azkar.currentRepeatCount, nextRepeatCount);
+    setItem(STORAGE_KEYS.azkar.completedItems, newCompleted);
   },
 
   previousItem: () => {
-    const { currentItemIndex } = get();
-    const prevIndex = Math.max(currentItemIndex - 1, 0);
+    const { categoryId, currentItemIndex, completedItems } = get();
+    if (!categoryId) return;
 
-    set({ currentItemIndex: prevIndex, currentRepeatCount: 0 });
+    const prevIndex = Math.max(currentItemIndex - 1, 0);
+    if (prevIndex === currentItemIndex) return;
+
+    const items = getItemsByCategory(categoryId);
+    const prevItem = items[prevIndex];
+    const isPrevCompleted = prevItem ? completedItems.includes(prevItem.id) : false;
+    const prevRepeatCount = isPrevCompleted && prevItem ? prevItem.repeatCount : 0;
+
+    set({ currentItemIndex: prevIndex, currentRepeatCount: prevRepeatCount });
     setItem(STORAGE_KEYS.azkar.currentItemIndex, prevIndex);
-    setItem(STORAGE_KEYS.azkar.currentRepeatCount, 0);
+    setItem(STORAGE_KEYS.azkar.currentRepeatCount, prevRepeatCount);
   },
 
   resetSession: () => {
@@ -90,6 +118,7 @@ export const useAzkarSessionStore = create<AzkarSessionStore>((set, get) => ({
     if (categoryId) {
       setItem(STORAGE_KEYS.azkar.currentItemIndex, 0);
       setItem(STORAGE_KEYS.azkar.currentRepeatCount, 0);
+      setItem(STORAGE_KEYS.azkar.completedItems, [] as string[]);
     }
   },
 
@@ -104,6 +133,7 @@ export const useAzkarSessionStore = create<AzkarSessionStore>((set, get) => ({
     const indexResult = getItem<number>(STORAGE_KEYS.azkar.currentItemIndex);
     const repeatResult = getItem<number>(STORAGE_KEYS.azkar.currentRepeatCount);
     const hapticsResult = getItem<boolean>(STORAGE_KEYS.azkar.hapticsEnabled);
+    const completedResult = getItem<string[]>(STORAGE_KEYS.azkar.completedItems);
 
     const updates: Partial<AzkarSessionStore> = {};
 
@@ -121,6 +151,10 @@ export const useAzkarSessionStore = create<AzkarSessionStore>((set, get) => ({
 
     if (hapticsResult.data != null) {
       updates.hapticsEnabled = hapticsResult.data;
+    }
+
+    if (completedResult.data != null && Array.isArray(completedResult.data)) {
+      updates.completedItems = completedResult.data;
     }
 
     if (Object.keys(updates).length > 0) {

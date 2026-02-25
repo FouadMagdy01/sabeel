@@ -27,10 +27,11 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
+  const { theme } = useUnistyles();
   const { t } = useTranslation();
   const router = useRouter();
   const {
@@ -60,11 +61,13 @@ export default function HomeScreen() {
         case 'mushaf': {
           const result = getItem<LastReadInfo>(STORAGE_KEYS.quran.lastPage);
           const lastRead = result.data;
+          const page = Math.max(1, Math.min(604, lastRead?.page ?? 1));
+          const surahId = Math.max(1, Math.min(114, lastRead?.surahId ?? 1));
           router.push({
             pathname: '/(main)/quran-reader',
             params: {
-              page: String(lastRead?.page ?? 1),
-              surahId: String(lastRead?.surahId ?? 1),
+              page: String(page),
+              surahId: String(surahId),
             },
           });
           break;
@@ -78,6 +81,9 @@ export default function HomeScreen() {
         case 'azkar-dua':
           router.push('/(main)/azkar-hub');
           break;
+        case 'sunnah-books':
+          router.push('/(main)/sunnah-collections');
+          break;
         default:
           console.warn(t('screens.home.quickAccess.sectionTitle'), item.id);
       }
@@ -89,7 +95,7 @@ export default function HomeScreen() {
     if (isLoading && todayPrayers.length === 0) {
       return (
         <View style={homeStyles.loadingContainer}>
-          <ActivityIndicator />
+          <ActivityIndicator color={theme.colors.brand.primary} />
         </View>
       );
     }

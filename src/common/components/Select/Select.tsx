@@ -182,6 +182,7 @@ export function Select({
         snapPoints={['50%', '75%']}
         enablePanDownToClose
         backdropComponent={renderBackdrop}
+        containerStyle={styles.sheetContainer}
         backgroundStyle={styles.bottomSheetBackground}
         handleIndicatorStyle={styles.bottomSheetIndicator}
       >
