@@ -25,6 +25,7 @@ const STATUS_COLORS: Record<
   success: (theme) => theme.colors.state.success,
   error: (theme) => theme.colors.state.error,
   warning: (theme) => theme.colors.state.warning,
+  info: (theme) => theme.colors.state.info,
 };
 
 /**
@@ -141,7 +142,12 @@ const CircularProgress = ({
       {(children ?? showLabel) && (
         <View style={styles.labelContainer}>
           {children ?? (
-            <Typography type="caption" size="xs" weight="medium" style={styles.label}>
+            <Typography
+              type="caption"
+              size="xs"
+              weight="medium"
+              style={[styles.label, { color: theme.colors.text.primary }]}
+            >
               {percentageText}
             </Typography>
           )}

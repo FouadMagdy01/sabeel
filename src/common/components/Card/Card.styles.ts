@@ -9,21 +9,22 @@ export const RADIUS_MAP = {
 
 export const styles = StyleSheet.create((theme) => ({
   container: {
-    backgroundColor: theme.colors.background.surface,
     overflow: 'hidden',
     variants: {
       variant: {
         elevated: {
-          borderWidth: 1,
+          backgroundColor: theme.colors.background.surface,
           borderColor: theme.colors.border.default,
           shadowColor: theme.colors.shadow.color,
+          borderWidth: 1,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
           shadowRadius: 6,
         },
         outlined: {
-          borderWidth: 1,
+          backgroundColor: theme.colors.background.surface,
           borderColor: theme.colors.border.default,
+          borderWidth: 1,
         },
         filled: {
           backgroundColor: theme.colors.background.surface,

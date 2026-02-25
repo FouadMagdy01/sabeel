@@ -10,9 +10,11 @@ export const styles = StyleSheet.create((theme) => ({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: theme.colors.state.successBg,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: `${theme.colors.brand.primary}15`,
+    borderColor: `${theme.colors.brand.primary}30`,
   },
   content: {
     flex: 1,
@@ -24,8 +26,7 @@ export const styles = StyleSheet.create((theme) => ({
     marginTop: 2,
   },
   metaText: {
-    fontSize: 11,
-    letterSpacing: 0.3,
+    fontSize: theme.fonts.size.xxs,
   },
   actionsRow: {
     flexDirection: 'row',

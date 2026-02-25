@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const styles = StyleSheet.create((theme) => ({
   container: {
-    borderTopColor: theme.colors.brand.tertiary,
     borderTopWidth: 1,
+    borderTopColor: theme.colors.brand.tertiary,
   },
   decorativeIcon: {
     position: 'absolute',
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
   labelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: theme.metrics.spacing.p8,
   },
   labelDot: {
     width: 6,
@@ -29,20 +29,13 @@ export const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.brand.tertiary,
   },
   label: {
-    fontSize: 10,
-    letterSpacing: 3,
+    fontSize: theme.fonts.size.xxs,
   },
   shareButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.brand.tertiary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: theme.colors.brand.tertiary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
+    shadowColor: theme.colors.brand.tertiary,
     elevation: 4,
   },
   contentArea: {
@@ -55,13 +48,9 @@ export const styles = StyleSheet.create((theme) => ({
     width: '100%',
   },
   translationText: {
-    letterSpacing: -0.3,
-    marginBottom: 8,
+    marginBottom: theme.metrics.spacingV.p8,
   },
   referenceText: {
-    fontSize: 10,
-  },
-  pressed: {
-    opacity: 0.8,
+    fontSize: theme.fonts.size.xxs,
   },
 }));

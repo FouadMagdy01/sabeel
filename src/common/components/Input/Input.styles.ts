@@ -9,20 +9,12 @@ export const styles = StyleSheet.create((theme) => ({
     fontFamily: theme.fonts.semiBold,
     color: theme.colors.text.secondary,
     marginBottom: theme.metrics.spacingV.p4,
-    variants: {
-      error: {
-        true: {
-          color: theme.colors.state.error,
-        },
-        false: {},
-      },
-      disabled: {
-        true: {
-          color: theme.colors.text.muted,
-        },
-        false: {},
-      },
-    },
+  },
+  labelError: {
+    color: theme.colors.state.error,
+  },
+  labelDisabled: {
+    color: theme.colors.text.muted,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -84,72 +76,6 @@ export const styles = StyleSheet.create((theme) => ({
       },
     },
     compoundVariants: [
-      // Focused states
-      {
-        variant: 'outlined',
-        focused: true,
-        styles: {
-          borderColor: theme.colors.border.focus,
-        },
-      },
-      {
-        variant: 'filled',
-        focused: true,
-        styles: {
-          borderColor: theme.colors.border.focus,
-        },
-      },
-      {
-        variant: 'underlined',
-        focused: true,
-        styles: {
-          borderBottomColor: theme.colors.border.focus,
-        },
-      },
-      // Error states
-      {
-        variant: 'outlined',
-        error: true,
-        styles: {
-          borderColor: theme.colors.state.error,
-        },
-      },
-      {
-        variant: 'filled',
-        error: true,
-        styles: {
-          borderColor: theme.colors.state.error,
-        },
-      },
-      {
-        variant: 'underlined',
-        error: true,
-        styles: {
-          borderBottomColor: theme.colors.state.error,
-        },
-      },
-      // Success states
-      {
-        variant: 'outlined',
-        success: true,
-        styles: {
-          borderColor: theme.colors.state.success,
-        },
-      },
-      {
-        variant: 'filled',
-        success: true,
-        styles: {
-          borderColor: theme.colors.state.success,
-        },
-      },
-      {
-        variant: 'underlined',
-        success: true,
-        styles: {
-          borderBottomColor: theme.colors.state.success,
-        },
-      },
       // Underlined size adjustments (no horizontal padding, no border radius)
       {
         variant: 'underlined',
@@ -173,6 +99,72 @@ export const styles = StyleSheet.create((theme) => ({
         styles: {
           paddingHorizontal: 0,
           borderRadius: 0,
+        },
+      },
+      // Error state borders
+      {
+        variant: 'outlined',
+        error: true,
+        styles: {
+          borderColor: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'filled',
+        error: true,
+        styles: {
+          borderColor: theme.colors.state.error,
+        },
+      },
+      {
+        variant: 'underlined',
+        error: true,
+        styles: {
+          borderBottomColor: theme.colors.state.error,
+        },
+      },
+      // Success state borders
+      {
+        variant: 'outlined',
+        success: true,
+        styles: {
+          borderColor: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'filled',
+        success: true,
+        styles: {
+          borderColor: theme.colors.state.success,
+        },
+      },
+      {
+        variant: 'underlined',
+        success: true,
+        styles: {
+          borderBottomColor: theme.colors.state.success,
+        },
+      },
+      // Focused state borders (only when not error/success)
+      {
+        variant: 'outlined',
+        focused: true,
+        styles: {
+          borderColor: theme.colors.border.focus,
+        },
+      },
+      {
+        variant: 'filled',
+        focused: true,
+        styles: {
+          borderColor: theme.colors.border.focus,
+        },
+      },
+      {
+        variant: 'underlined',
+        focused: true,
+        styles: {
+          borderBottomColor: theme.colors.border.focus,
         },
       },
     ],
@@ -205,30 +197,22 @@ export const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
   },
   helperText: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.muted,
-    variants: {
-      error: {
-        true: {
-          color: theme.colors.state.error,
-        },
-        false: {},
-      },
-      success: {
-        true: {
-          color: theme.colors.state.success,
-        },
-        false: {},
-      },
-    },
+  },
+  helperTextError: {
+    color: theme.colors.state.error,
+  },
+  helperTextSuccess: {
+    color: theme.colors.state.success,
   },
   requiredIndicator: {
     color: theme.colors.state.error,
     marginLeft: 2,
   },
   charCount: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.muted,
     marginTop: theme.metrics.spacingV.p4,

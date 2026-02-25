@@ -5,7 +5,7 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.metrics.spacingV.p16,
   },
   sectionHeader: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xs,
     paddingHorizontal: 4,
   },
 }));

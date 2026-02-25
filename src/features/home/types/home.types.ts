@@ -1,4 +1,4 @@
-export type PrayerName = 'Fajr' | 'Shrouk' | 'Dhuhr' | 'Asr' | 'Maghrib' | 'Isha';
+export type PrayerName = 'Fajr' | 'Sunrise' | 'Dhuhr' | 'Asr' | 'Maghrib' | 'Isha';
 
 export type PrayerStatus = 'completed' | 'current' | 'upcoming';
 

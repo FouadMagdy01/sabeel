@@ -112,6 +112,13 @@ export const darkColors: ThemeColors = {
      * @examples Disabled button background, inactive toggle background
      */
     disabled: 'rgba(255, 255, 255, 0.05)',
+
+    /**
+     * Modal background - Solid dark emerald
+     * @usage Modal dialogs, bottom sheets, popovers
+     * @examples Date picker modal, select bottom sheet, dialog backgrounds
+     */
+    modal: '#0A2318',
   },
 
   text: {
@@ -211,21 +218,21 @@ export const darkColors: ThemeColors = {
 
   icon: {
     /**
-     * Primary icon color - Light slate
-     * @usage Main interactive icons, primary navigation
-     * @examples Tab bar icons, primary action icons
+     * Primary icon color - Bright green (brand)
+     * @usage Main interactive icons, primary navigation, quick access
+     * @examples Tab bar active icons, primary action icons, feature icons
      */
-    primary: '#CBD5E1',
+    primary: '#19E65E',
 
     /**
-     * Secondary icon color - Medium slate
-     * @usage Supporting icons, secondary actions
-     * @examples Utility icons, secondary action icons
+     * Secondary icon color - Light emerald (brand secondary)
+     * @usage Supporting icons, secondary actions, section icons
+     * @examples Utility icons, secondary action icons, card header icons
      */
-    secondary: '#94A3B8',
+    secondary: '#A7F3D0',
 
     /**
-     * Tertiary icon color - Dim slate
+     * Tertiary icon color - Medium slate
      * @usage Subtle icons, decorative elements
      * @examples Decorative icons, subtle indicators
      */
@@ -346,6 +353,13 @@ export const darkColors: ThemeColors = {
      * @examples Focus ring, keyboard navigation highlight
      */
     focus: 'rgba(25, 230, 94, 0.2)',
+
+    /**
+     * Ripple effect overlay - Semi-transparent white
+     * @usage Android ripple on colored/contained button backgrounds
+     * @examples Ripple on primary button, ripple on success button
+     */
+    ripple: 'rgba(255, 255, 255, 0.2)',
 
     /**
      * Shadow color - Deep semi-transparent black

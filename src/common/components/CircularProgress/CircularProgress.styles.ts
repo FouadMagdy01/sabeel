@@ -13,6 +13,5 @@ export const styles = StyleSheet.create((theme) => ({
   label: {
     fontFamily: theme.fonts.medium,
     fontSize: theme.fonts.size.xs,
-    color: theme.colors.text.primary,
   },
 }));

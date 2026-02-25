@@ -12,6 +12,9 @@ export const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: theme.metrics.spacing.p16,
   },
   recommendedHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: theme.metrics.spacing.p16,
     marginTop: theme.metrics.spacingV.p32,
     marginBottom: theme.metrics.spacingV.p12,
@@ -24,5 +27,15 @@ export const styles = StyleSheet.create((theme) => ({
   recommendedSection: {
     paddingHorizontal: theme.metrics.spacing.p16,
     gap: theme.metrics.spacingV.p12,
+  },
+  loadingContainer: {
+    paddingVertical: theme.metrics.spacingV.p32,
+    alignItems: 'center',
+  },
+  errorContainer: {
+    paddingVertical: theme.metrics.spacingV.p16,
+    paddingHorizontal: theme.metrics.spacing.p16,
+    alignItems: 'center',
+    gap: theme.metrics.spacingV.p8,
   },
 }));

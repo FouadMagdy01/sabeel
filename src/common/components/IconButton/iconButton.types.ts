@@ -4,7 +4,14 @@ import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
 
 export type IconButtonSize = 'small' | 'medium' | 'large';
 export type IconButtonVariant = 'filled' | 'outlined' | 'ghost' | 'tinted';
-export type IconButtonColor = 'primary' | 'success' | 'error' | 'warning' | 'info';
+export type IconButtonColor =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info';
 
 export interface IconButtonProps<T extends keyof typeof ICON_FAMILIES> extends Omit<
   PressableProps,
@@ -43,8 +50,8 @@ export interface IconButtonProps<T extends keyof typeof ICON_FAMILIES> extends O
   variant?: IconButtonVariant;
 
   /**
-   * Tinted variant color (only applies when variant="tinted")
-   * @default 'success'
+   * Button color (applies to filled and tinted variants)
+   * @default 'primary'
    */
   color?: IconButtonColor;
 

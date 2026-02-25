@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -55,20 +55,11 @@ export function Card({
     [isDisabled]
   );
 
-  const androidRipple = useMemo(() => {
-    if (Platform.OS !== 'android' || isDisabled) return undefined;
-    return {
-      color: theme.colors.overlay.pressed,
-      borderless: false,
-      foreground: true,
-    };
-  }, [theme.colors.overlay.pressed, isDisabled]);
-
   const renderLoadingOverlay = () => {
     if (!loading) return null;
     return (
       <View style={styles.loadingOverlay}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={theme.colors.brand.primary} />
       </View>
     );
   };
@@ -89,8 +80,12 @@ export function Card({
         <Pressable
           onPress={onPress}
           disabled={isDisabled}
+          android_ripple={
+            isDisabled
+              ? undefined
+              : { color: theme.colors.overlay.pressed, borderless: false, foreground: true }
+          }
           style={({ pressed }) => [styles.container, getPressedStyle(pressed)]}
-          android_ripple={androidRipple}
         >
           <LinearGradient
             colors={gradientColors}
@@ -122,8 +117,12 @@ export function Card({
       <Pressable
         onPress={onPress}
         disabled={isDisabled}
+        android_ripple={
+          isDisabled
+            ? undefined
+            : { color: theme.colors.overlay.pressed, borderless: false, foreground: true }
+        }
         style={({ pressed }) => [styles.container, getPressedStyle(pressed), style]}
-        android_ripple={androidRipple}
       >
         {renderContent()}
       </Pressable>

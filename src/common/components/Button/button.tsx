@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -52,7 +52,6 @@ export function Button({
   ...pressableProps
 }: ButtonProps) {
   const { theme } = useUnistyles();
-
   const isDisabled = disabled || loading;
 
   styles.useVariants({
@@ -63,65 +62,36 @@ export function Button({
     fullWidth: fullWidth as true | false,
   });
 
-  const androidRipple = useMemo(() => {
-    if (Platform.OS !== 'android' || isDisabled) return undefined;
-
-    const getColorForRipple = () => {
-      if (color === 'primary') return theme.colors.brand.primary;
-      if (color === 'secondary') return theme.colors.brand.secondary;
-      if (color === 'success') return theme.colors.state.success;
-      if (color === 'error') return theme.colors.state.error;
-      if (color === 'warning') return theme.colors.state.warning;
-      if (color === 'info') return theme.colors.state.info;
-      return theme.colors.brand.primary;
-    };
-
-    const rippleColor =
-      variant === 'contained' ? 'rgba(255, 255, 255, 0.25)' : `${getColorForRipple()}25`;
-
-    return {
-      color: rippleColor,
-      borderless: false,
-      foreground: true,
-    };
-  }, [variant, color, theme, isDisabled]);
-
-  const spinnerColor = useMemo(() => {
-    if (variant === 'contained') return theme.colors.text.inverse;
-    if (color === 'primary') return theme.colors.brand.primary;
-    if (color === 'secondary') return theme.colors.brand.secondary;
-    if (color === 'success') return theme.colors.state.success;
-    if (color === 'error') return theme.colors.state.error;
-    if (color === 'warning') return theme.colors.state.warning;
-    if (color === 'info') return theme.colors.state.info;
-    return theme.colors.brand.primary;
-  }, [variant, color, theme]);
-
   const getPressedStyle = useCallback(
     (pressed: boolean): StyleProp<ViewStyle> => {
-      if (!pressed || isDisabled || Platform.OS === 'android') return undefined;
+      if (!pressed || isDisabled || Platform.OS === 'android') return {};
       if (variant === 'contained') return { opacity: 0.85 };
       if (variant === 'transparent') return { opacity: 0.7 };
 
-      const getBaseColor = () => {
-        if (color === 'primary') return theme.colors.brand.primary;
-        if (color === 'secondary') return theme.colors.brand.secondary;
-        if (color === 'success') return theme.colors.state.success;
-        if (color === 'error') return theme.colors.state.error;
-        if (color === 'warning') return theme.colors.state.warning;
-        if (color === 'info') return theme.colors.state.info;
-        return theme.colors.brand.primary;
-      };
-
-      return { backgroundColor: `${getBaseColor()}15` };
+      return styles.pressedOverlay;
     },
-    [variant, color, theme, isDisabled]
+    [variant, isDisabled]
   );
+
+  const getSpinnerColor = () => {
+    if (variant === 'contained') {
+      return disabled ? theme.colors.text.primary : theme.colors.text.inverse;
+    }
+    const colorMap = {
+      primary: theme.colors.brand.primary,
+      secondary: theme.colors.brand.secondary,
+      success: theme.colors.state.success,
+      error: theme.colors.state.error,
+      warning: theme.colors.state.warning,
+      info: theme.colors.state.info,
+    } as const;
+    return colorMap[color];
+  };
 
   const renderContent = () => (
     <>
       {loading ? (
-        <ActivityIndicator size={SPINNER_SIZE[size]} color={spinnerColor} />
+        <ActivityIndicator size={SPINNER_SIZE[size]} color={getSpinnerColor()} />
       ) : (
         icon && iconPosition === 'left' && icon
       )}
@@ -139,7 +109,16 @@ export function Button({
         getPressedStyle(pressed),
         style,
       ]}
-      android_ripple={androidRipple}
+      android_ripple={
+        isDisabled
+          ? undefined
+          : {
+              color:
+                variant === 'contained' ? theme.colors.overlay.ripple : theme.colors.overlay.hover,
+              borderless: false,
+              foreground: true,
+            }
+      }
       {...pressableProps}
     >
       {renderContent()}

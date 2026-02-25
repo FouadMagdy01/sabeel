@@ -8,7 +8,7 @@ export const DUMMY_STATS: StatsData = {
 
 export const DUMMY_PRAYERS: PrayerData[] = [
   { name: 'Fajr', time: '05:30 AM', status: 'completed' },
-  { name: 'Shrouk', time: '06:45 AM', status: 'completed' },
+  { name: 'Sunrise', time: '06:45 AM', status: 'completed' },
   { name: 'Dhuhr', time: '12:15 PM', status: 'completed' },
   { name: 'Asr', time: '03:30 PM', status: 'current' },
   { name: 'Maghrib', time: '06:00 PM', status: 'upcoming' },

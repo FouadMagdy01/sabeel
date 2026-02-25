@@ -10,19 +10,17 @@ export const styles = StyleSheet.create((theme) => ({
     width: 56,
     height: 56,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: theme.colors.border.default,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: `${theme.colors.brand.primary}15`,
   },
   content: {
     flex: 1,
   },
   surasText: {
-    fontSize: 11,
+    fontSize: theme.fonts.size.xxs,
     marginTop: 2,
-    letterSpacing: 0.5,
   },
   actionsRow: {
     flexDirection: 'row',

@@ -10,45 +10,33 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     marginBottom: theme.metrics.spacingV.p20,
   },
-  title: {
-    letterSpacing: -0.3,
-  },
+  title: {},
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
-  progressText: {
-    color: theme.colors.state.info,
+    gap: theme.metrics.spacing.p8,
   },
   chipsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: theme.metrics.spacing.p12, // Updated from 8pt to 12pt per research decision
+    gap: theme.metrics.spacing.p8,
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p4,
+    paddingHorizontal: theme.metrics.spacing.p12,
+    paddingVertical: theme.metrics.spacingV.p8,
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   chipCompleted: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: theme.metrics.spacing.p16,
-    paddingVertical: theme.metrics.spacingV.p12, // Updated for minimum 44pt height
-    borderRadius: 100,
     backgroundColor: theme.colors.state.successBg,
-    borderWidth: 1,
-    borderColor: theme.colors.state.success,
   },
-  chipUncompleted: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: theme.metrics.spacing.p16,
-    paddingVertical: theme.metrics.spacingV.p12, // Updated for minimum 44pt height
-    borderRadius: 100,
-    backgroundColor: theme.colors.background.input,
-    borderWidth: 1,
-    borderColor: theme.colors.border.default,
+  chipPending: {
+    backgroundColor: theme.colors.background.surfaceAlt,
   },
-  chipText: {
-    fontSize: 10,
+  pressed: {
+    opacity: 0.85,
   },
 }));

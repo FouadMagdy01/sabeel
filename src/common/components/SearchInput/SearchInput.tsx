@@ -69,12 +69,7 @@ export function SearchInput({
           style={styles.loadingSpinner}
         />
       ) : (
-        <Icon
-          familyName="Feather"
-          iconName="search"
-          size={iconSize}
-          color={theme.colors.icon.tertiary}
-        />
+        <Icon familyName="Feather" iconName="search" size={iconSize} variant="tertiary" />
       )}
       <TextInput
         style={[styles.input, style]}
@@ -86,13 +81,17 @@ export function SearchInput({
         {...textInputProps}
       />
       {shouldShowClear && onClear && !disabled && (
-        <Pressable onPress={onClear} style={styles.clearButton} hitSlop={8}>
-          <Icon
-            familyName="Feather"
-            iconName="x"
-            size={iconSize - 2}
-            color={theme.colors.icon.muted}
-          />
+        <Pressable
+          onPress={onClear}
+          style={styles.clearButton}
+          hitSlop={8}
+          android_ripple={{
+            color: theme.colors.overlay.pressed,
+            borderless: false,
+            foreground: true,
+          }}
+        >
+          <Icon familyName="Feather" iconName="x" size={iconSize - 2} variant="muted" />
         </Pressable>
       )}
     </View>

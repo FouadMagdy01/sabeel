@@ -1,3 +1,4 @@
+import { I18nManager } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 export const SEARCH_INPUT_ICON_SIZES = {
@@ -10,10 +11,10 @@ export const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.input,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: theme.colors.border.default,
+    backgroundColor: theme.colors.background.input,
     gap: theme.metrics.spacing.p8,
     variants: {
       size: {
@@ -46,6 +47,7 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.primary,
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
     padding: 0,
     variants: {
       size: {
@@ -64,7 +66,5 @@ export const styles = StyleSheet.create((theme) => ({
   clearButton: {
     padding: 2,
   },
-  loadingSpinner: {
-    // ActivityIndicator will use size prop directly
-  },
+  loadingSpinner: {},
 }));

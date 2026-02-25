@@ -4,22 +4,22 @@ export const styles = StyleSheet.create((theme) => ({
   container: {
     alignItems: 'center',
     minWidth: 150,
-    backgroundColor: theme.colors.background.surface,
     borderWidth: 1,
-    borderColor: theme.colors.border.default,
     borderRadius: 32,
     padding: theme.metrics.spacing.p16,
     gap: theme.metrics.spacingV.p4,
+    overflow: 'hidden',
+    backgroundColor: theme.colors.background.surface,
+    borderColor: theme.colors.border.default,
   },
   avatarContainer: {
     width: 88,
     height: 88,
     borderRadius: 44,
-    borderWidth: 2,
-    borderColor: theme.colors.border.default,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: `${theme.colors.brand.primary}15`,
   },
   playButton: {
     position: 'absolute',
@@ -28,10 +28,10 @@ export const styles = StyleSheet.create((theme) => ({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: theme.colors.brand.primary,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
+    backgroundColor: theme.colors.brand.primary,
     borderColor: theme.colors.background.surface,
   },
   avatarWrapper: {
@@ -39,7 +39,6 @@ export const styles = StyleSheet.create((theme) => ({
     marginBottom: theme.metrics.spacingV.p8,
   },
   styleText: {
-    fontSize: 10,
-    letterSpacing: 1,
+    fontSize: theme.fonts.size.xxs,
   },
 }));

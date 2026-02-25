@@ -5,24 +5,17 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
 
 import { styles } from './RecommendedReciterCard.styles';
 import type { RecommendedReciterCardProps } from './RecommendedReciterCard.types';
 
 const RecommendedReciterCard: React.FC<RecommendedReciterCardProps> = ({ reciter }) => {
   const { t } = useTranslation();
-  const { theme } = useUnistyles();
 
   return (
     <Card variant="outlined" padding="sm" style={styles.cardLayout}>
       <View style={styles.imageContainer}>
-        <Icon
-          familyName="MaterialIcons"
-          iconName="person"
-          size={28}
-          color={theme.colors.brand.primary}
-        />
+        <Icon familyName="MaterialIcons" iconName="person" size={28} variant="brandPrimary" />
       </View>
       <View style={styles.content}>
         <Typography size="sm" weight="bold">

@@ -1,0 +1,1 @@
+export { QuranDownloadPrompt } from './QuranDownloadPrompt';

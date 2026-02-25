@@ -10,7 +10,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.Sabeel"
+      "bundleIdentifier": "com.Sabeel",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Sabeel needs your location to calculate accurate prayer times for your area.",
+        "CFBundleAllowMixedLocalizations": true
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +31,19 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "extra": {
+      "supportsRTL": true
+    },
     "plugins": [
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": ["en", "ar"],
+            "android": ["en", "ar"]
+          }
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -54,6 +70,39 @@
             "./assets/fonts/Cairo-ExtraBold.ttf",
             "./assets/fonts/Cairo-Black.ttf"
           ]
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Sabeel needs your location to calculate accurate prayer times for your area."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "sounds": [
+            "./assets/sounds/adhan_hafiz_mustafa.mp3",
+            "./assets/sounds/adhan_mansour.mp3",
+            "./assets/sounds/adhan_dubai_mishary.mp3",
+            "./assets/sounds/adhan_mashary.mp3"
+          ]
+        }
+      ],
+      "expo-sqlite",
+      [
+        "expo-asset",
+        {
+          "assets": ["./assets/quran/quran_ayah_bounds.db", "./assets/quran/quran_data.db"]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "15.5"
+          }
         }
       ]
     ],

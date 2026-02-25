@@ -1,5 +1,6 @@
 import { SegmentedControl } from '@/common/components/SegmentedControl';
 import { DownloadsContent, ExploreContent, FavoritesContent } from '@/features/library';
+import { useBottomPadding } from '@/hooks/useBottomPadding';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -9,6 +10,7 @@ import { StyleSheet } from 'react-native-unistyles';
 export default function LibraryScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const bottomPadding = useBottomPadding();
   const [selectedTab, setSelectedTab] = useState<'explore' | 'favorites' | 'downloads'>('explore');
 
   const options = useMemo(
@@ -31,9 +33,11 @@ export default function LibraryScreen() {
         />
       </View>
 
-      {selectedTab === 'explore' && <ExploreContent />}
-      {selectedTab === 'favorites' && <FavoritesContent />}
-      {selectedTab === 'downloads' && <DownloadsContent />}
+      <View style={screenStyles.content}>
+        {selectedTab === 'explore' && <ExploreContent bottomPadding={bottomPadding} />}
+        {selectedTab === 'favorites' && <FavoritesContent />}
+        {selectedTab === 'downloads' && <DownloadsContent />}
+      </View>
     </View>
   );
 }
@@ -46,5 +50,8 @@ const screenStyles = StyleSheet.create((theme) => ({
   header: {
     paddingHorizontal: theme.metrics.spacing.p16,
     paddingBottom: theme.metrics.spacingV.p16,
+  },
+  content: {
+    flex: 1,
   },
 }));

@@ -1,7 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { createStyles } from './SegmentedControl.styles';
+import { useUnistyles } from 'react-native-unistyles';
+
+import { getSizeStyles, styles } from './SegmentedControl.styles';
 import type { SegmentOption, SegmentedControlProps } from './SegmentedControl.types';
 
 /**
@@ -59,6 +61,8 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   selectedIndex,
   onSegmentChange,
 }) => {
+  const { theme } = useUnistyles();
+
   // Development warning for legacy API usage
   if (__DEV__) {
     if (segments || selectedIndex !== undefined || onSegmentChange) {
@@ -69,6 +73,8 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
       );
     }
   }
+
+  const sizeStyles = useMemo(() => getSizeStyles(size), [size]);
 
   // Convert legacy segments to options if needed
   const normalizedOptions = useMemo<SegmentOption[]>(() => {
@@ -114,10 +120,15 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
     }
   };
 
-  const styles = createStyles({ size, fullWidth, disabled });
-
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        sizeStyles.container,
+        fullWidth && styles.containerFullWidth,
+        disabled && styles.containerDisabled,
+      ]}
+    >
       {normalizedOptions.map((option) => {
         const isActive = option.value === currentValue;
         const isSegmentDisabled = disabled || option.disabled;
@@ -127,6 +138,8 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
             key={option.value}
             style={[
               styles.segment,
+              sizeStyles.segment,
+              fullWidth && styles.segmentFullWidth,
               isActive && styles.segmentActive,
               isSegmentDisabled && styles.segmentDisabled,
             ]}
@@ -140,13 +153,17 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
             accessibilityLabel={option.label}
           >
             {option.icon && (
-              <View style={styles.iconContainer} accessibilityElementsHidden>
+              <View
+                style={[styles.iconContainer, sizeStyles.iconContainer]}
+                accessibilityElementsHidden
+              >
                 {option.icon}
               </View>
             )}
             <Text
               style={[
                 styles.segmentText,
+                { fontSize: theme.fonts.size[sizeStyles.fontSize] },
                 isActive && styles.segmentTextActive,
                 isSegmentDisabled && styles.segmentTextDisabled,
               ]}

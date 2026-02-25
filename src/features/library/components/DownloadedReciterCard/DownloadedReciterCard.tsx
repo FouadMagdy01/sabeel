@@ -6,36 +6,56 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
 
 import type { DownloadedReciter } from '../../types';
 import { styles } from './DownloadedReciterCard.styles';
 
-interface DownloadedReciterCardProps {
-  reciter: DownloadedReciter;
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${String(bytes)} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
 }
 
-const DownloadedReciterCard: React.FC<DownloadedReciterCardProps> = ({ reciter }) => {
-  const { t } = useTranslation();
-  const { theme } = useUnistyles();
+interface DownloadedReciterCardProps {
+  reciter: DownloadedReciter;
+  onPress?: (reciter: DownloadedReciter) => void;
+  onPlay?: (reciter: DownloadedReciter) => void;
+  onDelete?: (reciter: DownloadedReciter) => void;
+}
+
+const DownloadedReciterCard: React.FC<DownloadedReciterCardProps> = ({
+  reciter,
+  onPress,
+  onPlay,
+  onDelete,
+}) => {
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+
+  const reciterDisplayName = isArabic
+    ? reciter.reciterNameAr || reciter.reciterNameEn
+    : reciter.reciterNameEn || reciter.reciterNameAr;
+  const moshafDisplayName = isArabic
+    ? reciter.moshafNameAr || reciter.moshafNameEn
+    : reciter.moshafNameEn || reciter.moshafNameAr;
 
   return (
-    <Card variant="outlined" style={styles.cardLayout}>
+    <Card
+      variant="outlined"
+      style={styles.cardLayout}
+      onPress={onPress ? () => onPress(reciter) : undefined}
+    >
       <View style={styles.avatar}>
-        <Icon
-          familyName="MaterialIcons"
-          iconName="person"
-          size={24}
-          color={theme.colors.brand.primary}
-        />
+        <Icon familyName="MaterialIcons" iconName="person" size={24} variant="brandPrimary" />
       </View>
       <View style={styles.content}>
         <Typography size="sm" weight="bold">
-          {reciter.name}
+          {reciterDisplayName}
         </Typography>
         <View style={styles.metaRow}>
           <Typography size="xs" weight="medium" color="muted" style={styles.metaText}>
-            {reciter.nationality}
+            {moshafDisplayName}
           </Typography>
           <Divider variant="dot" />
           <Typography size="xs" weight="medium" color="muted" style={styles.metaText}>
@@ -45,7 +65,7 @@ const DownloadedReciterCard: React.FC<DownloadedReciterCardProps> = ({ reciter }
           </Typography>
           <Divider variant="dot" />
           <Typography size="xs" weight="medium" color="muted" style={styles.metaText}>
-            {reciter.totalSize}
+            {formatFileSize(reciter.totalSize)}
           </Typography>
         </View>
       </View>
@@ -55,7 +75,7 @@ const DownloadedReciterCard: React.FC<DownloadedReciterCardProps> = ({ reciter }
           iconName="play-arrow"
           variant="tinted"
           size="medium"
-          onPress={() => console.warn('Play reciter:', reciter.name)}
+          onPress={onPlay ? () => onPlay(reciter) : undefined}
         />
         <IconButton
           familyName="MaterialIcons"
@@ -63,7 +83,7 @@ const DownloadedReciterCard: React.FC<DownloadedReciterCardProps> = ({ reciter }
           variant="ghost"
           size="medium"
           color="error"
-          onPress={() => console.warn('Delete reciter:', reciter.name)}
+          onPress={onDelete ? () => onDelete(reciter) : undefined}
         />
       </View>
     </Card>

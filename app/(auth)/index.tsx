@@ -1,24 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native';
-
-import { useTranslation } from 'react-i18next';
+import { LoginForm } from '@/features/auth/components/LoginForm';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native-unistyles';
 
 export default function LoginScreen() {
-  const { t } = useTranslation();
   return (
-    <View style={styles.container}>
-      <Text>{t('screens.auth.login')}</Text>
-      <Text>{t('screens.auth.login')}</Text>
-      <Text>{t('screens.auth.login')}</Text>
-      <Text>{t('screens.auth.login')}</Text>
-      <Text>{t('screens.auth.login')}</Text>
-    </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+        <SafeAreaView style={styles.safeAreaContainer}>
+          <LoginForm />
+        </SafeAreaView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: theme.colors.background.app,
   },
-});
+  safeAreaContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: theme.metrics.spacing.p24,
+  },
+}));

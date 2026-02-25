@@ -3,6 +3,7 @@ import { Text, TextInput, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 
 import { IconButton } from '@/common/components/IconButton';
+import { Typography } from '@/common/components/Typography';
 import { styles } from './Input.styles';
 import type { InputProps } from './Input.types';
 
@@ -105,7 +106,6 @@ export function Input({
   const currentLength = value?.length ?? 0;
   const charCountText = maxLength ? `${currentLength}/${maxLength}` : `${currentLength}`;
 
-  // Determine right element (clear button takes precedence over custom rightElement when clearable is true)
   const effectiveRightElement = showClearButton ? (
     <View style={styles.clearButton}>
       <IconButton
@@ -123,10 +123,21 @@ export function Input({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <Text style={[styles.label, labelStyle]}>
+        <Typography
+          type="label"
+          size="xs"
+          weight="semiBold"
+          color="secondary"
+          style={[
+            styles.label,
+            error && styles.labelError,
+            disabled && styles.labelDisabled,
+            labelStyle,
+          ]}
+        >
           {label}
           {required && <Text style={styles.requiredIndicator}> *</Text>}
-        </Text>
+        </Typography>
       )}
 
       <View style={[styles.inputContainer, inputContainerStyle]}>
@@ -134,8 +145,8 @@ export function Input({
 
         <TextInput
           style={[styles.input, style]}
-          editable={!disabled}
           placeholderTextColor={theme.colors.text.muted}
+          editable={!disabled}
           onFocus={handleFocus}
           onBlur={handleBlur}
           value={value}
@@ -150,7 +161,16 @@ export function Input({
       {(Boolean(displayHelperText) || showCount) && (
         <View style={styles.helperTextRow}>
           {displayHelperText && (
-            <Text style={[styles.helperText, helperTextStyle]}>{displayHelperText}</Text>
+            <Text
+              style={[
+                styles.helperText,
+                error && styles.helperTextError,
+                success && styles.helperTextSuccess,
+                helperTextStyle,
+              ]}
+            >
+              {displayHelperText}
+            </Text>
           )}
           {showCount && <Text style={styles.charCount}>{charCountText}</Text>}
         </View>

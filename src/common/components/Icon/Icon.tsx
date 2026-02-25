@@ -35,6 +35,13 @@ const Icon = <T extends keyof typeof ICON_FAMILIES>({
       muted: theme.colors.icon.muted,
       inverse: theme.colors.icon.inverse,
       accent: theme.colors.icon.accent,
+      brandPrimary: theme.colors.brand.primary,
+      brandSecondary: theme.colors.brand.secondary,
+      brandTertiary: theme.colors.brand.tertiary,
+      success: theme.colors.state.success,
+      error: theme.colors.state.error,
+      warning: theme.colors.state.warning,
+      info: theme.colors.state.info,
     };
     return colorMap[v];
   };

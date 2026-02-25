@@ -97,6 +97,13 @@ export interface BackgroundColors {
    * @examples Disabled button background, inactive toggle background
    */
   disabled: string;
+
+  /**
+   * Modal background
+   * @usage Modal dialogs, bottom sheets, popovers
+   * @examples Date picker modal, select bottom sheet, dialog backgrounds
+   */
+  modal: string;
 }
 
 /**
@@ -348,6 +355,13 @@ export interface OverlayColors {
   focus: string;
 
   /**
+   * Ripple effect overlay for contained buttons
+   * @usage Android ripple effect on colored/contained button backgrounds
+   * @examples Ripple on primary button, ripple on success button
+   */
+  ripple: string;
+
+  /**
    * Shadow color
    * @usage Drop shadows, elevation shadows
    * @examples Card shadow, button shadow, elevated surface shadow
@@ -486,10 +500,10 @@ export interface Theme {
  * Predefined Theme Presets
  */
 export type ThemePreset =
-  | 'emerald' // Traditional Islamic teal/emerald
-  | 'desert' // Desert sand and warm earth tones
-  | 'sapphire' // Deep blue like mosque domes
-  | 'moonlight' // Cool silver and white tones
+  | 'ocean' // Deep blue-teal inspired by Iznik tiles
+  | 'desert' // Warm terracotta and earth tones
+  | 'sapphire' // Vivid blue inspired by lapis lazuli
+  | 'rose' // Warm rose inspired by Persian gardens
   | 'royal'; // Rich purple and gold
 
 /**

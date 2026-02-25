@@ -10,11 +10,11 @@ export const styles = StyleSheet.create((theme) => ({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: theme.colors.state.successBg,
     borderWidth: 1,
-    borderColor: theme.colors.state.success,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: `${theme.colors.brand.primary}15`,
+    borderColor: `${theme.colors.brand.primary}30`,
   },
   content: {
     flex: 1,
@@ -24,9 +24,15 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: theme.metrics.spacing.p8,
     marginTop: 2,
+    flexShrink: 1,
   },
   metaText: {
-    fontSize: 11,
-    letterSpacing: 0.3,
+    fontSize: theme.fonts.size.xxs,
+    flexShrink: 1,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p4,
   },
 }));
