@@ -17,7 +17,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { TabBar, TabView } from 'react-native-tab-view';
@@ -224,19 +224,46 @@ function QuranBrowsingContent() {
   );
 }
 
+function DbReadyGate({ onReady, children }: { onReady: () => void; children: React.ReactNode }) {
+  useEffect(() => {
+    onReady();
+  }, [onReady]);
+  return <>{children}</>;
+}
+
 export default function QuranScreen() {
+  const { theme } = useUnistyles();
+  const [dbReady, setDbReady] = useState(false);
+
+  const handleDbReady = useCallback(() => {
+    setDbReady(true);
+  }, []);
+
   return (
-    <SQLiteProvider
-      databaseName="quran_data.db"
-      assetSource={{ assetId: QURAN_DATA_DB }}
-      onError={(err) => console.error('[SQLiteProvider quran_data] Error:', err)}
-    >
-      <QuranBrowsingContent />
-    </SQLiteProvider>
+    <View style={screenStyles.wrapper}>
+      {!dbReady && (
+        <View style={screenStyles.loadingOverlay}>
+          <ActivityIndicator size="large" color={theme.colors.brand.primary} />
+        </View>
+      )}
+      <SQLiteProvider
+        databaseName="quran_data.db"
+        assetSource={{ assetId: QURAN_DATA_DB }}
+        onError={(err) => console.error('[SQLiteProvider quran_data] Error:', err)}
+      >
+        <DbReadyGate onReady={handleDbReady}>
+          <QuranBrowsingContent />
+        </DbReadyGate>
+      </SQLiteProvider>
+    </View>
   );
 }
 
 const screenStyles = StyleSheet.create((theme) => ({
+  wrapper: {
+    flex: 1,
+    backgroundColor: theme.colors.background.app,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background.app,
@@ -248,5 +275,15 @@ const screenStyles = StyleSheet.create((theme) => ({
   continueReadingContainer: {
     paddingHorizontal: theme.metrics.spacing.p16,
     paddingBottom: theme.metrics.spacingV.p8,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
   },
 }));

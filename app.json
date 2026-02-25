@@ -81,7 +81,13 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/icon.png"
+          "icon": "./assets/images/icon.png",
+          "sounds": [
+            "./assets/sounds/adhan_hafiz_mustafa.mp3",
+            "./assets/sounds/adhan_mansour.mp3",
+            "./assets/sounds/adhan_dubai_mishary.mp3",
+            "./assets/sounds/adhan_mashary.mp3"
+          ]
         }
       ],
       "expo-sqlite",

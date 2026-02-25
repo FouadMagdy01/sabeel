@@ -2,6 +2,7 @@ import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
 import { getSurahById } from '@/features/library/data/surahData';
 import { usePlayerStore } from '@/features/quran/stores/playerStore';
+import Slider from '@react-native-community/slider';
 import { BlurView } from 'expo-blur';
 import { useSegments } from 'expo-router';
 import { useEffect } from 'react';
@@ -13,7 +14,6 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { styles } from './MiniPlayer.styles';
-import { MINI_PLAYER_HEIGHT } from './MiniPlayer.types';
 
 export function MiniPlayer() {
   const { theme } = useUnistyles();
@@ -23,54 +23,60 @@ export function MiniPlayer() {
   const isVisible = usePlayerStore((s) => s.isVisible);
   const isMiniPlayerHidden = usePlayerStore((s) => s.isMiniPlayerHidden);
   const tabBarHeight = usePlayerStore((s) => s.tabBarHeight);
+  const miniPlayerHeight = usePlayerStore((s) => s.miniPlayerHeight);
+  const setMiniPlayerHeight = usePlayerStore((s) => s.setMiniPlayerHeight);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const currentSurahName = usePlayerStore((s) => s.currentSurahName);
   const currentAyahNumber = usePlayerStore((s) => s.currentAyahNumber);
   const reciterName = usePlayerStore((s) => s.reciterName);
+  const playerSource = usePlayerStore((s) => s.playerSource);
   const togglePlayPause = usePlayerStore((s) => s.togglePlayPause);
   const skipToNext = usePlayerStore((s) => s.skipToNext);
   const skipToPrevious = usePlayerStore((s) => s.skipToPrevious);
   const stop = usePlayerStore((s) => s.stop);
+  const seekTo = usePlayerStore((s) => s.seekTo);
 
   const { position, duration } = useProgress(200);
-  const progress = duration > 0 ? position / duration : 0;
 
   const isDark = theme.colors.mode === 'dark';
   const isRTL = I18nManager.isRTL;
 
-  // Detect if we're on a tab screen (segments: ["(main)", "(tabs)", ...])
   const isOnTabScreen = segments.includes('(tabs)' as never);
-  // Position above tab bar on tab screens (with 8px gap), above safe area on other screens
   const TAB_BAR_GAP = 8;
   const bottomOffset =
     isOnTabScreen && tabBarHeight > 0 ? tabBarHeight + TAB_BAR_GAP : insets.bottom;
 
   const shouldShow = isVisible && !isMiniPlayerHidden;
-  const translateY = useSharedValue(MINI_PLAYER_HEIGHT + bottomOffset);
+  const hideDistance = (miniPlayerHeight || 150) + bottomOffset;
+  const translateY = useSharedValue(hideDistance);
 
   useEffect(() => {
-    translateY.value = withTiming(shouldShow ? 0 : MINI_PLAYER_HEIGHT + bottomOffset, {
+    translateY.value = withTiming(shouldShow ? 0 : hideDistance, {
       duration: 300,
     });
-  }, [shouldShow, bottomOffset, translateY]);
+  }, [shouldShow, hideDistance, translateY]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
   }));
 
-  // Build localized surah + ayah display
   const isArabic = i18n.language === 'ar';
   const surahId = Number(currentSurahName);
   const surahInfo = getSurahById(surahId);
   const surahDisplayName = isArabic ? surahInfo?.nameArabic : surahInfo?.nameSimple;
-  const trackTitle = surahInfo
-    ? t('screens.quran.player.surahAyah', {
-        surah: surahDisplayName,
-        ayah: String(currentAyahNumber),
-      })
-    : `${currentSurahName}:${String(currentAyahNumber)}`;
 
-  // In RTL, swap both icon names and handlers so visual direction matches
+  let trackTitle: string;
+  if (playerSource === 'library') {
+    trackTitle = surahDisplayName ?? currentSurahName;
+  } else if (surahInfo) {
+    trackTitle = t('screens.quran.player.surahAyah', {
+      surah: surahDisplayName,
+      ayah: String(currentAyahNumber),
+    });
+  } else {
+    trackTitle = `${currentSurahName}:${String(currentAyahNumber)}`;
+  }
+
   const prevIcon = isRTL ? ('play-skip-forward' as const) : ('play-skip-back' as const);
   const nextIcon = isRTL ? ('play-skip-back' as const) : ('play-skip-forward' as const);
 
@@ -78,13 +84,13 @@ export function MiniPlayer() {
 
   return (
     <Animated.View
-      style={[
-        styles.container,
-        animatedStyle,
-        {
-          bottom: bottomOffset,
-        },
-      ]}
+      style={[styles.container, animatedStyle, { bottom: bottomOffset }]}
+      onLayout={(event) => {
+        const height = event.nativeEvent.layout.height;
+        if (height > 0 && height !== miniPlayerHeight) {
+          setMiniPlayerHeight(height);
+        }
+      }}
     >
       <BlurView
         experimentalBlurMethod="dimezisBlurView"
@@ -94,49 +100,15 @@ export function MiniPlayer() {
         pointerEvents="none"
       />
 
-      <View style={styles.progressBar}>
-        <View
-          style={[
-            styles.progressFill,
-            {
-              width: `${String(Math.round(progress * 100))}%` as `${number}%`,
-              backgroundColor: theme.colors.brand.primary,
-            },
-          ]}
-        />
-      </View>
-
-      <View style={styles.controls}>
-        <Pressable
-          onPress={() => {
-            void skipToPrevious();
-          }}
-          hitSlop={8}
-        >
-          <Icon familyName="Ionicons" iconName={prevIcon} size={22} variant="primary" />
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            void togglePlayPause();
-          }}
-          hitSlop={8}
-        >
-          <Icon
-            familyName="Ionicons"
-            iconName={isPlaying ? 'pause' : 'play'}
-            size={28}
-            variant="brandPrimary"
-          />
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            void skipToNext();
-          }}
-          hitSlop={8}
-        >
-          <Icon familyName="Ionicons" iconName={nextIcon} size={22} variant="primary" />
-        </Pressable>
-      </View>
+      <Pressable
+        onPress={() => {
+          void stop();
+        }}
+        hitSlop={8}
+        style={styles.closeButton}
+      >
+        <Icon familyName="Ionicons" iconName="close" size={20} variant="muted" />
+      </Pressable>
 
       <View style={styles.info}>
         <Typography size="sm" weight="semiBold" numberOfLines={1}>
@@ -147,15 +119,50 @@ export function MiniPlayer() {
         </Typography>
       </View>
 
-      <Pressable
-        onPress={() => {
-          void stop();
+      <Slider
+        style={styles.slider}
+        value={position}
+        minimumValue={0}
+        maximumValue={duration > 0 ? duration : 1}
+        minimumTrackTintColor={theme.colors.brand.primary}
+        maximumTrackTintColor={theme.colors.border.default}
+        thumbTintColor={theme.colors.brand.primary}
+        onSlidingComplete={(value) => {
+          void seekTo(value);
         }}
-        hitSlop={8}
-        style={styles.closeButton}
-      >
-        <Icon familyName="Ionicons" iconName="close" size={22} variant="muted" />
-      </Pressable>
+      />
+
+      <View style={styles.controls}>
+        <Pressable
+          onPress={() => {
+            void skipToPrevious();
+          }}
+          hitSlop={8}
+        >
+          <Icon familyName="Ionicons" iconName={prevIcon} size={24} variant="primary" />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            void togglePlayPause();
+          }}
+          hitSlop={8}
+        >
+          <Icon
+            familyName="Ionicons"
+            iconName={isPlaying ? 'pause' : 'play'}
+            size={32}
+            variant="brandPrimary"
+          />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            void skipToNext();
+          }}
+          hitSlop={8}
+        >
+          <Icon familyName="Ionicons" iconName={nextIcon} size={24} variant="primary" />
+        </Pressable>
+      </View>
     </Animated.View>
   );
 }

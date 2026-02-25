@@ -2,9 +2,9 @@ import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import React, { forwardRef, useCallback, useMemo } from 'react';
+import React, { forwardRef, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { I18nManager, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 
@@ -13,12 +13,24 @@ import { styles } from './MoshafSelectionSheet.styles';
 import type { MoshafSelectionSheetProps } from './MoshafSelectionSheet.types';
 
 const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetProps>(
-  ({ reciterName, moshafList, onSelect }, ref) => {
+  (
+    {
+      reciterName,
+      moshafList,
+      onSelect,
+      onFavoriteToggle,
+      isMoshafFavorited,
+      onPlay,
+      isMoshafPlaying,
+    },
+    ref
+  ) => {
     const { t } = useTranslation();
     const { theme } = useUnistyles();
     const insets = useSafeAreaInsets();
 
     const snapPoints = useMemo(() => ['50%', '70%'], []);
+    const pendingAction = useRef<{ type: 'select' | 'play'; moshaf: Moshaf } | null>(null);
 
     const renderBackdrop = useCallback(
       (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
@@ -39,14 +51,43 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
       }
     }, [ref]);
 
+    const handleSheetDismiss = useCallback(() => {
+      const action = pendingAction.current;
+      pendingAction.current = null;
+      if (!action) return;
+
+      // Delay navigation to allow the backdrop fade-out animation to fully
+      // complete. Without this, the BlurView in MiniPlayer amplifies the
+      // still-fading backdrop into a visible white overlay during the
+      // screen transition.
+      const BACKDROP_SETTLE_MS = 2000; // TODO: revert to 100 after testing
+      setTimeout(() => {
+        if (action.type === 'select') {
+          onSelect(action.moshaf);
+        } else if (action.type === 'play') {
+          onPlay?.(action.moshaf);
+        }
+      }, BACKDROP_SETTLE_MS);
+    }, [onSelect, onPlay]);
+
     const handleSelect = useCallback(
       (moshaf: Moshaf) => {
-        onSelect(moshaf);
+        pendingAction.current = { type: 'select', moshaf };
         if (ref && 'current' in ref) {
           ref.current?.dismiss();
         }
       },
-      [onSelect, ref]
+      [ref]
+    );
+
+    const handlePlay = useCallback(
+      (moshaf: Moshaf) => {
+        pendingAction.current = { type: 'play', moshaf };
+        if (ref && 'current' in ref) {
+          ref.current?.dismiss();
+        }
+      },
+      [ref]
     );
 
     return (
@@ -57,6 +98,7 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
         backdropComponent={renderBackdrop}
         backgroundStyle={styles.background}
         handleIndicatorStyle={styles.indicator}
+        onDismiss={handleSheetDismiss}
       >
         <View style={styles.header}>
           <View style={styles.headerInfo}>
@@ -102,7 +144,31 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
                   })}
                 </Typography>
               </View>
-              <Icon familyName="MaterialIcons" iconName="chevron-right" size={20} variant="muted" />
+              {onFavoriteToggle && (
+                <IconButton
+                  familyName="MaterialIcons"
+                  iconName={isMoshafFavorited?.(moshaf.id) ? 'favorite' : 'favorite-border'}
+                  variant="ghost"
+                  size="small"
+                  iconVariant={isMoshafFavorited?.(moshaf.id) ? 'accent' : 'muted'}
+                  onPress={() => onFavoriteToggle(moshaf)}
+                />
+              )}
+              {onPlay && (
+                <IconButton
+                  familyName="MaterialIcons"
+                  iconName={isMoshafPlaying?.(moshaf.id) ? 'pause' : 'play-arrow'}
+                  variant="tinted"
+                  size="small"
+                  onPress={() => handlePlay(moshaf)}
+                />
+              )}
+              <Icon
+                familyName="MaterialIcons"
+                iconName={I18nManager.isRTL ? 'chevron-left' : 'chevron-right'}
+                size={20}
+                variant="muted"
+              />
             </Pressable>
           ))}
         </BottomSheetScrollView>

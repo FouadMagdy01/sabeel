@@ -14,5 +14,23 @@ export const STORAGE_KEYS = {
   },
   prayers: {
     yearlyData: 'prayers_yearly_data',
+    adhanEnabled: 'prayers_adhan_enabled',
+    adhanSound: 'prayers_adhan_sound',
+    locationName: 'prayers_location_name',
+  },
+  library: {
+    downloadCancelFlag: 'library_download_cancel_flag',
+  },
+  tasbeeh: {
+    currentCount: 'tasbeeh_current_count',
+    selectedPhrase: 'tasbeeh_selected_phrase',
+    targetCount: 'tasbeeh_target_count',
+    hapticsEnabled: 'tasbeeh_haptics_enabled',
+  },
+  azkar: {
+    currentCategory: 'azkar_current_category',
+    currentItemIndex: 'azkar_current_item_index',
+    currentRepeatCount: 'azkar_current_repeat_count',
+    hapticsEnabled: 'azkar_haptics_enabled',
   },
 } as const;

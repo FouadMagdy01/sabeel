@@ -1,15 +1,58 @@
 export interface FavoriteSura {
   id: number;
-  name: string;
-  translation: string;
-  versesCount: number;
+  reciterId: number;
+  moshafId: number;
+  surahId: number;
+  reciterNameAr: string;
+  reciterNameEn: string;
+  moshafNameAr: string;
+  moshafNameEn: string;
+  server: string;
+  surahList: string;
+  createdAt: number;
 }
 
 export interface FavoriteReciter {
-  id: string;
-  name: string;
+  id: number;
+  reciterId: number;
+  moshafId: number;
+  reciterNameAr: string;
+  reciterNameEn: string;
+  moshafNameAr: string;
+  moshafNameEn: string;
+  server: string;
+  surahList: string;
+  surahTotal: number;
+  createdAt: number;
+}
+
+export interface DownloadedSura {
+  id: number;
+  reciterId: number;
+  moshafId: number;
+  surahId: number;
+  reciterNameAr: string;
+  reciterNameEn: string;
+  moshafNameAr: string;
+  moshafNameEn: string;
+  server: string;
+  surahList: string;
+  filePath: string;
+  fileSize: number;
+  createdAt: number;
+}
+
+export interface DownloadedReciter {
+  reciterId: number;
+  moshafId: number;
+  reciterNameAr: string;
+  reciterNameEn: string;
+  moshafNameAr: string;
+  moshafNameEn: string;
+  server: string;
+  surahList: string;
   surasCount: number;
-  nationality: string;
+  totalSize: number;
 }
 
 export interface FeaturedReciter {
@@ -24,38 +67,4 @@ export interface RecommendedReciter {
   name: string;
   surasAvailable: number;
   isStarred: boolean;
-}
-
-export interface FavoriteAya {
-  id: string;
-  suraName: string;
-  suraNumber: number;
-  ayaNumber: number;
-  arabicText: string;
-  translation: string;
-}
-
-export interface DownloadedSura {
-  id: number;
-  name: string;
-  translation: string;
-  versesCount: number;
-  fileSize: string;
-}
-
-export interface DownloadedReciter {
-  id: string;
-  name: string;
-  surasCount: number;
-  nationality: string;
-  totalSize: string;
-}
-
-export interface DownloadedAya {
-  id: string;
-  suraName: string;
-  suraNumber: number;
-  ayaNumber: number;
-  arabicText: string;
-  translation: string;
 }

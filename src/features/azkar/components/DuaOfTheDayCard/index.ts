@@ -1,0 +1,1 @@
+export { DuaOfTheDayCard } from './DuaOfTheDayCard';

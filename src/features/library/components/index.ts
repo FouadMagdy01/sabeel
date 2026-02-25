@@ -1,12 +1,10 @@
 export { AllRecitersScreen } from './AllRecitersScreen';
-export { DownloadedAyaCard } from './DownloadedAyaCard';
 export { DownloadedReciterCard } from './DownloadedReciterCard';
 export { DownloadedSuraCard } from './DownloadedSuraCard';
 export { DownloadsContent } from './DownloadsContent';
 export { ExploreContent } from './ExploreContent';
 export { FilterSortDrawer } from './FilterSortDrawer';
 export { MoshafSelectionSheet } from './MoshafSelectionSheet';
-export { FavoriteAyaCard } from './FavoriteAyaCard';
 export { FavoriteReciterCard } from './FavoriteReciterCard';
 export { FavoriteSuraCard } from './FavoriteSuraCard';
 export { FavoritesContent } from './FavoritesContent';

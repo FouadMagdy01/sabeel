@@ -179,6 +179,7 @@ const VersePage = React.memo(({ pageNum, width, highlightAyah }: VersePageProps)
 
   const isArabic = i18n.language === 'ar';
 
+  const playerSource = usePlayerStore((s) => s.playerSource);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const currentSurahName = usePlayerStore((s) => s.currentSurahName);
   const currentAyahNumber = usePlayerStore((s) => s.currentAyahNumber);
@@ -232,14 +233,17 @@ const VersePage = React.memo(({ pageNum, width, highlightAyah }: VersePageProps)
   const handlePlayVerse = useCallback(
     (sura: number, ayah: number) => {
       const isThisVersePlaying =
-        isPlaying && currentSurahName === String(sura) && currentAyahNumber === ayah;
+        playerSource === 'quran' &&
+        isPlaying &&
+        currentSurahName === String(sura) &&
+        currentAyahNumber === ayah;
       if (isThisVersePlaying) {
         void togglePlayPause();
       } else {
         void playSingleAyah(sura, ayah);
       }
     },
-    [isPlaying, currentSurahName, currentAyahNumber, togglePlayPause, playSingleAyah]
+    [playerSource, isPlaying, currentSurahName, currentAyahNumber, togglePlayPause, playSingleAyah]
   );
 
   const saveLabel = t('screens.quran.verses.save');
@@ -279,6 +283,7 @@ const VersePage = React.memo(({ pageNum, width, highlightAyah }: VersePageProps)
               highlightAyah?.sura === verse.surah_id && highlightAyah?.ayah === verse.ayah_number
             }
             isVersePlaying={
+              playerSource === 'quran' &&
               isPlaying &&
               currentSurahName === String(verse.surah_id) &&
               currentAyahNumber === verse.ayah_number

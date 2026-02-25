@@ -28,7 +28,7 @@ export const styles = StyleSheet.create((theme, rt) => ({
   },
   drawerContent: {
     flex: 1,
-    backgroundColor: theme.colors.background.surface,
+    backgroundColor: theme.colors.background.modal,
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
   },

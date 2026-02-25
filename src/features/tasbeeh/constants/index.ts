@@ -1,0 +1,1 @@
+export { TASBEEH_PHRASES, PRESET_TARGETS, INFINITE_TARGET } from './phrases';

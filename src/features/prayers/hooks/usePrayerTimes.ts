@@ -5,20 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { getItem, setItem } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/utils/storage/constants';
 
+import { DEFAULT_ADHAN_SOUND } from '../constants';
 import {
   checkAndResyncNotificationLanguage,
   fetchYearlyPrayerTimes,
   getTodayKey,
   scheduleYearlyPrayerNotifications,
 } from '../services';
-import type { DayPrayerTimes, HijriDate, PrayerKey, YearlyPrayerData } from '../types';
-import { PRAYER_KEYS } from '../types';
-
-interface PrayerStatus {
-  name: PrayerKey;
-  time: string;
-  status: 'completed' | 'current' | 'upcoming';
-}
+import type { HijriDate, PrayerKey, YearlyPrayerData } from '../types';
+import type { PrayerStatus } from '../utils';
+import { deriveStatuses } from '../utils';
 
 interface UsePrayerTimesReturn {
   todayPrayers: PrayerStatus[];
@@ -34,61 +30,6 @@ interface UsePrayerTimesReturn {
 
 // ─── helpers ────────────────────────────────────────────────────────
 
-function toMinutes(timeStr: string): number {
-  const [h, m] = timeStr.split(':').map(Number);
-  return h * 60 + m;
-}
-
-function deriveStatuses(today: DayPrayerTimes): {
-  prayers: PrayerStatus[];
-  current: PrayerKey | null;
-  next: PrayerKey | null;
-  countdown: string;
-} {
-  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
-
-  const entries = PRAYER_KEYS.map((key) => ({
-    key,
-    minutes: toMinutes(today[key]),
-  }));
-
-  let currentIdx = -1;
-  for (let i = entries.length - 1; i >= 0; i--) {
-    if (nowMin >= entries[i].minutes) {
-      currentIdx = i;
-      break;
-    }
-  }
-
-  const current: PrayerKey | null = currentIdx >= 0 ? entries[currentIdx].key : null;
-
-  let next: PrayerKey | null;
-  if (currentIdx === -1) {
-    next = 'Fajr';
-  } else if (currentIdx < entries.length - 1) {
-    next = entries[currentIdx + 1].key;
-  } else {
-    next = 'Fajr';
-  }
-
-  let countdown = '--:--';
-  const nextMinutes = next ? toMinutes(today[next]) : -1;
-  if (nextMinutes >= 0) {
-    let diff = nextMinutes - nowMin;
-    if (diff <= 0) diff += 24 * 60;
-    countdown = `${String(Math.floor(diff / 60)).padStart(2, '0')}:${String(diff % 60).padStart(2, '0')}`;
-  }
-
-  const prayers: PrayerStatus[] = PRAYER_KEYS.map((key, i) => {
-    if (i === currentIdx) return { name: key, time: today[key], status: 'current' as const };
-    if (currentIdx >= 0 && i < currentIdx)
-      return { name: key, time: today[key], status: 'completed' as const };
-    return { name: key, time: today[key], status: 'upcoming' as const };
-  });
-
-  return { prayers, current, next, countdown };
-}
-
 function loadCachedData(): YearlyPrayerData | null {
   const result = getItem<YearlyPrayerData>(STORAGE_KEYS.prayers.yearlyData);
   if (result.success && result.data) {
@@ -99,6 +40,17 @@ function loadCachedData(): YearlyPrayerData | null {
 
 function saveCachedData(data: YearlyPrayerData): void {
   setItem(STORAGE_KEYS.prayers.yearlyData, data);
+}
+
+function getAdhanEnabled(): boolean {
+  const result = getItem<boolean>(STORAGE_KEYS.prayers.adhanEnabled);
+  if (result.success && typeof result.data === 'boolean') return result.data;
+  return true;
+}
+
+function getAdhanSound(): string {
+  const result = getItem<string>(STORAGE_KEYS.prayers.adhanSound);
+  return result.success && result.data ? result.data : DEFAULT_ADHAN_SOUND;
 }
 
 // ─── main hook ──────────────────────────────────────────────────────
@@ -116,20 +68,29 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
 
   // ── Fetch with location (prompts user for GPS) ──
   const fetchWithLocation = async () => {
+    console.log('[PrayerTimes] fetchWithLocation | user-prompting flow triggered');
     setIsLoading(!yearlyData);
     setError(null);
     setIsStale(false);
 
     // Step 1: Permission
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      const permResponse = await Location.requestForegroundPermissionsAsync();
+      console.log('[PrayerTimes] requestPermission |', {
+        status: permResponse.status,
+        granted: permResponse.granted,
+        canAskAgain: permResponse.canAskAgain,
+        expires: permResponse.expires,
+      });
+      if (permResponse.status !== 'granted') {
+        console.log('[PrayerTimes] result | permission denied, hasCachedData:', !!yearlyData);
         if (!yearlyData) setError('location_denied');
         else setIsStale(true);
         setIsLoading(false);
         return;
       }
-    } catch {
+    } catch (err) {
+      console.log('[PrayerTimes] result | permission error:', err);
       if (!yearlyData) setError('location_error');
       else setIsStale(true);
       setIsLoading(false);
@@ -148,19 +109,24 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
       ]);
       lat = position.coords.latitude;
       lng = position.coords.longitude;
+      console.log('[PrayerTimes] location | source: "currentPosition", lat:', lat, 'lng:', lng);
     } catch {
+      console.log('[PrayerTimes] location | currentPosition failed, trying lastKnown');
       try {
         const last = await Location.getLastKnownPositionAsync();
         if (last) {
           lat = last.coords.latitude;
           lng = last.coords.longitude;
+          console.log('[PrayerTimes] location | source: "lastKnown", lat:', lat, 'lng:', lng);
         } else {
+          console.log('[PrayerTimes] result | no lastKnown position available');
           if (!yearlyData) setError('location_error');
           else setIsStale(true);
           setIsLoading(false);
           return;
         }
-      } catch {
+      } catch (err) {
+        console.log('[PrayerTimes] result | lastKnown error:', err);
         if (!yearlyData) setError('location_error');
         else setIsStale(true);
         setIsLoading(false);
@@ -176,36 +142,60 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
       setYearlyData(data);
       setError(null);
       setIsStale(false);
-    } catch {
+      console.log('[PrayerTimes] apiFetch | success: true, year:', year);
+    } catch (err) {
+      console.log('[PrayerTimes] apiFetch | success: false, error:', err);
       if (!yearlyData) setError('fetch_error');
       else setIsStale(true);
     } finally {
       setIsLoading(false);
+      console.log('[PrayerTimes] result | isLoading: false, isStale:', isStale, 'error:', error);
     }
   };
 
   // ── On mount: prompt if no cached data, otherwise try silently ──
   const initialFetch = async () => {
     const hasCachedData = !!yearlyData;
+    const cached = hasCachedData ? yearlyData : null;
+    console.log(
+      '[PrayerTimes] initialFetch | hasCachedData:',
+      hasCachedData,
+      cached
+        ? {
+            fetchedAt: cached.fetchedAt,
+            location: cached.location,
+          }
+        : null
+    );
 
     // No cached data → prompt the user for location permission
     if (!hasCachedData) {
+      console.log('[PrayerTimes] initialFetch | no cache, prompting user');
       await fetchWithLocation();
       return;
     }
 
     // Has cached data → try silently without any prompts or dialogs
-    const { status } = await Location.getForegroundPermissionsAsync();
+    const permResponse = await Location.getForegroundPermissionsAsync();
+    console.log('[PrayerTimes] silentPermissionCheck |', {
+      status: permResponse.status,
+      granted: permResponse.granted,
+      canAskAgain: permResponse.canAskAgain,
+      expires: permResponse.expires,
+    });
 
-    if (status !== 'granted') {
+    if (permResponse.status !== 'granted') {
+      console.log('[PrayerTimes] result | silent check denied, marking stale');
       setIsStale(true);
       setIsLoading(false);
       return;
     }
 
     const gpsEnabled = await Location.hasServicesEnabledAsync();
+    console.log('[PrayerTimes] gpsCheck | enabled:', gpsEnabled);
 
     if (!gpsEnabled) {
+      console.log('[PrayerTimes] result | GPS disabled, marking stale');
       setIsStale(true);
       setIsLoading(false);
       return;
@@ -215,12 +205,14 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
     try {
       const lastKnown = await Location.getLastKnownPositionAsync();
       if (!lastKnown) {
+        console.log('[PrayerTimes] result | no lastKnown position in silent path');
         setIsStale(true);
         setIsLoading(false);
         return;
       }
       const lat = lastKnown.coords.latitude;
       const lng = lastKnown.coords.longitude;
+      console.log('[PrayerTimes] location | source: "lastKnown" (silent), lat:', lat, 'lng:', lng);
 
       const year = new Date().getFullYear();
       const data = await fetchYearlyPrayerTimes(lat, lng, year);
@@ -228,10 +220,13 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
       setYearlyData(data);
       setIsStale(false);
       setError(null);
-    } catch {
+      console.log('[PrayerTimes] apiFetch | success: true (silent), year:', year);
+    } catch (err) {
+      console.log('[PrayerTimes] apiFetch | success: false (silent), error:', err);
       setIsStale(true);
     } finally {
       setIsLoading(false);
+      console.log('[PrayerTimes] result | silent flow done, isStale:', isStale);
     }
   };
 
@@ -259,7 +254,10 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
   // ── Schedule notifications on every new data ──
   useEffect(() => {
     if (!yearlyData) return;
-    void scheduleYearlyPrayerNotifications(yearlyData, prayerNames);
+    const adhanEnabled = getAdhanEnabled();
+    if (!adhanEnabled) return;
+    const adhanSound = getAdhanSound();
+    void scheduleYearlyPrayerNotifications(yearlyData, prayerNames, adhanSound);
   }, [yearlyData, prayerNames]);
 
   // ── Resync notification language on app open ──

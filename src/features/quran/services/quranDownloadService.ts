@@ -151,7 +151,29 @@ export async function extractPages(): Promise<void> {
     await FileSystem.makeDirectoryAsync(PAGES_DIR, { intermediates: true });
   }
 
-  await unzip(ZIP_PATH, PAGES_DIR);
+  // Validate zip exists before extraction
+  const zipInfo = await FileSystem.getInfoAsync(ZIP_PATH);
+  if (!zipInfo.exists) {
+    persistStatus('idle');
+    throw new Error('Zip file not found');
+  }
+
+  try {
+    await unzip(ZIP_PATH, PAGES_DIR);
+  } catch {
+    // react-native-zip-archive can crash with NullPointerException on Android
+    // when rejection code is null. Clean up and reset state.
+    await deleteZipSilently();
+    persistStatus('idle');
+    throw new Error('Extraction failed — the download may be corrupted. Please try again.');
+  }
+
+  // Verify extraction produced the expected files
+  if (!(await arePagesReady())) {
+    await deleteZipSilently();
+    persistStatus('idle');
+    throw new Error('Extraction incomplete — some pages are missing. Please try again.');
+  }
 
   await FileSystem.deleteAsync(ZIP_PATH, { idempotent: true });
 

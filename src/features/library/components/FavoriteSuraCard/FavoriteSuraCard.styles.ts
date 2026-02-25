@@ -26,4 +26,9 @@ export const styles = StyleSheet.create((theme) => ({
   metaText: {
     fontSize: theme.fonts.size.xxs,
   },
+  actionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p4,
+  },
 }));

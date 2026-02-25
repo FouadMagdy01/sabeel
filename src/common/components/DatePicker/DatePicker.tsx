@@ -339,6 +339,10 @@ export function DatePicker({
     setViewMode('year');
   }, []);
 
+  const handleBackToCalendar = useCallback(() => {
+    setViewMode('calendar');
+  }, []);
+
   const handleSelectYear = useCallback(
     (year: number) => {
       const currentDay = viewDate.getDate();
@@ -434,21 +438,49 @@ export function DatePicker({
               <View style={styles.calendarContainer}>
                 {viewMode === 'year' ? (
                   /* Year Selector View */
-                  <YearSelector
-                    selectedYear={yearNumber}
-                    onSelectYear={handleSelectYear}
-                    minYear={minYear}
-                    maxYear={maxYear}
-                  />
+                  <>
+                    <View style={styles.subViewHeader}>
+                      <IconButton
+                        familyName="Feather"
+                        iconName="chevron-left"
+                        onPress={handleBackToCalendar}
+                        variant="ghost"
+                        size="small"
+                      />
+                      <Typography type="heading" size="md" weight="medium">
+                        {t('auth.calendar.selectYear')}
+                      </Typography>
+                    </View>
+                    <YearSelector
+                      selectedYear={yearNumber}
+                      onSelectYear={handleSelectYear}
+                      minYear={minYear}
+                      maxYear={maxYear}
+                    />
+                  </>
                 ) : viewMode === 'month' ? (
                   /* Month Grid View */
-                  <MonthGrid
-                    selectedMonth={viewDate.getMonth()}
-                    year={yearNumber}
-                    onSelectMonth={handleSelectMonth}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                  />
+                  <>
+                    <View style={styles.subViewHeader}>
+                      <IconButton
+                        familyName="Feather"
+                        iconName="chevron-left"
+                        onPress={handleBackToCalendar}
+                        variant="ghost"
+                        size="small"
+                      />
+                      <Typography type="heading" size="md" weight="medium">
+                        {t('auth.calendar.selectMonth')}
+                      </Typography>
+                    </View>
+                    <MonthGrid
+                      selectedMonth={viewDate.getMonth()}
+                      year={yearNumber}
+                      onSelectMonth={handleSelectMonth}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                    />
+                  </>
                 ) : (
                   <>
                     {/* Month/Year Navigation */}

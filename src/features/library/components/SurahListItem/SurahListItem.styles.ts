@@ -33,4 +33,10 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: 2,
   },
+  spinnerContainer: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));

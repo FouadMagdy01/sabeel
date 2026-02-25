@@ -1,5 +1,6 @@
 import i18n from '@/i18n/config';
 import { getSurahById } from '@/features/library/data/surahData';
+import { getDownloadedSurahPath } from '@/features/library/services/libraryDatabase';
 import { getQuranClient, resolveAudioUrl } from '@/integrations/quranApi';
 import { getItem, setItem } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/utils/storage/constants';
@@ -22,12 +23,15 @@ type ReciterInfo = {
 
 type Track = { id: string; url: string; title: string; artist: string };
 
+export type PlayerSource = 'quran' | 'library';
+
 type PlayerState = {
   isPlaying: boolean;
   currentTrackIndex: number;
   isVisible: boolean;
   isMiniPlayerHidden: boolean;
   tabBarHeight: number;
+  miniPlayerHeight: number;
   selectedReciterId: string;
   reciterName: string;
   repeatMode: QuranRepeatMode;
@@ -36,10 +40,23 @@ type PlayerState = {
   currentSurahName: string;
   currentAyahNumber: number;
   repeatPlayCount: number;
+  playerSource: PlayerSource;
+  currentLibraryReciterId: number;
+  currentMoshafId: number;
+  currentMoshafServer: string;
+  isLoadingTrack: boolean;
 
   playPageAyahs: (page: number, reciterId?: string) => Promise<void>;
   playSelectedAyahs: (ayahs: { sura: number; ayah: number }[], reciterId?: string) => Promise<void>;
   playSingleAyah: (sura: number, ayah: number, reciterId?: string) => Promise<void>;
+  playSurah: (
+    surahId: number,
+    reciterId: number,
+    moshafId: number,
+    reciterName: string,
+    server: string,
+    surahList: string
+  ) => Promise<void>;
   togglePlayPause: () => Promise<void>;
   skipToNext: () => Promise<void>;
   skipToPrevious: () => Promise<void>;
@@ -47,11 +64,13 @@ type PlayerState = {
   setSelectedReciter: (id: string, name: string) => void;
   setRepeatMode: (mode: QuranRepeatMode) => void;
   setRepeatCount: (count: number) => void;
+  seekTo: (position: number) => Promise<void>;
   setPlaybackSpeed: (speed: number) => Promise<void>;
   setIsPlaying: (playing: boolean) => void;
   setCurrentTrackIndex: (index: number) => void;
   setMiniPlayerHidden: (hidden: boolean) => void;
   setTabBarHeight: (height: number) => void;
+  setMiniPlayerHeight: (height: number) => void;
   handleQueueEnded: () => Promise<void>;
   loadFromStorage: () => void;
 };
@@ -145,11 +164,24 @@ function findPreviousUniqueIndex(queue: TPTrack[], currentIndex: number): number
 async function loadAndPlayTracks(tracks: Track[], state: PlayerState) {
   const expanded = expandTracksForRepeat(tracks, state.repeatMode, state.repeatCount);
 
+  console.log('[PlayerStore] loadAndPlayTracks', {
+    trackCount: tracks.length,
+    expandedCount: expanded.length,
+    repeatMode: state.repeatMode,
+    repeatCount: state.repeatCount,
+    playbackSpeed: state.playbackSpeed,
+    firstTrackId: expanded[0]?.id,
+    firstTrackUrl: expanded[0]?.url,
+  });
+
   await TrackPlayer.reset();
+  console.log('[PlayerStore] TrackPlayer.reset() done');
   await TrackPlayer.add(expanded);
+  console.log('[PlayerStore] TrackPlayer.add() done');
   await TrackPlayer.setRepeatMode(RepeatMode.Off);
   await TrackPlayer.setRate(state.playbackSpeed);
   await TrackPlayer.play();
+  console.log('[PlayerStore] TrackPlayer.play() done');
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
@@ -158,6 +190,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   isVisible: false,
   isMiniPlayerHidden: false,
   tabBarHeight: 0,
+  miniPlayerHeight: 0,
   selectedReciterId: DEFAULT_RECITER_ID,
   reciterName: DEFAULT_RECITER_NAME,
   repeatMode: 'off',
@@ -166,6 +199,11 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   currentSurahName: '',
   currentAyahNumber: 0,
   repeatPlayCount: 0,
+  playerSource: 'quran',
+  currentLibraryReciterId: 0,
+  currentMoshafId: 0,
+  currentMoshafServer: '',
+  isLoadingTrack: false,
 
   playPageAyahs: async (page, reciterId) => {
     const state = get();
@@ -226,6 +264,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         currentSurahName: sura,
         currentAyahNumber: Number(ayah),
         repeatPlayCount: 0,
+        playerSource: 'quran',
       });
     } catch (error) {
       console.error('[PlayerStore] playPageAyahs error:', error);
@@ -283,6 +322,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         currentSurahName: String(firstAyah.sura),
         currentAyahNumber: firstAyah.ayah,
         repeatPlayCount: 0,
+        playerSource: 'quran',
       });
     } catch (error) {
       console.error('[PlayerStore] playSelectedAyahs error:', error);
@@ -326,18 +366,165 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         currentSurahName: String(sura),
         currentAyahNumber: ayah,
         repeatPlayCount: 0,
+        playerSource: 'quran',
       });
     } catch (error) {
       console.error('[PlayerStore] playSingleAyah error:', error);
     }
   },
 
+  playSurah: async (surahId, reciterId, moshafId, reciterNameParam, server, surahList) => {
+    const state = get();
+    console.log('[PlayerStore] playSurah called', {
+      surahId,
+      reciterId,
+      moshafId,
+      reciterName: reciterNameParam,
+      server,
+      surahListLength: surahList.split(',').length,
+      currentState: {
+        playerSource: state.playerSource,
+        currentLibraryReciterId: state.currentLibraryReciterId,
+        currentMoshafId: state.currentMoshafId,
+        isPlaying: state.isPlaying,
+      },
+    });
+
+    try {
+      const surahIds = surahList.split(',').map(Number);
+      const startIndex = surahIds.indexOf(surahId);
+      if (startIndex === -1) {
+        console.warn('[PlayerStore] surahId not found in surahList');
+        return;
+      }
+
+      // Optimistically update state before async work to prevent UI flicker.
+      // TrackPlayer.reset() fires a pause event that briefly sets isPlaying=false,
+      // then play() sets it back to true, causing the play button icon to flicker.
+      set({
+        isLoadingTrack: true,
+        isPlaying: true,
+        isVisible: true,
+        isMiniPlayerHidden: false,
+        currentSurahName: String(surahId),
+        currentAyahNumber: 0,
+        playerSource: 'library',
+        currentLibraryReciterId: reciterId,
+        currentMoshafId: moshafId,
+        currentMoshafServer: server,
+        reciterName: reciterNameParam,
+      });
+
+      // If same reciter/moshaf is playing, check if surah is in queue
+      if (
+        state.playerSource === 'library' &&
+        state.currentLibraryReciterId === reciterId &&
+        state.currentMoshafId === moshafId
+      ) {
+        console.log('[PlayerStore] same reciter/moshaf — checking queue for surah');
+        const queue = await TrackPlayer.getQueue();
+        const trackId = `surah:${String(surahId)}`;
+        const queueIndex = queue.findIndex((t) => t.id === trackId);
+        console.log('[PlayerStore] queue search', {
+          trackId,
+          queueIndex,
+          queueLength: queue.length,
+        });
+        if (queueIndex >= 0) {
+          await TrackPlayer.skip(queueIndex);
+          await TrackPlayer.play();
+          console.log('[PlayerStore] skipped to existing track in queue at index', queueIndex);
+          set({
+            isLoadingTrack: false,
+            isPlaying: true,
+            isVisible: true,
+            isMiniPlayerHidden: false,
+            currentTrackIndex: queueIndex,
+            currentSurahName: String(surahId),
+            currentAyahNumber: 0,
+            playerSource: 'library',
+            reciterName: reciterNameParam,
+          });
+          return;
+        }
+      }
+
+      // Build tracks from startIndex to end
+      const remainingSurahs = surahIds.slice(startIndex);
+      console.log(
+        '[PlayerStore] building tracks from startIndex',
+        startIndex,
+        'count',
+        remainingSurahs.length
+      );
+      const isArabic = i18n.language === 'ar';
+      const tracks: Track[] = [];
+
+      for (const sid of remainingSurahs) {
+        const surahInfo = getSurahById(sid);
+        const surahName = isArabic ? surahInfo?.nameArabic : surahInfo?.nameSimple;
+        const paddedId = String(sid).padStart(3, '0');
+
+        // Check if surah is downloaded locally
+        const localPath = await getDownloadedSurahPath(reciterId, moshafId, sid);
+        const url = localPath ?? `${server}${paddedId}.mp3`;
+
+        tracks.push({
+          id: `surah:${String(sid)}`,
+          url,
+          title: surahName ?? String(sid),
+          artist: reciterNameParam,
+        });
+      }
+
+      if (tracks.length === 0) {
+        console.warn('[PlayerStore] playSurah — no tracks');
+        set({ isLoadingTrack: false });
+        return;
+      }
+
+      console.log(
+        '[PlayerStore] playSurah — calling loadAndPlayTracks with',
+        tracks.length,
+        'tracks'
+      );
+      await loadAndPlayTracks(tracks, state);
+
+      console.log('[PlayerStore] playSurah — setting state after loadAndPlayTracks');
+      set({
+        isLoadingTrack: false,
+        isPlaying: true,
+        isVisible: true,
+        isMiniPlayerHidden: false,
+        currentTrackIndex: 0,
+        currentSurahName: String(surahId),
+        currentAyahNumber: 0,
+        repeatPlayCount: 0,
+        playerSource: 'library',
+        currentLibraryReciterId: reciterId,
+        currentMoshafId: moshafId,
+        currentMoshafServer: server,
+        reciterName: reciterNameParam,
+      });
+      console.log('[PlayerStore] playSurah — done, state set');
+    } catch (error) {
+      console.error('[PlayerStore] playSurah error:', error);
+      set({ isLoadingTrack: false });
+    }
+  },
+
   togglePlayPause: async () => {
     const state = get();
+    console.log('[PlayerStore] togglePlayPause', {
+      wasPlaying: state.isPlaying,
+      playerSource: state.playerSource,
+    });
     if (state.isPlaying) {
       await TrackPlayer.pause();
+      console.log('[PlayerStore] paused');
     } else {
       await TrackPlayer.play();
+      console.log('[PlayerStore] resumed');
     }
     set({ isPlaying: !state.isPlaying });
   },
@@ -376,12 +563,19 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 
   stop: async () => {
+    console.log('[PlayerStore] stop called');
     await TrackPlayer.reset();
     set({
       isPlaying: false,
       isVisible: false,
       currentTrackIndex: 0,
       repeatPlayCount: 0,
+      currentLibraryReciterId: 0,
+      currentMoshafId: 0,
+      currentMoshafServer: '',
+      currentSurahName: '',
+      currentAyahNumber: 0,
+      playerSource: 'quran',
     });
   },
 
@@ -417,6 +611,15 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     setItem(STORAGE_KEYS.quran.playbackSettings, settings);
   },
 
+  seekTo: async (position) => {
+    try {
+      const clamped = Math.max(0, position);
+      await TrackPlayer.seekTo(clamped);
+    } catch (error) {
+      console.warn('[PlayerStore] seekTo error:', error);
+    }
+  },
+
   setPlaybackSpeed: async (speed) => {
     set({ playbackSpeed: speed });
     await TrackPlayer.setRate(speed);
@@ -430,6 +633,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 
   setIsPlaying: (playing) => {
+    console.log('[PlayerStore] setIsPlaying', { playing, prev: get().isPlaying });
     set({ isPlaying: playing });
   },
 
@@ -443,6 +647,10 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
   setTabBarHeight: (height) => {
     set({ tabBarHeight: height });
+  },
+
+  setMiniPlayerHeight: (height) => {
+    set({ miniPlayerHeight: height });
   },
 
   handleQueueEnded: async () => {

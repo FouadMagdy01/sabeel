@@ -20,12 +20,22 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function ensureAndroidChannel(): Promise<void> {
+async function ensureAndroidChannel(soundFilename?: string): Promise<void> {
   if (Platform.OS !== 'android') return;
+
+  const soundValue = soundFilename ? `${soundFilename}.mp3` : 'default';
+
+  // Delete existing channel and recreate with potentially new sound
+  try {
+    await Notifications.deleteNotificationChannelAsync(PRAYER_CHANNEL_ID);
+  } catch {
+    // Channel may not exist yet
+  }
+
   await Notifications.setNotificationChannelAsync(PRAYER_CHANNEL_ID, {
     name: 'Prayer Times',
     importance: Notifications.AndroidImportance.HIGH,
-    sound: 'default',
+    sound: soundValue,
     vibrationPattern: [0, 250, 250, 250],
     enableLights: true,
   });
@@ -86,12 +96,17 @@ function collectUpcomingPrayers(
 
 export async function scheduleYearlyPrayerNotifications(
   yearlyData: YearlyPrayerData,
-  prayerNames: Record<PrayerKey, string>
+  prayerNames: Record<PrayerKey, string>,
+  adhanSound?: string
 ): Promise<void> {
   const hasPermission = await requestNotificationPermission();
   if (!hasPermission) return;
 
-  await ensureAndroidChannel();
+  // Resolve sound: 'default' id maps to system default, otherwise use the filename
+  const soundFilename = adhanSound && adhanSound !== 'default' ? adhanSound : undefined;
+  const notificationSound = soundFilename ? `${soundFilename}.mp3` : 'default';
+
+  await ensureAndroidChannel(soundFilename);
   await cancelAllPrayerNotifications();
 
   const lang = i18n.language;
@@ -104,7 +119,7 @@ export async function scheduleYearlyPrayerNotifications(
         content: {
           title: i18n.t('prayers.notification.title', { prayer: name }),
           body: i18n.t('prayers.notification.body', { prayer: name }),
-          sound: 'default',
+          sound: notificationSound,
           data: { lang, prayerKey },
           ...(Platform.OS === 'android' && { channelId: PRAYER_CHANNEL_ID }),
         },

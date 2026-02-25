@@ -2,16 +2,16 @@ import type { QuickAccessItem } from '../components/QuickAccess/QuickAccess.type
 
 export const QUICK_ACCESS_ITEMS: QuickAccessItem[] = [
   {
-    id: 'dua',
-    labelKey: 'screens.home.quickAccess.dua',
+    id: 'azkar-dua',
+    labelKey: 'screens.home.quickAccess.azkarDua',
     iconFamily: 'MaterialIcons',
     iconName: 'back-hand',
   },
   {
-    id: 'wird',
-    labelKey: 'screens.home.quickAccess.wird',
+    id: 'qibla',
+    labelKey: 'screens.home.quickAccess.qibla',
     iconFamily: 'MaterialIcons',
-    iconName: 'auto-stories',
+    iconName: 'explore',
   },
   {
     id: 'tasbeeh',
@@ -20,8 +20,8 @@ export const QUICK_ACCESS_ITEMS: QuickAccessItem[] = [
     iconName: 'touch-app',
   },
   {
-    id: 'quran',
-    labelKey: 'screens.home.quickAccess.quran',
+    id: 'mushaf',
+    labelKey: 'screens.home.quickAccess.mushaf',
     iconFamily: 'MaterialIcons',
     iconName: 'menu-book',
   },

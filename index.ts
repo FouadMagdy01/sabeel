@@ -41,9 +41,12 @@ async function setupPlayer() {
         Capability.Pause,
         Capability.SkipToNext,
         Capability.SkipToPrevious,
+        Capability.Stop,
+        Capability.SeekTo,
       ],
       android: {
         appKilledPlaybackBehavior: AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
+        stopForegroundGracePeriod: 5,
       },
     });
     console.log('[TrackPlayer] options updated');

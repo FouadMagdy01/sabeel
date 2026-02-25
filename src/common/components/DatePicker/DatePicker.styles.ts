@@ -383,4 +383,10 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     gap: theme.metrics.spacing.p8,
   },
+  subViewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p8,
+    paddingBottom: theme.metrics.spacingV.p8,
+  },
 }));

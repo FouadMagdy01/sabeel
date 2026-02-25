@@ -77,6 +77,7 @@ const QuranPagesView: React.FC<QuranPagesViewProps> = React.memo(
     const [activeSelectionPage, setActiveSelectionPage] = useState<number | null>(null);
     const [currentVisiblePage, setCurrentVisiblePage] = useState(initialPage);
 
+    const playerSource = usePlayerStore((s) => s.playerSource);
     const isPlaying = usePlayerStore((s) => s.isPlaying);
     const playPageAyahs = usePlayerStore((s) => s.playPageAyahs);
     const playSelectedAyahs = usePlayerStore((s) => s.playSelectedAyahs);
@@ -105,7 +106,7 @@ const QuranPagesView: React.FC<QuranPagesViewProps> = React.memo(
 
     const handlePlay = useCallback(
       (ayahs: SelectedAyah[]) => {
-        if (isPlaying) {
+        if (playerSource === 'quran' && isPlaying) {
           void togglePlayPause();
         } else if (ayahs.length > 0) {
           void playSelectedAyahs(ayahs);
@@ -113,7 +114,14 @@ const QuranPagesView: React.FC<QuranPagesViewProps> = React.memo(
           void playPageAyahs(currentVisiblePage);
         }
       },
-      [isPlaying, togglePlayPause, playSelectedAyahs, playPageAyahs, currentVisiblePage]
+      [
+        playerSource,
+        isPlaying,
+        togglePlayPause,
+        playSelectedAyahs,
+        playPageAyahs,
+        currentVisiblePage,
+      ]
     );
 
     const handleBookmark = useCallback((ayahs: SelectedAyah[]) => {
@@ -160,7 +168,7 @@ const QuranPagesView: React.FC<QuranPagesViewProps> = React.memo(
           onPlay={handlePlay}
           onBookmark={handleBookmark}
           onTap={onTap}
-          isPagePlaying={isPlaying}
+          isPagePlaying={playerSource === 'quran' && isPlaying}
           initialHighlightKeys={item === initialPage ? initialHighlightKeys : undefined}
         />
       ),

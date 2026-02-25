@@ -11,8 +11,9 @@ import { ActivityIndicator, FlatList, I18nManager, Platform, View } from 'react-
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 
+import { useFavoriteReciters, useToggleFavoriteReciter } from '../../hooks/useFavorites';
 import { useReciters } from '../../hooks/useReciters';
-import type { Reciter } from '../../types/api.types';
+import type { Moshaf, Reciter } from '../../types/api.types';
 import type { FilterSortState } from '../../types/filter.types';
 import { sortReciters } from '../../utils/reciterFilters';
 import { FilterSortDrawer } from '../FilterSortDrawer';
@@ -25,7 +26,7 @@ interface AllRecitersScreenProps {
 }
 
 const AllRecitersScreen: React.FC<AllRecitersScreenProps> = ({ initialRewayaId }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme } = useUnistyles();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -39,6 +40,8 @@ const AllRecitersScreen: React.FC<AllRecitersScreenProps> = ({ initialRewayaId }
   const moshafSheetRef = useRef<BottomSheetModal>(null);
 
   const { data: reciters, isLoading, error, refetch } = useReciters(filterSortState.rewayahId);
+  const { data: favoriteReciters } = useFavoriteReciters();
+  const toggleReciterFav = useToggleFavoriteReciter();
 
   const processedReciters = useMemo(() => {
     if (!reciters) return [];
@@ -112,9 +115,81 @@ const AllRecitersScreen: React.FC<AllRecitersScreenProps> = ({ initialRewayaId }
     [selectedReciter, navigateToSurahs]
   );
 
+  const isReciterFavorited = useCallback(
+    (reciterId: number, moshafId: number): boolean => {
+      if (!favoriteReciters) return false;
+      return favoriteReciters.some((r) => r.reciterId === reciterId && r.moshafId === moshafId);
+    },
+    [favoriteReciters]
+  );
+
+  const handleFavoriteToggle = useCallback(
+    (reciter: Reciter) => {
+      if (reciter.moshaf.length > 1) {
+        setSelectedReciter(reciter);
+        moshafSheetRef.current?.present();
+        return;
+      }
+
+      const moshaf = reciter.moshaf[0];
+      if (!moshaf) return;
+
+      const isFav = isReciterFavorited(reciter.id, moshaf.id);
+
+      toggleReciterFav.mutate({
+        isFavorited: isFav,
+        reciterId: reciter.id,
+        moshafId: moshaf.id,
+        reciterName: reciter.name,
+        moshafName: moshaf.name,
+        language: i18n.language,
+        server: moshaf.server,
+        surahList: moshaf.surah_list,
+        surahTotal: moshaf.surah_total,
+      });
+    },
+    [i18n.language, isReciterFavorited, toggleReciterFav]
+  );
+
+  const handleMoshafFavoriteToggle = useCallback(
+    (moshaf: Moshaf) => {
+      if (!selectedReciter) return;
+
+      const isFav = isReciterFavorited(selectedReciter.id, moshaf.id);
+
+      toggleReciterFav.mutate({
+        isFavorited: isFav,
+        reciterId: selectedReciter.id,
+        moshafId: moshaf.id,
+        reciterName: selectedReciter.name,
+        moshafName: moshaf.name,
+        language: i18n.language,
+        server: moshaf.server,
+        surahList: moshaf.surah_list,
+        surahTotal: moshaf.surah_total,
+      });
+    },
+    [i18n.language, isReciterFavorited, selectedReciter, toggleReciterFav]
+  );
+
+  const isMoshafFavorited = useCallback(
+    (moshafId: number): boolean => {
+      if (!selectedReciter) return false;
+      return isReciterFavorited(selectedReciter.id, moshafId);
+    },
+    [isReciterFavorited, selectedReciter]
+  );
+
   const renderItem = useCallback(
-    ({ item }: { item: Reciter }) => <ReciterCard reciter={item} onPress={handleReciterPress} />,
-    [handleReciterPress]
+    ({ item }: { item: Reciter }) => (
+      <ReciterCard
+        reciter={item}
+        onPress={handleReciterPress}
+        onFavoriteToggle={handleFavoriteToggle}
+        isFavorited={isReciterFavorited(item.id, item.moshaf[0]?.id ?? 0)}
+      />
+    ),
+    [handleReciterPress, handleFavoriteToggle, isReciterFavorited]
   );
 
   const keyExtractor = useCallback((item: Reciter) => String(item.id), []);
@@ -218,6 +293,8 @@ const AllRecitersScreen: React.FC<AllRecitersScreenProps> = ({ initialRewayaId }
         reciterName={selectedReciter?.name ?? ''}
         moshafList={selectedReciter?.moshaf ?? []}
         onSelect={handleMoshafSelect}
+        onFavoriteToggle={handleMoshafFavoriteToggle}
+        isMoshafFavorited={isMoshafFavorited}
       />
     </View>
   );

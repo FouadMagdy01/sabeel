@@ -8,6 +8,7 @@ import {
   VerseOfTheDay,
 } from '@/features/home';
 import { QUICK_ACCESS_ITEMS } from '@/features/home/constants';
+import type { QuickAccessItem } from '@/features/home/components/QuickAccess/QuickAccess.types';
 import {
   DUMMY_AZKAR,
   DUMMY_PRAYERS,
@@ -18,7 +19,11 @@ import {
 import type { PrayerData, PrayerName } from '@/features/home/types';
 import { usePrayerTimes } from '@/features/prayers';
 import { useBottomPadding } from '@/hooks/useBottomPadding';
-import { useMemo } from 'react';
+import { getItem } from '@/utils/storage';
+import { STORAGE_KEYS } from '@/utils/storage/constants';
+import type { LastReadInfo } from '@/features/quran/components/ContinueReadingCard';
+import { useRouter } from 'expo-router';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -27,6 +32,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
   const { t } = useTranslation();
+  const router = useRouter();
   const {
     todayPrayers,
     currentPrayer,
@@ -47,6 +53,37 @@ export default function HomeScreen() {
       status: p.status,
     }));
   }, [todayPrayers]);
+
+  const handleQuickAccessPress = useCallback(
+    (item: QuickAccessItem) => {
+      switch (item.id) {
+        case 'mushaf': {
+          const result = getItem<LastReadInfo>(STORAGE_KEYS.quran.lastPage);
+          const lastRead = result.data;
+          router.push({
+            pathname: '/(main)/quran-reader',
+            params: {
+              page: String(lastRead?.page ?? 1),
+              surahId: String(lastRead?.surahId ?? 1),
+            },
+          });
+          break;
+        }
+        case 'qibla':
+          router.push('/(main)/qibla');
+          break;
+        case 'tasbeeh':
+          router.push('/(main)/tasbeeh');
+          break;
+        case 'azkar-dua':
+          router.push('/(main)/azkar-hub');
+          break;
+        default:
+          console.warn(t('screens.home.quickAccess.sectionTitle'), item.id);
+      }
+    },
+    [router, t]
+  );
 
   const renderPrayerCard = () => {
     if (isLoading && todayPrayers.length === 0) {
@@ -89,10 +126,7 @@ export default function HomeScreen() {
 
         <StatsCard stats={DUMMY_STATS} />
         {renderPrayerCard()}
-        <QuickAccess
-          items={QUICK_ACCESS_ITEMS}
-          onItemPress={(item) => console.warn(t('screens.home.quickAccess.sectionTitle'), item.id)}
-        />
+        <QuickAccess items={QUICK_ACCESS_ITEMS} onItemPress={handleQuickAccessPress} />
 
         <VerseOfTheDay verse={DUMMY_VERSE} onShare={() => console.warn('Share verse')} />
 

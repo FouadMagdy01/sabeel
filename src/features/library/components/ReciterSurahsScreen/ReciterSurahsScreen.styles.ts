@@ -116,7 +116,6 @@ export const styles = StyleSheet.create((theme) => ({
   },
   listContent: {
     paddingHorizontal: theme.metrics.spacing.p16,
-    paddingBottom: theme.metrics.spacingV.p32,
     gap: theme.metrics.spacingV.p12,
   },
   listContentEmpty: {
@@ -127,5 +126,43 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.metrics.spacingV.p12,
+  },
+
+  // Bulk download progress
+  bulkProgressContainer: {
+    width: '100%',
+    paddingVertical: theme.metrics.spacingV.p8,
+  },
+  bulkProgressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p8,
+  },
+  bulkProgressBarTrack: {
+    flex: 1,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: `${theme.colors.brand.primary}20`,
+    overflow: 'hidden',
+  },
+  bulkProgressBarFill: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.colors.brand.primary,
+  },
+  bulkProgressText: {
+    marginTop: theme.metrics.spacingV.p4,
+    textAlign: 'center',
+  },
+
+  // Collapsed header bulk progress bar
+  collapsedBulkProgress: {
+    height: 3,
+    backgroundColor: `${theme.colors.brand.primary}20`,
+    overflow: 'hidden',
+  },
+  collapsedBulkProgressFill: {
+    height: 3,
+    backgroundColor: theme.colors.brand.primary,
   },
 }));

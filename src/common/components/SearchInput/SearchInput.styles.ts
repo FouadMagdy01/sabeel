@@ -1,3 +1,4 @@
+import { I18nManager } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 export const SEARCH_INPUT_ICON_SIZES = {
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create((theme) => ({
     flex: 1,
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.primary,
-    textAlign: 'right',
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
     padding: 0,
     variants: {
       size: {

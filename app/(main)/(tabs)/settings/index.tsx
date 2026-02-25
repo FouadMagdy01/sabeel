@@ -15,9 +15,16 @@ import type { ThemePresetName } from '@/theme/config';
 
 import { applyThemePreset, getCurrentPreset, toggleDarkMode } from '@/theme/themeManager';
 
+import { ADHAN_SOUNDS, DEFAULT_ADHAN_SOUND } from '@/features/prayers/constants';
+import {
+  cancelAllPrayerNotifications,
+  scheduleYearlyPrayerNotifications,
+} from '@/features/prayers/services/notificationService';
+import type { PrayerKey, YearlyPrayerData } from '@/features/prayers/types';
 import { reloadApp } from '@/utils/reload';
-import { setItem, STORAGE_KEYS } from '@/utils/storage';
-import React, { useCallback, useState } from 'react';
+import { getItem, setItem, STORAGE_KEYS } from '@/utils/storage';
+import { useRouter } from 'expo-router';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, I18nManager, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,10 +39,62 @@ export default function SettingsScreen() {
   const { isAuthenticated } = useAuth();
   const logoutMutation = useLogoutMutation();
 
+  const router = useRouter();
   const { rt } = useUnistyles();
   const isDark = String(rt.themeName ?? '').endsWith('dark');
   const [currentPreset, setCurrentPreset] = useState<ThemePresetName>(getCurrentPreset);
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+
+  // Adhan notification settings
+  const [adhanEnabled, setAdhanEnabled] = useState<boolean>(() => {
+    const result = getItem<boolean>(STORAGE_KEYS.prayers.adhanEnabled);
+    if (result.success && typeof result.data === 'boolean') return result.data;
+    return true;
+  });
+
+  const currentAdhanSoundId = useMemo(() => {
+    const result = getItem<string>(STORAGE_KEYS.prayers.adhanSound);
+    return result.success && result.data ? result.data : DEFAULT_ADHAN_SOUND;
+  }, []);
+
+  const currentSoundDisplayName = useMemo(() => {
+    const sound = ADHAN_SOUNDS.find((s) => s.id === currentAdhanSoundId);
+    return sound
+      ? t(sound.nameKey as 'screens.adhanSound.defaultSound')
+      : t('screens.adhanSound.defaultSound');
+  }, [currentAdhanSoundId, t]);
+
+  const prayerNames = useMemo<Record<PrayerKey, string>>(
+    () => ({
+      Fajr: t('prayers.names.Fajr'),
+      Sunrise: t('prayers.names.Sunrise'),
+      Dhuhr: t('prayers.names.Dhuhr'),
+      Asr: t('prayers.names.Asr'),
+      Maghrib: t('prayers.names.Maghrib'),
+      Isha: t('prayers.names.Isha'),
+    }),
+    [t]
+  );
+
+  const handleToggleAdhan = useCallback(
+    (value: boolean) => {
+      setAdhanEnabled(value);
+      setItem(STORAGE_KEYS.prayers.adhanEnabled, value);
+
+      if (!value) {
+        void cancelAllPrayerNotifications();
+      } else {
+        const yearlyResult = getItem<YearlyPrayerData>(STORAGE_KEYS.prayers.yearlyData);
+        if (yearlyResult.success && yearlyResult.data) {
+          const soundResult = getItem<string>(STORAGE_KEYS.prayers.adhanSound);
+          const sound =
+            soundResult.success && soundResult.data ? soundResult.data : DEFAULT_ADHAN_SOUND;
+          void scheduleYearlyPrayerNotifications(yearlyResult.data, prayerNames, sound);
+        }
+      }
+    },
+    [prayerNames]
+  );
 
   const handleToggleDarkMode = useCallback((value: boolean) => {
     toggleDarkMode(value);
@@ -131,6 +190,24 @@ export default function SettingsScreen() {
               size="small"
             />
           }
+        />
+      </SettingsSection>
+
+      <SettingsSection title={t('settings.sections.notifications')}>
+        <SettingsRow
+          icon="notifications-outline"
+          iconFamily="Ionicons"
+          label={t('settings.notifications.adhanEnabled')}
+          showChevron={false}
+          rightElement={<Toggle value={adhanEnabled} onValueChange={handleToggleAdhan} />}
+        />
+        <SettingsRow
+          icon="musical-notes-outline"
+          iconFamily="Ionicons"
+          label={t('settings.notifications.adhanSound')}
+          value={currentSoundDisplayName}
+          isLast
+          onPress={() => router.push('/adhan-sound')}
         />
       </SettingsSection>
 

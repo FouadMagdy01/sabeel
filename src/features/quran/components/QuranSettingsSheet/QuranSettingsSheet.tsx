@@ -1,6 +1,5 @@
 import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
-import { MINI_PLAYER_HEIGHT } from '@/common/components/MiniPlayer';
 import { SegmentedControl } from '@/common/components/SegmentedControl';
 import { Typography } from '@/common/components/Typography';
 import { usePlayerStore, type QuranRepeatMode } from '@/features/quran/stores/playerStore';
@@ -24,6 +23,7 @@ const QuranSettingsSheet = forwardRef<BottomSheetModal>((_props, ref) => {
   const insets = useSafeAreaInsets();
 
   const isPlayerVisible = usePlayerStore((s) => s.isVisible);
+  const miniPlayerHeight = usePlayerStore((s) => s.miniPlayerHeight);
   const selectedReciterId = usePlayerStore((s) => s.selectedReciterId);
   const repeatMode = usePlayerStore((s) => s.repeatMode);
   const repeatCount = usePlayerStore((s) => s.repeatCount);
@@ -118,7 +118,7 @@ const QuranSettingsSheet = forwardRef<BottomSheetModal>((_props, ref) => {
       <BottomSheetScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + (isPlayerVisible ? MINI_PLAYER_HEIGHT : 0) + 16 },
+          { paddingBottom: insets.bottom + (isPlayerVisible ? miniPlayerHeight : 0) + 16 },
         ]}
         showsVerticalScrollIndicator={false}
       >

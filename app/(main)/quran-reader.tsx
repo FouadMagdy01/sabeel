@@ -1,5 +1,4 @@
 import { IconButton } from '@/common/components/IconButton';
-import { MINI_PLAYER_HEIGHT } from '@/common/components/MiniPlayer';
 import { Typography } from '@/common/components/Typography';
 import { getAllSurahsForPage } from '@/features/library/data/surahData';
 import { QuranDownloadPrompt } from '@/features/quran/components/QuranDownloadPrompt';
@@ -44,6 +43,7 @@ function ReaderContent() {
   const [checkingPages, setCheckingPages] = useState(true);
 
   const isPlayerVisible = usePlayerStore((s) => s.isVisible);
+  const miniPlayerHeight = usePlayerStore((s) => s.miniPlayerHeight);
   const setMiniPlayerHidden = usePlayerStore((s) => s.setMiniPlayerHidden);
 
   useEffect(() => {
@@ -114,7 +114,7 @@ function ReaderContent() {
 
   // Compute FAB bottom offset to sit above MiniPlayer when visible
   // MiniPlayer sits at bottom: insets.bottom on non-tab screens
-  const fabBottomOffset = isPlayerVisible && chromeVisible ? MINI_PLAYER_HEIGHT + insets.bottom : 0;
+  const fabBottomOffset = isPlayerVisible && chromeVisible ? miniPlayerHeight + insets.bottom : 0;
 
   if (checkingPages) {
     return <View style={readerStyles.container} />;

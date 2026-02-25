@@ -14,7 +14,7 @@ export const LibraryList = <T,>({ data, renderItem, keyExtractor }: LibraryListP
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 120 }]}
+      contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 160 }]}
       showsVerticalScrollIndicator={false}
     />
   );

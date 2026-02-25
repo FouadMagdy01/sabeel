@@ -1,10 +1,10 @@
 import { SegmentedControl } from '@/common/components/SegmentedControl';
 import { DownloadsContent, ExploreContent, FavoritesContent } from '@/features/library';
+import { useBottomPadding } from '@/hooks/useBottomPadding';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useBottomPadding } from '@/hooks/useBottomPadding';
 import { StyleSheet } from 'react-native-unistyles';
 
 export default function LibraryScreen() {

@@ -24,8 +24,15 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: theme.metrics.spacing.p8,
     marginTop: 2,
+    flexShrink: 1,
   },
   metaText: {
     fontSize: theme.fonts.size.xxs,
+    flexShrink: 1,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p4,
   },
 }));
