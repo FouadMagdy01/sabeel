@@ -26,7 +26,8 @@
             }
           }
         },
-        "CFBundleLocalizations": ["en", "ar"]
+        "CFBundleLocalizations": ["en", "ar"],
+        "ITSAppUsesNonExemptEncryption": false
       },
       "appleTeamId": "ZRDDD93RS9"
     },
@@ -50,7 +51,12 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "extra": {},
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9c75198a-10e5-4ab5-a6c1-4ec3d172434a"
+      }
+    },
     "plugins": [
       [
         "expo-localization",
