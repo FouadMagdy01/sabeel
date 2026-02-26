@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { I18nManager, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import { IconButton } from '@/common/components/IconButton';
 import { Toggle } from '@/common/components/Toggle';
 import { Typography } from '@/common/components/Typography';
 import type { TypographySize } from '@/common/components/Typography';
+import { useDailyTodosStore } from '@/features/home/stores/dailyTodosStore';
 import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import { rf } from '@/theme/metrics';
 
@@ -55,6 +56,8 @@ export function AzkarSessionScreen() {
     loadFromStorage,
   } = useAzkarSessionStore();
 
+  const markAzkarCompleted = useDailyTodosStore((s) => s.markAzkarCompleted);
+
   const { onIncrement, onItemComplete } = useAzkarHaptics(hapticsEnabled);
 
   const items = useMemo(
@@ -88,6 +91,25 @@ export function AzkarSessionScreen() {
     }
   }, [isItemComplete, onItemComplete]);
 
+  const hasSessionStarted = useRef(false);
+
+  useEffect(() => {
+    // Track when startSession has reset the state (completedItems becomes empty)
+    if (!isSessionComplete) {
+      hasSessionStarted.current = true;
+    }
+  }, [isSessionComplete]);
+
+  useEffect(() => {
+    if (
+      isSessionComplete &&
+      hasSessionStarted.current &&
+      (categoryId === 'morning_azkar' || categoryId === 'evening_azkar')
+    ) {
+      markAzkarCompleted(categoryId);
+    }
+  }, [isSessionComplete, categoryId, markAzkarCompleted]);
+
   const handleIncrement = useCallback(() => {
     if (isItemComplete && !isSessionComplete) return;
     incrementRepeat();
@@ -101,8 +123,8 @@ export function AzkarSessionScreen() {
       {/* Header */}
       <View style={styles.header}>
         <IconButton
-          familyName="Feather"
-          iconName="arrow-left"
+          familyName="MaterialIcons"
+          iconName={I18nManager.isRTL ? 'arrow-forward' : 'arrow-back'}
           onPress={() => router.back()}
           variant="ghost"
           size="medium"
@@ -173,12 +195,7 @@ export function AzkarSessionScreen() {
             )}
 
             {currentItem.source.startsWith('Quran ') && (
-              <View
-                style={[
-                  styles.ayahBadge,
-                  { backgroundColor: theme.colors.brand.primary },
-                ]}
-              >
+              <View style={[styles.ayahBadge, { backgroundColor: theme.colors.brand.primary }]}>
                 <Typography size="sm" weight="semiBold" color="inverse">
                   {t('screens.azkar.session.ayah', {
                     ref: currentItem.source.replace('Quran ', ''),
@@ -225,8 +242,8 @@ export function AzkarSessionScreen() {
         {/* Navigation Row */}
         <View style={styles.navigationRow}>
           <IconButton
-            familyName="Feather"
-            iconName="chevron-left"
+            familyName="MaterialIcons"
+            iconName={I18nManager.isRTL ? 'chevron-right' : 'chevron-left'}
             onPress={previousItem}
             variant="outlined"
             size="medium"
@@ -236,8 +253,8 @@ export function AzkarSessionScreen() {
             {t('screens.azkar.session.reset')}
           </Button>
           <IconButton
-            familyName="Feather"
-            iconName="chevron-right"
+            familyName="MaterialIcons"
+            iconName={I18nManager.isRTL ? 'chevron-left' : 'chevron-right'}
             onPress={nextItem}
             variant="outlined"
             size="medium"

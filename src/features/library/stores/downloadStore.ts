@@ -122,7 +122,7 @@ export const useDownloadStore = create<DownloadStoreState>((set, get) => ({
         },
       }));
     } catch (error) {
-      console.log('[DownloadStore] startSurahDownload error:', error);
+      console.warn('[DownloadStore] startSurahDownload error:', error);
       set((state) => ({
         activeDownloads: {
           ...state.activeDownloads,
@@ -217,7 +217,7 @@ export const useDownloadStore = create<DownloadStoreState>((set, get) => ({
         await deleteAllForReciter(reciterId, moshafId);
       }
     } catch (error) {
-      console.log('[DownloadStore] deleteSurahDownload error:', error);
+      console.warn('[DownloadStore] deleteSurahDownload error:', error);
     }
   },
 
@@ -236,7 +236,7 @@ export const useDownloadStore = create<DownloadStoreState>((set, get) => ({
       await deleteAllForReciter(reciterId, moshafId);
       await deleteAllDownloadsForReciter(reciterId, moshafId);
     } catch (error) {
-      console.log('[DownloadStore] deleteReciterDownloads error:', error);
+      console.warn('[DownloadStore] deleteReciterDownloads error:', error);
     }
   },
 }));

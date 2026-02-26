@@ -6,7 +6,12 @@ import { styles } from './LibraryList.styles';
 
 import type { LibraryListProps } from './LibraryList.types';
 
-export const LibraryList = <T,>({ data, renderItem, keyExtractor }: LibraryListProps<T>) => {
+export const LibraryList = <T,>({
+  data,
+  renderItem,
+  keyExtractor,
+  bottomPadding,
+}: LibraryListProps<T>) => {
   const insets = useSafeAreaInsets();
 
   return (
@@ -14,7 +19,10 @@ export const LibraryList = <T,>({ data, renderItem, keyExtractor }: LibraryListP
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 160 }]}
+      contentContainerStyle={[
+        styles.listContent,
+        { paddingBottom: bottomPadding ?? insets.bottom + 160 },
+      ]}
       showsVerticalScrollIndicator={false}
     />
   );

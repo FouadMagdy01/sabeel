@@ -20,7 +20,7 @@ export const styles = StyleSheet.create((theme) => ({
     gap: theme.metrics.spacing.p12,
   },
   gridBottomRowItem: {
-    width: '30%',
+    flex: 1,
   },
   itemCard: {
     flex: 1,

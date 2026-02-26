@@ -1,3 +1,4 @@
+/* global __dirname, Buffer */
 /**
  * Asset Generation Script
  *
@@ -89,11 +90,9 @@ function sabeelTextPath(color, scale = 1, translateX = 0, translateY = 0) {
 function quranBookCrescentSvg({ size, fgColor, bgColor, withBg = true, withText = false }) {
   const cx = size / 2;
   // True vertical center for the icon group (crescent top to book bottom)
-  const cy = withText ? size * 0.38 : size * 0.50;
+  const cy = withText ? size * 0.38 : size * 0.5;
 
-  const bgRect = withBg
-    ? `<rect width="${size}" height="${size}" fill="${bgColor}" />`
-    : '';
+  const bgRect = withBg ? `<rect width="${size}" height="${size}" fill="${bgColor}" />` : '';
 
   // Smaller book dimensions — 40% width instead of 52%
   const bookW = size * 0.38;
@@ -111,7 +110,7 @@ function quranBookCrescentSvg({ size, fgColor, bgColor, withBg = true, withText 
 
   // Text section (SVG paths for "سبيل")
   const textSection = withText
-    ? sabeelTextPath(fgColor, size / 1024 * 1.0, cx, bookBot + size * 0.14)
+    ? sabeelTextPath(fgColor, (size / 1024) * 1.0, cx, bookBot + size * 0.14)
     : '';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
@@ -155,15 +154,15 @@ function quranBookCrescentSvg({ size, fgColor, bgColor, withBg = true, withText 
 
   <!-- Left page lines (text lines) -->
   <line x1="${spineX - bookW * 0.08}" y1="${bookTop + bookH * 0.22}" x2="${spineX - bookW * 0.42}" y2="${bookTop + bookH * 0.24}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
-  <line x1="${spineX - bookW * 0.08}" y1="${bookTop + bookH * 0.38}" x2="${spineX - bookW * 0.42}" y2="${bookTop + bookH * 0.40}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
+  <line x1="${spineX - bookW * 0.08}" y1="${bookTop + bookH * 0.38}" x2="${spineX - bookW * 0.42}" y2="${bookTop + bookH * 0.4}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
   <line x1="${spineX - bookW * 0.08}" y1="${bookTop + bookH * 0.54}" x2="${spineX - bookW * 0.42}" y2="${bookTop + bookH * 0.56}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
-  <line x1="${spineX - bookW * 0.08}" y1="${bookTop + bookH * 0.70}" x2="${spineX - bookW * 0.42}" y2="${bookTop + bookH * 0.72}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
+  <line x1="${spineX - bookW * 0.08}" y1="${bookTop + bookH * 0.7}" x2="${spineX - bookW * 0.42}" y2="${bookTop + bookH * 0.72}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
 
   <!-- Right page lines (text lines) -->
   <line x1="${spineX + bookW * 0.08}" y1="${bookTop + bookH * 0.22}" x2="${spineX + bookW * 0.42}" y2="${bookTop + bookH * 0.24}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
-  <line x1="${spineX + bookW * 0.08}" y1="${bookTop + bookH * 0.38}" x2="${spineX + bookW * 0.42}" y2="${bookTop + bookH * 0.40}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
+  <line x1="${spineX + bookW * 0.08}" y1="${bookTop + bookH * 0.38}" x2="${spineX + bookW * 0.42}" y2="${bookTop + bookH * 0.4}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
   <line x1="${spineX + bookW * 0.08}" y1="${bookTop + bookH * 0.54}" x2="${spineX + bookW * 0.42}" y2="${bookTop + bookH * 0.56}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
-  <line x1="${spineX + bookW * 0.08}" y1="${bookTop + bookH * 0.70}" x2="${spineX + bookW * 0.42}" y2="${bookTop + bookH * 0.72}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
+  <line x1="${spineX + bookW * 0.08}" y1="${bookTop + bookH * 0.7}" x2="${spineX + bookW * 0.42}" y2="${bookTop + bookH * 0.72}" stroke="${fgColor}" stroke-width="${size * 0.005}" opacity="0.5" />
 
   ${textSection}
 </svg>`;

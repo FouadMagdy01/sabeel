@@ -1,1 +1,10 @@
-export { SettingsRow, SettingsSection, ThemeSwatchPicker, ProfileHeader } from './components';
+export {
+  SettingsRow,
+  SettingsSection,
+  ThemeSwatchPicker,
+  ProfileHeader,
+  StaticContentScreen,
+  PrivacyPolicyScreen,
+  TermsOfServiceScreen,
+  AboutSabeelScreen,
+} from './components';

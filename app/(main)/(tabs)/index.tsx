@@ -4,30 +4,26 @@ import {
   HomeHeader,
   PrayerTimesError,
   QuickAccess,
-  StatsCard,
   VerseOfTheDay,
 } from '@/features/home';
 import { QUICK_ACCESS_ITEMS } from '@/features/home/constants';
 import type { QuickAccessItem } from '@/features/home/components/QuickAccess/QuickAccess.types';
-import {
-  DUMMY_AZKAR,
-  DUMMY_PRAYERS,
-  DUMMY_RANDOM_ACTS,
-  DUMMY_STATS,
-  DUMMY_VERSE,
-} from '@/features/home/data';
-import type { PrayerData, PrayerName } from '@/features/home/types';
+import { DUMMY_PRAYERS } from '@/features/home/data';
+import type { AzkarData, PrayerData, PrayerName, RandomActData } from '@/features/home/types';
+import { useVerseOfTheDay } from '@/features/home/hooks/useVerseOfTheDay';
+import { useDailyTodosStore } from '@/features/home/stores/dailyTodosStore';
 import { usePrayerTimes } from '@/features/prayers';
 import { useBottomPadding } from '@/hooks/useBottomPadding';
 import { getItem } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/utils/storage/constants';
 import type { LastReadInfo } from '@/features/quran/components/ContinueReadingCard';
 import { useRouter } from 'expo-router';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Share, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
@@ -46,6 +42,24 @@ export default function HomeScreen() {
     refresh,
   } = usePrayerTimes();
 
+  const { verse } = useVerseOfTheDay();
+
+  // Daily todos store
+  const {
+    completedPrayers,
+    completedAzkar,
+    completedRandomActs,
+    dailyRandomActs,
+    togglePrayer,
+    toggleRandomAct,
+    loadFromStorage: loadTodosFromStorage,
+  } = useDailyTodosStore();
+
+  // Load daily todos state on mount
+  useEffect(() => {
+    loadTodosFromStorage();
+  }, [loadTodosFromStorage]);
+
   const livePrayerData: PrayerData[] = useMemo(() => {
     if (todayPrayers.length === 0) return DUMMY_PRAYERS;
     return todayPrayers.map((p) => ({
@@ -54,6 +68,42 @@ export default function HomeScreen() {
       status: p.status,
     }));
   }, [todayPrayers]);
+
+  // Build azkar data from store state
+  const azkarData: AzkarData[] = useMemo(
+    () => [
+      {
+        type: 'Morning' as const,
+        categoryId: 'morning_azkar' as const,
+        status: completedAzkar.includes('morning_azkar')
+          ? ('completed' as const)
+          : ('uncompleted' as const),
+      },
+      {
+        type: 'Evening' as const,
+        categoryId: 'evening_azkar' as const,
+        status: completedAzkar.includes('evening_azkar')
+          ? ('completed' as const)
+          : ('uncompleted' as const),
+      },
+    ],
+    [completedAzkar]
+  );
+
+  // Build random acts data from store state
+  const randomActsData: RandomActData[] = useMemo(
+    () =>
+      dailyRandomActs.map((act) => ({
+        id: act.id,
+        title: t(act.titleKey as never),
+        iconFamily: act.iconFamily,
+        iconName: act.iconName,
+        status: completedRandomActs.includes(act.id)
+          ? ('completed' as const)
+          : ('unlocked' as const),
+      })),
+    [dailyRandomActs, completedRandomActs, t]
+  );
 
   const handleQuickAccessPress = useCallback(
     (item: QuickAccessItem) => {
@@ -85,11 +135,60 @@ export default function HomeScreen() {
           router.push('/(main)/sunnah-collections');
           break;
         default:
-          console.warn(t('screens.home.quickAccess.sectionTitle'), item.id);
+          break;
       }
     },
-    [router, t]
+    [router]
   );
+
+  const handlePrayerPress = useCallback(
+    (prayer: PrayerData) => {
+      // Only allow toggling past and current prayers, not upcoming
+      if (prayer.status === 'upcoming' && !completedPrayers.includes(prayer.name)) return;
+      togglePrayer(prayer.name);
+    },
+    [togglePrayer, completedPrayers]
+  );
+
+  const handleAzkarPress = useCallback(
+    (azkar: AzkarData) => {
+      router.push({
+        pathname: '/(main)/azkar-session',
+        params: { categoryId: azkar.categoryId },
+      });
+    },
+    [router]
+  );
+
+  const handleRandomActPress = useCallback(
+    (act: RandomActData) => {
+      // Find the definition to check for navigation
+      const definition = dailyRandomActs.find((a) => a.id === act.id);
+
+      if (definition?.navigateTo) {
+        if (definition.navigateTo === '/(main)/quran-reader') {
+          const result = getItem<LastReadInfo>(STORAGE_KEYS.quran.lastPage);
+          const lastRead = result.data;
+          const page = Math.max(1, Math.min(604, lastRead?.page ?? 1));
+          const surahId = Math.max(1, Math.min(114, lastRead?.surahId ?? 1));
+          router.push({
+            pathname: '/(main)/quran-reader',
+            params: { page: String(page), surahId: String(surahId) },
+          });
+        } else {
+          router.push(definition.navigateTo as never);
+        }
+      }
+
+      toggleRandomAct(act.id);
+    },
+    [dailyRandomActs, router, toggleRandomAct]
+  );
+
+  const handleShareVerse = useCallback(() => {
+    const parts = [verse.arabic, verse.translation, verse.reference].filter(Boolean);
+    void Share.share({ message: parts.join('\n\n') });
+  }, [verse]);
 
   const renderPrayerCard = () => {
     if (isLoading && todayPrayers.length === 0) {
@@ -130,19 +229,19 @@ export default function HomeScreen() {
       >
         <HomeHeader hijriDate={hijriDate} />
 
-        <StatsCard stats={DUMMY_STATS} />
         {renderPrayerCard()}
         <QuickAccess items={QUICK_ACCESS_ITEMS} onItemPress={handleQuickAccessPress} />
 
-        <VerseOfTheDay verse={DUMMY_VERSE} onShare={() => console.warn('Share verse')} />
+        <VerseOfTheDay verse={verse} onShare={handleShareVerse} />
 
         <DailyTodos
           prayers={livePrayerData.length > 0 ? livePrayerData : DUMMY_PRAYERS}
-          azkar={DUMMY_AZKAR}
-          randomActs={DUMMY_RANDOM_ACTS}
-          onPrayerPress={(p) => console.warn('Prayer pressed:', p.name)}
-          onAzkarPress={(a) => console.warn('Azkar pressed:', a.type)}
-          onActPress={(a) => console.warn('Act pressed:', a.title)}
+          completedPrayers={completedPrayers}
+          azkar={azkarData}
+          randomActs={randomActsData}
+          onPrayerPress={handlePrayerPress}
+          onAzkarPress={handleAzkarPress}
+          onActPress={handleRandomActPress}
         />
       </ScrollView>
     </View>

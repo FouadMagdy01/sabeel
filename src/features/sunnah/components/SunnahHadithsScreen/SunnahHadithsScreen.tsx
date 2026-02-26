@@ -7,7 +7,7 @@ import * as Clipboard from 'expo-clipboard';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, Share, View } from 'react-native';
+import { ActivityIndicator, FlatList, I18nManager, Share, View } from 'react-native';
 import Animated, {
   type SharedValue,
   useAnimatedStyle,
@@ -16,6 +16,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
+import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import { useHadiths } from '../../hooks';
 import { stripHtml } from '../../services/sunnahApi';
 import type { SunnahHadith } from '../../types';
@@ -67,6 +68,7 @@ function CopiedToast({ visible, opacity }: { visible: boolean; opacity: SharedVa
 
 export function SunnahHadithsScreen() {
   const insets = useSafeAreaInsets();
+  const bottomPadding = useReaderBottomPadding();
   const { theme } = useUnistyles();
   const { t, i18n } = useTranslation();
   const router = useRouter();
@@ -211,11 +213,12 @@ export function SunnahHadithsScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <IconButton
-          familyName="Feather"
-          iconName="arrow-left"
+          familyName="MaterialIcons"
+          iconName={I18nManager.isRTL ? 'arrow-forward' : 'arrow-back'}
           onPress={() => router.back()}
+          variant="ghost"
           size="medium"
         />
         <Typography
@@ -259,7 +262,7 @@ export function SunnahHadithsScreen() {
           data={hadiths}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 24 }]}
+          contentContainerStyle={[styles.listContent, { paddingBottom: bottomPadding }]}
           showsVerticalScrollIndicator={false}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.5}

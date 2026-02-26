@@ -12,11 +12,12 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useUnistyles } from 'react-native-unistyles';
-import type { PrayerData } from '../../types';
+import type { PrayerData, PrayerName } from '../../types';
 import { styles } from './PrayersProgress.styles';
 
 interface PrayersProgressProps {
   prayers: PrayerData[];
+  completedPrayers: PrayerName[];
   onPrayerPress: (prayer: PrayerData) => void;
 }
 
@@ -34,43 +35,60 @@ function PulsingDot() {
   return <Animated.View style={[styles.currentDot, animatedStyle]} />;
 }
 
-export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps) {
+export function PrayersProgress({
+  prayers,
+  completedPrayers,
+  onPrayerPress,
+}: PrayersProgressProps) {
   const { theme } = useUnistyles();
   const { t } = useTranslation();
 
-  const completedCount = prayers.filter((p) => p.status === 'completed').length;
+  const completedCount = completedPrayers.length;
   const progress = completedCount / prayers.length;
   const percentage = Math.round(progress * 100);
+  const allCompleted = completedCount === prayers.length;
 
-  const renderPrayerCircle = (prayer: PrayerData): React.JSX.Element => (
-    <Pressable
-      key={prayer.name}
-      style={styles.prayerCircle}
-      onPress={() => onPrayerPress(prayer)}
-      android_ripple={{ color: theme.colors.overlay.pressed, borderless: true, foreground: true }}
-    >
-      {prayer.status === 'completed' && (
-        <View style={styles.circleCompleted}>
-          <Icon familyName="MaterialIcons" iconName="check" size={20} variant="inverse" />
-        </View>
-      )}
-      {prayer.status === 'current' && (
-        <View style={styles.circleCurrent}>
-          <PulsingDot />
-        </View>
-      )}
-      {prayer.status === 'upcoming' && (
-        <View style={styles.circleUpcoming}>
-          <Icon
-            familyName="MaterialCommunityIcons"
-            iconName="circle-outline"
-            size={18}
-            variant="muted"
-          />
-        </View>
-      )}
-    </Pressable>
-  );
+  const renderPrayerCircle = (prayer: PrayerData): React.JSX.Element => {
+    const isManuallyCompleted = completedPrayers.includes(prayer.name);
+    const isUpcoming = prayer.status === 'upcoming';
+    const isDisabled = isUpcoming && !isManuallyCompleted;
+
+    return (
+      <Pressable
+        key={prayer.name}
+        style={styles.prayerCircle}
+        onPress={() => onPrayerPress(prayer)}
+        disabled={isDisabled}
+        android_ripple={
+          isDisabled
+            ? undefined
+            : { color: theme.colors.overlay.pressed, borderless: true, foreground: true }
+        }
+      >
+        {isManuallyCompleted && (
+          <View style={styles.circleCompleted}>
+            <Icon familyName="MaterialIcons" iconName="check" size={20} variant="inverse" />
+          </View>
+        )}
+        {!isManuallyCompleted && prayer.status === 'current' && (
+          <View style={styles.circleCurrent}>
+            <PulsingDot />
+          </View>
+        )}
+        {!isManuallyCompleted &&
+          (prayer.status === 'upcoming' || prayer.status === 'completed') && (
+            <View style={[styles.circleUpcoming, isUpcoming ? styles.disabledCircle : undefined]}>
+              <Icon
+                familyName="MaterialCommunityIcons"
+                iconName="circle-outline"
+                size={18}
+                variant="muted"
+              />
+            </View>
+          )}
+      </Pressable>
+    );
+  };
 
   return (
     <Card variant="elevated" padding="lg" style={styles.cardLayout}>
@@ -87,6 +105,18 @@ export function PrayersProgress({ prayers, onPrayerPress }: PrayersProgressProps
       </View>
 
       <View style={styles.prayerRow}>{prayers.map(renderPrayerCircle)}</View>
+
+      {allCompleted && (
+        <Typography
+          size="xs"
+          color="success"
+          align="center"
+          weight="semiBold"
+          style={styles.allCompletedText}
+        >
+          {t('screens.home.dailyTodos.allPrayersCompleted')}
+        </Typography>
+      )}
     </Card>
   );
 }

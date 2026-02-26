@@ -1,32 +1,34 @@
-import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FlatList, I18nManager, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '@/common/components/Icon';
+import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
+import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import { ADHAN_SOUNDS, DEFAULT_ADHAN_SOUND } from '@/features/prayers/constants';
 import type { AdhanSound } from '@/features/prayers/constants';
 import { scheduleYearlyPrayerNotifications } from '@/features/prayers/services/notificationService';
 import type { PrayerKey, YearlyPrayerData } from '@/features/prayers/types';
+import { usePlayerStore } from '@/features/quran/stores/playerStore';
 import { getItem, setItem, STORAGE_KEYS } from '@/utils/storage';
 
-/* eslint-disable @typescript-eslint/no-require-imports */
 const SOUND_FILES: Record<string, number> = {
   adhan_mansour: require('../../assets/sounds/adhan_mansour.mp3') as number,
   adhan_hafiz_mustafa: require('../../assets/sounds/adhan_hafiz_mustafa.mp3') as number,
   adhan_dubai_mishary: require('../../assets/sounds/adhan_dubai_mishary.mp3') as number,
   adhan_mashary: require('../../assets/sounds/adhan_mashary.mp3') as number,
 };
-/* eslint-enable @typescript-eslint/no-require-imports */
 
 export default function AdhanSoundScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const bottomPadding = useReaderBottomPadding();
   const { theme } = useUnistyles();
 
   const [selectedId, setSelectedId] = useState(() => {
@@ -35,13 +37,18 @@ export default function AdhanSoundScreen() {
   });
 
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const player = useAudioPlayer(null);
-  const status = useAudioPlayerStatus(player);
 
   // Detect when playback finishes to reset playingId
-  if (status.playing === false && status.currentTime > 0 && playingId !== null) {
+  useTrackPlayerEvents([Event.PlaybackQueueEnded], () => {
     setPlayingId(null);
-  }
+  });
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      void TrackPlayer.reset();
+    };
+  }, []);
 
   const prayerNames = useMemo<Record<PrayerKey, string>>(
     () => ({
@@ -55,23 +62,31 @@ export default function AdhanSoundScreen() {
     [t]
   );
 
-  const stopPreview = useCallback(() => {
-    player.pause();
-    player.seekTo(0);
+  const stopPreview = useCallback(async () => {
+    await TrackPlayer.reset();
     setPlayingId(null);
-  }, [player]);
+  }, []);
 
   const playPreview = useCallback(
-    (soundId: string) => {
-      stopPreview();
+    async (soundId: string) => {
+      // Stop any active player (Quran, library, or previous preview)
+      await usePlayerStore.getState().stop();
 
       if (soundId === 'default' || !SOUND_FILES[soundId]) return;
 
-      player.replace(SOUND_FILES[soundId]);
-      player.play();
+      // RNTP's AddTrack intersection narrows url to string, but require() returns number
+      // (ResourceObject). RNTP handles numbers at runtime for local assets.
+      const track = {
+        id: `adhan-preview-${soundId}`,
+        url: SOUND_FILES[soundId] as unknown as string,
+        title: t(`screens.adhanSound.sounds.${soundId}` as 'screens.adhanSound.defaultSound'),
+        artist: 'Sabeel',
+      };
+      await TrackPlayer.add(track);
+      await TrackPlayer.play();
       setPlayingId(soundId);
     },
-    [stopPreview, player]
+    [t]
   );
 
   const handleSelect = useCallback(
@@ -97,7 +112,7 @@ export default function AdhanSoundScreen() {
   );
 
   const handleBack = useCallback(() => {
-    stopPreview();
+    void stopPreview();
     router.back();
   }, [stopPreview, router]);
 
@@ -149,9 +164,9 @@ export default function AdhanSoundScreen() {
               <Pressable
                 onPress={() => {
                   if (isPlaying) {
-                    stopPreview();
+                    void stopPreview();
                   } else {
-                    playPreview(item.id);
+                    void playPreview(item.id);
                   }
                 }}
                 hitSlop={8}
@@ -187,14 +202,13 @@ export default function AdhanSoundScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.app }]}>
       <View style={[styles.header, { paddingTop: insets.top }]}>
-        <Pressable onPress={handleBack} hitSlop={8}>
-          <Icon
-            familyName="Ionicons"
-            iconName="arrow-back"
-            size={24}
-            color={theme.colors.text.primary}
-          />
-        </Pressable>
+        <IconButton
+          familyName="MaterialIcons"
+          iconName={I18nManager.isRTL ? 'arrow-forward' : 'arrow-back'}
+          onPress={handleBack}
+          variant="ghost"
+          size="medium"
+        />
         <Typography type="heading" size="lg" weight="bold" style={styles.headerTitle}>
           {t('screens.adhanSound.title')}
         </Typography>
@@ -205,7 +219,7 @@ export default function AdhanSoundScreen() {
         data={ADHAN_SOUNDS}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: bottomPadding }]}
         showsVerticalScrollIndicator={false}
       />
     </View>

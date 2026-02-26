@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { I18nManager, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import { IconButton } from '@/common/components/IconButton';
 import { Toggle } from '@/common/components/Toggle';
 import { Typography } from '@/common/components/Typography';
 import { Card } from '@/common/components/Card';
+import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import { INFINITE_TARGET, PRESET_TARGETS, TASBEEH_PHRASES } from '../../constants';
 import { useTasbeehHaptics } from '../../hooks';
 import { useTasbeehStore } from '../../stores';
@@ -24,6 +25,7 @@ const TARGET_OPTIONS = [...PRESET_TARGETS, INFINITE_TARGET];
 
 export function TasbeehScreen() {
   const insets = useSafeAreaInsets();
+  const bottomPadding = useReaderBottomPadding();
   const { theme } = useUnistyles();
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
@@ -94,8 +96,8 @@ export function TasbeehScreen() {
           {/* Header */}
           <View style={styles.header}>
             <IconButton
-              familyName="Feather"
-              iconName="arrow-left"
+              familyName="MaterialIcons"
+              iconName={I18nManager.isRTL ? 'arrow-forward' : 'arrow-back'}
               onPress={() => router.back()}
               variant="ghost"
               size="medium"
@@ -113,7 +115,7 @@ export function TasbeehScreen() {
           contentContainerStyle={[
             styles.scrollContent,
             {
-              paddingBottom: insets.bottom + 24,
+              paddingBottom: bottomPadding,
             },
           ]}
           showsVerticalScrollIndicator={false}

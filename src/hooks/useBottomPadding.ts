@@ -11,7 +11,7 @@ export function useBottomPadding(includeTabBar = true) {
   const isPlayerVisible = usePlayerStore((s) => s.isVisible);
   const miniPlayerHeight = usePlayerStore((s) => s.miniPlayerHeight);
   const extra = Platform.OS === 'android' ? ANDROID_EXTRA_PADDING : 0;
-
+  console.warn(bottom, miniPlayerHeight);
   return (
     (includeTabBar ? tabBarHeight : 0) + bottom + extra + (isPlayerVisible ? miniPlayerHeight : 0)
   );

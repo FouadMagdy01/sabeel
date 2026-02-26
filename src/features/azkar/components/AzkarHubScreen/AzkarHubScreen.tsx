@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ScrollView, View } from 'react-native';
+import { I18nManager, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 import { useTranslation } from 'react-i18next';
@@ -73,8 +73,8 @@ export function AzkarHubScreen() {
       {/* Header */}
       <View style={styles.header}>
         <IconButton
-          familyName="Feather"
-          iconName="arrow-left"
+          familyName="MaterialIcons"
+          iconName={I18nManager.isRTL ? 'arrow-forward' : 'arrow-back'}
           onPress={() => router.back()}
           variant="ghost"
           size="medium"

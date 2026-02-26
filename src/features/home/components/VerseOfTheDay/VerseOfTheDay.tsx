@@ -51,16 +51,18 @@ export function VerseOfTheDay({ verse, onShare }: VerseOfTheDayProps) {
         >
           {verse.arabic}
         </Typography>
-        <Typography
-          size="lg"
-          weight="medium"
-          color="brandPrimary"
-          align="center"
-          italic
-          style={styles.translationText}
-        >
-          {verse.translation}
-        </Typography>
+        {verse.translation !== '' && (
+          <Typography
+            size="lg"
+            weight="medium"
+            color="brandPrimary"
+            align="center"
+            italic
+            style={styles.translationText}
+          >
+            {verse.translation}
+          </Typography>
+        )}
         <Typography type="overline" color="tertiary" align="center" style={styles.referenceText}>
           {verse.reference}
         </Typography>

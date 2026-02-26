@@ -12,28 +12,24 @@ import './src/theme/unistyles'; // <-- file that initializes Unistyles
 
 async function setupPlayer() {
   try {
-    console.log('[TrackPlayer] registering playback service...');
     TrackPlayer.registerPlaybackService(() => PlaybackService);
 
     console.log('[TrackPlayer] setting up player...');
     await TrackPlayer.setupPlayer({
       iosCategory: IOSCategory.Playback,
       iosCategoryMode: IOSCategoryMode.SpokenAudio,
-      iosCategoryOptions: [
-        IOSCategoryOptions.DuckOthers,
-        IOSCategoryOptions.InterruptSpokenAudioAndMixWithOthers,
-      ],
+      iosCategoryOptions: [IOSCategoryOptions.DuckOthers],
       autoHandleInterruptions: true,
     });
     console.log('[TrackPlayer] player setup complete');
 
-    TrackPlayer.updateOptions({
+    await TrackPlayer.updateOptions({
       capabilities: [
         Capability.Play,
         Capability.Pause,
+        Capability.Stop,
         Capability.SkipToNext,
         Capability.SkipToPrevious,
-        Capability.Stop,
         Capability.SeekTo,
       ],
       notificationCapabilities: [
@@ -41,7 +37,6 @@ async function setupPlayer() {
         Capability.Pause,
         Capability.SkipToNext,
         Capability.SkipToPrevious,
-        Capability.Stop,
         Capability.SeekTo,
       ],
       android: {

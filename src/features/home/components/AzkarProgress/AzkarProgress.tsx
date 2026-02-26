@@ -24,15 +24,15 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
 
   const isIOS = Platform.OS === 'ios';
 
-  const renderAzkarChip = (item: AzkarData): React.JSX.Element => {
+  const renderAzkarItem = (item: AzkarData): React.JSX.Element => {
     const isCompleted = item.status === 'completed';
 
     return (
       <Pressable
         key={item.type}
         style={({ pressed }) => [
-          styles.chip,
-          isCompleted ? styles.chipCompleted : styles.chipPending,
+          styles.itemContainer,
+          isCompleted ? styles.itemCompleted : styles.itemPending,
           isIOS && pressed ? styles.pressed : undefined,
         ]}
         onPress={() => onAzkarPress(item)}
@@ -42,15 +42,27 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
           borderless: false,
         }}
       >
+        <View style={styles.itemContent}>
+          <Icon
+            familyName="MaterialIcons"
+            iconName={item.type === 'Morning' ? 'wb-sunny' : 'nights-stay'}
+            size={22}
+            variant={isCompleted ? 'success' : 'brandTertiary'}
+          />
+          <View style={styles.textContainer}>
+            <Typography size="sm" weight="semiBold" color={isCompleted ? 'primary' : 'secondary'}>
+              {t(
+                `screens.home.dailyTodos.${item.type === 'Morning' ? 'morning' : 'evening'}` as never
+              )}
+            </Typography>
+          </View>
+        </View>
         <Icon
           familyName="MaterialIcons"
           iconName={isCompleted ? 'check-circle' : 'radio-button-unchecked'}
-          size={16}
+          size={20}
           variant={isCompleted ? 'success' : 'muted'}
         />
-        <Typography size="xs" weight="semiBold" color={isCompleted ? 'primary' : 'secondary'}>
-          {item.type}
-        </Typography>
       </Pressable>
     );
   };
@@ -69,7 +81,7 @@ export function AzkarProgress({ azkar, onAzkarPress }: AzkarProgressProps) {
         </View>
       </View>
 
-      <View style={styles.chipsRow}>{azkar.map(renderAzkarChip)}</View>
+      <View style={styles.verticalList}>{azkar.map(renderAzkarItem)}</View>
     </Card>
   );
 }

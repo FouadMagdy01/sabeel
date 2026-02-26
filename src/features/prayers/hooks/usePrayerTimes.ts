@@ -68,7 +68,7 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
 
   // ── Fetch with location (prompts user for GPS) ──
   const fetchWithLocation = async () => {
-    console.log('[PrayerTimes] fetchWithLocation | user-prompting flow triggered');
+    console.warn('[PrayerTimes] fetchWithLocation | user-prompting flow triggered');
     setIsLoading(!yearlyData);
     setError(null);
     setIsStale(false);
@@ -76,21 +76,21 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
     // Step 1: Permission
     try {
       const permResponse = await Location.requestForegroundPermissionsAsync();
-      console.log('[PrayerTimes] requestPermission |', {
+      console.warn('[PrayerTimes] requestPermission |', {
         status: permResponse.status,
         granted: permResponse.granted,
         canAskAgain: permResponse.canAskAgain,
         expires: permResponse.expires,
       });
       if (permResponse.status !== 'granted') {
-        console.log('[PrayerTimes] result | permission denied, hasCachedData:', !!yearlyData);
+        console.warn('[PrayerTimes] result | permission denied, hasCachedData:', !!yearlyData);
         if (!yearlyData) setError('location_denied');
         else setIsStale(true);
         setIsLoading(false);
         return;
       }
     } catch (err) {
-      console.log('[PrayerTimes] result | permission error:', err);
+      console.warn('[PrayerTimes] result | permission error:', err);
       if (!yearlyData) setError('location_error');
       else setIsStale(true);
       setIsLoading(false);
@@ -109,24 +109,24 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
       ]);
       lat = position.coords.latitude;
       lng = position.coords.longitude;
-      console.log('[PrayerTimes] location | source: "currentPosition", lat:', lat, 'lng:', lng);
+      console.warn('[PrayerTimes] location | source: "currentPosition", lat:', lat, 'lng:', lng);
     } catch {
-      console.log('[PrayerTimes] location | currentPosition failed, trying lastKnown');
+      console.warn('[PrayerTimes] location | currentPosition failed, trying lastKnown');
       try {
         const last = await Location.getLastKnownPositionAsync();
         if (last) {
           lat = last.coords.latitude;
           lng = last.coords.longitude;
-          console.log('[PrayerTimes] location | source: "lastKnown", lat:', lat, 'lng:', lng);
+          console.warn('[PrayerTimes] location | source: "lastKnown", lat:', lat, 'lng:', lng);
         } else {
-          console.log('[PrayerTimes] result | no lastKnown position available');
+          console.warn('[PrayerTimes] result | no lastKnown position available');
           if (!yearlyData) setError('location_error');
           else setIsStale(true);
           setIsLoading(false);
           return;
         }
       } catch (err) {
-        console.log('[PrayerTimes] result | lastKnown error:', err);
+        console.warn('[PrayerTimes] result | lastKnown error:', err);
         if (!yearlyData) setError('location_error');
         else setIsStale(true);
         setIsLoading(false);
@@ -142,14 +142,14 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
       setYearlyData(data);
       setError(null);
       setIsStale(false);
-      console.log('[PrayerTimes] apiFetch | success: true, year:', year);
+      console.warn('[PrayerTimes] apiFetch | success: true, year:', year);
     } catch (err) {
-      console.log('[PrayerTimes] apiFetch | success: false, error:', err);
+      console.warn('[PrayerTimes] apiFetch | success: false, error:', err);
       if (!yearlyData) setError('fetch_error');
       else setIsStale(true);
     } finally {
       setIsLoading(false);
-      console.log('[PrayerTimes] result | isLoading: false, isStale:', isStale, 'error:', error);
+      console.warn('[PrayerTimes] result | isLoading: false, isStale:', isStale, 'error:', error);
     }
   };
 
@@ -157,7 +157,7 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
   const initialFetch = async () => {
     const hasCachedData = !!yearlyData;
     const cached = hasCachedData ? yearlyData : null;
-    console.log(
+    console.warn(
       '[PrayerTimes] initialFetch | hasCachedData:',
       hasCachedData,
       cached
@@ -170,14 +170,14 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
 
     // No cached data → prompt the user for location permission
     if (!hasCachedData) {
-      console.log('[PrayerTimes] initialFetch | no cache, prompting user');
+      console.warn('[PrayerTimes] initialFetch | no cache, prompting user');
       await fetchWithLocation();
       return;
     }
 
     // Has cached data → try silently without any prompts or dialogs
     const permResponse = await Location.getForegroundPermissionsAsync();
-    console.log('[PrayerTimes] silentPermissionCheck |', {
+    console.warn('[PrayerTimes] silentPermissionCheck |', {
       status: permResponse.status,
       granted: permResponse.granted,
       canAskAgain: permResponse.canAskAgain,
@@ -185,17 +185,17 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
     });
 
     if (permResponse.status !== 'granted') {
-      console.log('[PrayerTimes] result | silent check denied, marking stale');
+      console.warn('[PrayerTimes] result | silent check denied, marking stale');
       setIsStale(true);
       setIsLoading(false);
       return;
     }
 
     const gpsEnabled = await Location.hasServicesEnabledAsync();
-    console.log('[PrayerTimes] gpsCheck | enabled:', gpsEnabled);
+    console.warn('[PrayerTimes] gpsCheck | enabled:', gpsEnabled);
 
     if (!gpsEnabled) {
-      console.log('[PrayerTimes] result | GPS disabled, marking stale');
+      console.warn('[PrayerTimes] result | GPS disabled, marking stale');
       setIsStale(true);
       setIsLoading(false);
       return;
@@ -205,14 +205,14 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
     try {
       const lastKnown = await Location.getLastKnownPositionAsync();
       if (!lastKnown) {
-        console.log('[PrayerTimes] result | no lastKnown position in silent path');
+        console.warn('[PrayerTimes] result | no lastKnown position in silent path');
         setIsStale(true);
         setIsLoading(false);
         return;
       }
       const lat = lastKnown.coords.latitude;
       const lng = lastKnown.coords.longitude;
-      console.log('[PrayerTimes] location | source: "lastKnown" (silent), lat:', lat, 'lng:', lng);
+      console.warn('[PrayerTimes] location | source: "lastKnown" (silent), lat:', lat, 'lng:', lng);
 
       const year = new Date().getFullYear();
       const data = await fetchYearlyPrayerTimes(lat, lng, year);
@@ -220,13 +220,13 @@ export function usePrayerTimes(): UsePrayerTimesReturn {
       setYearlyData(data);
       setIsStale(false);
       setError(null);
-      console.log('[PrayerTimes] apiFetch | success: true (silent), year:', year);
+      console.warn('[PrayerTimes] apiFetch | success: true (silent), year:', year);
     } catch (err) {
-      console.log('[PrayerTimes] apiFetch | success: false (silent), error:', err);
+      console.warn('[PrayerTimes] apiFetch | success: false (silent), error:', err);
       setIsStale(true);
     } finally {
       setIsLoading(false);
-      console.log('[PrayerTimes] result | silent flow done, isStale:', isStale);
+      console.warn('[PrayerTimes] result | silent flow done, isStale:', isStale);
     }
   };
 

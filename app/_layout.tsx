@@ -1,11 +1,11 @@
 import { MiniPlayer } from '@/common/components/MiniPlayer';
 import { useInitQuranPlayer } from '@/features/quran/hooks/useQuranPlayer';
 import i18n from '@/i18n/config';
-import { AuthProvider, QueryProvider, useAuth } from '@/providers';
+import { AuthProvider, QueryProvider } from '@/providers';
 import { initializeTheme } from '@/theme/themeManager';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
-import { ActivityIndicator, I18nManager, Platform, View } from 'react-native';
+import { I18nManager, Platform, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
@@ -24,25 +24,20 @@ if (Platform.OS !== 'web') {
 }
 
 function RootNavigator() {
-  const { isAuthenticated, isLoading } = useAuth();
+  // Auth guards commented out for release — re-enable when auth flow is ready
+  // const { isAuthenticated, isLoading } = useAuth();
   const { theme } = useUnistyles();
 
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={theme.colors.brand.primary} />
-      </View>
-    );
-  }
-
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isAuthenticated}>
-        <Stack.Screen name="(main)" />
-      </Stack.Protected>
-      <Stack.Protected guard={!isAuthenticated}>
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: theme.colors.background.app },
+      }}
+      initialRouteName="(main)"
+    >
+      <Stack.Screen name="(main)" />
+      {/* <Stack.Screen name="(auth)" /> */}
     </Stack>
   );
 }
@@ -61,7 +56,7 @@ function AppContent() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={styles.rootView}>
       <QueryProvider>
         <AuthProvider>
           <BottomSheetModalProvider>
@@ -73,13 +68,13 @@ export default function RootLayout() {
   );
 }
 
-const styles = StyleSheet.create((_theme) => ({
+const styles = StyleSheet.create((theme) => ({
+  rootView: {
+    flex: 1,
+    backgroundColor: theme.colors.background.app,
+  },
   appContainer: {
     flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: theme.colors.background.app,
   },
 }));

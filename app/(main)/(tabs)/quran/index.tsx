@@ -60,7 +60,12 @@ function QuranBrowsingContent() {
     (surahId: number) => {
       const surah = SURAHS.find((s) => s.id === surahId);
       const page = surah?.pages[0] ?? 1;
-      console.log('[QuranTab] handleSurahPress surahId=%d page=%d surahName=%s', surahId, page, surah?.nameSimple);
+      console.warn(
+        '[QuranTab] handleSurahPress surahId=%d page=%d surahName=%s',
+        surahId,
+        page,
+        surah?.nameSimple
+      );
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
@@ -85,7 +90,13 @@ function QuranBrowsingContent() {
       const fallbackPage = SURAHS.find((s) => s.id === firstSurahId)?.pages[0] ?? 1;
       const resolvedPage = page ?? fallbackPage;
 
-      console.log('[QuranTab] handleJuzPress juz=%d surahId=%d page=%d ayah=%d', juzNumber, firstSurahId, resolvedPage, firstAyah);
+      console.warn(
+        '[QuranTab] handleJuzPress juz=%d surahId=%d page=%d ayah=%d',
+        juzNumber,
+        firstSurahId,
+        resolvedPage,
+        firstAyah
+      );
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
@@ -100,7 +111,12 @@ function QuranBrowsingContent() {
 
   const handleBookmarkPress = useCallback(
     (surahId: number, page: number, ayah: number) => {
-      console.log('[QuranTab] handleBookmarkPress surahId=%d page=%d ayah=%d', surahId, page, ayah);
+      console.warn(
+        '[QuranTab] handleBookmarkPress surahId=%d page=%d ayah=%d',
+        surahId,
+        page,
+        ayah
+      );
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
@@ -117,7 +133,7 @@ function QuranBrowsingContent() {
     if (!lastRead) return;
     const page = Math.max(1, Math.min(604, lastRead.page));
     const surahId = Math.max(1, Math.min(114, lastRead.surahId));
-    console.log('[QuranTab] handleContinueReading surahId=%d page=%d', surahId, page);
+    console.warn('[QuranTab] handleContinueReading surahId=%d page=%d', surahId, page);
     router.push({
       pathname: '/(main)/quran-reader',
       params: {
@@ -129,7 +145,12 @@ function QuranBrowsingContent() {
 
   const handleSearchResultPress = useCallback(
     (surahId: number, page: number, ayahNumber: number) => {
-      console.log('[QuranTab] handleSearchResultPress surahId=%d page=%d ayah=%d', surahId, page, ayahNumber);
+      console.warn(
+        '[QuranTab] handleSearchResultPress surahId=%d page=%d ayah=%d',
+        surahId,
+        page,
+        ayahNumber
+      );
       router.push({
         pathname: '/(main)/quran-reader',
         params: {
@@ -172,7 +193,7 @@ function QuranBrowsingContent() {
     (props: React.ComponentProps<typeof TabBar>) => (
       <TabBar
         {...props}
-        style={{ backgroundColor: theme.colors.background.surface, elevation: 0, shadowOpacity: 0 }}
+        style={[screenStyles.tabBar, { backgroundColor: theme.colors.background.surface }]}
         indicatorStyle={{ backgroundColor: theme.colors.brand.primary }}
         activeColor={theme.colors.brand.primary}
         inactiveColor={theme.colors.text.secondary}
@@ -195,10 +216,7 @@ function QuranBrowsingContent() {
         />
       </View>
       {isSearching ? (
-        <QuranSearchResults
-          query={searchQuery}
-          onResultPress={handleSearchResultPress}
-        />
+        <QuranSearchResults query={searchQuery} onResultPress={handleSearchResultPress} />
       ) : (
         <>
           {lastRead && (
@@ -265,7 +283,8 @@ const screenStyles = StyleSheet.create((theme) => ({
   },
   searchContainer: {
     paddingHorizontal: theme.metrics.spacing.p16,
-    paddingBottom: theme.metrics.spacingV.p8,
+    paddingTop: theme.metrics.spacingV.p8,
+    paddingBottom: theme.metrics.spacingV.p12,
   },
   continueReadingContainer: {
     paddingHorizontal: theme.metrics.spacing.p16,
@@ -280,5 +299,9 @@ const screenStyles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
+  },
+  tabBar: {
+    elevation: 0,
+    shadowOpacity: 0,
   },
 }));

@@ -1,16 +1,8 @@
-import { Button } from '@/common/components/Button';
 import { SegmentedControl } from '@/common/components/SegmentedControl';
 import { Toggle } from '@/common/components/Toggle';
 import { Typography } from '@/common/components/Typography';
-import { useLogoutMutation } from '@/features/auth/hooks';
-import {
-  ProfileHeader,
-  SettingsRow,
-  SettingsSection,
-  ThemeSwatchPicker,
-} from '@/features/settings';
+import { SettingsRow, SettingsSection, ThemeSwatchPicker } from '@/features/settings';
 import { useBottomPadding } from '@/hooks/useBottomPadding';
-import { useAuth } from '@/providers';
 import type { ThemePresetName } from '@/theme/config';
 
 import { applyThemePreset, getCurrentPreset, toggleDarkMode } from '@/theme/themeManager';
@@ -24,20 +16,19 @@ import type { PrayerKey, YearlyPrayerData } from '@/features/prayers/types';
 import { reloadApp } from '@/utils/reload';
 import { getItem, setItem, STORAGE_KEYS } from '@/utils/storage';
 import { useRouter } from 'expo-router';
+import Constants from 'expo-constants';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, I18nManager, Platform, ScrollView, View } from 'react-native';
+import { Alert, I18nManager, Linking, Platform, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = Constants.expoConfig?.version ?? '1.0.0';
 
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const bottomPadding = useBottomPadding();
-  const { isAuthenticated } = useAuth();
-  const logoutMutation = useLogoutMutation();
 
   const router = useRouter();
   const { rt } = useUnistyles();
@@ -138,20 +129,20 @@ export default function SettingsScreen() {
     [t, i18n]
   );
 
-  const handleSignOut = useCallback(() => {
-    Alert.alert(t('settings.signOut.confirmTitle'), t('settings.signOut.confirmMessage'), [
-      { text: t('common.cancel'), style: 'cancel' },
-      {
-        text: t('settings.signOut.confirm'),
-        style: 'destructive',
-        onPress: () => logoutMutation.mutate(),
-      },
-    ]);
-  }, [t, logoutMutation]);
+  const handleContactUs = useCallback(() => {
+    const subject = encodeURIComponent(t('screens.contact.emailSubject'));
+    const body = encodeURIComponent(t('screens.contact.emailBody'));
+    void Linking.openURL(`mailto:fouad.maggdy772@gmail.com?subject=${subject}&body=${body}`);
+  }, [t]);
 
-  const handlePlaceholderPress = useCallback((_feature: string) => {
-    // Placeholder for future navigation
-  }, []);
+  const handleReportIssue = useCallback(() => {
+    const subject = encodeURIComponent(t('screens.report.emailSubject'));
+    const deviceInfo = `${Platform.OS} ${Platform.Version}`;
+    const body = encodeURIComponent(
+      `${t('screens.report.descriptionLabel')}\n\n\n${t('screens.report.stepsLabel')}\n1. \n2. \n3. \n\n${t('screens.report.deviceLabel')}\n${deviceInfo} | Sabeel v${APP_VERSION}`
+    );
+    void Linking.openURL(`mailto:fouad.maggdy772@gmail.com?subject=${subject}&body=${body}`);
+  }, [t]);
 
   return (
     <ScrollView
@@ -162,8 +153,6 @@ export default function SettingsScreen() {
       <Typography type="heading" size="2xl" weight="bold" style={styles.screenTitle}>
         {t('screens.settings.title')}
       </Typography>
-
-      <ProfileHeader />
 
       <SettingsSection title={t('settings.sections.preferences')}>
         <SettingsRow
@@ -220,48 +209,34 @@ export default function SettingsScreen() {
           icon="shield-checkmark-outline"
           iconFamily="Ionicons"
           label={t('settings.support.privacy')}
-          onPress={() => handlePlaceholderPress('Privacy Policy')}
+          onPress={() => router.push('/privacy-policy')}
         />
         <SettingsRow
           icon="document-text-outline"
           iconFamily="Ionicons"
           label={t('settings.support.terms')}
-          onPress={() => handlePlaceholderPress('Terms of Service')}
+          onPress={() => router.push('/terms-of-service')}
         />
         <SettingsRow
           icon="information-circle-outline"
           iconFamily="Ionicons"
           label={t('settings.support.about')}
-          onPress={() => handlePlaceholderPress('About')}
+          onPress={() => router.push('/about')}
         />
         <SettingsRow
           icon="mail-outline"
           iconFamily="Ionicons"
           label={t('settings.support.contact')}
-          onPress={() => handlePlaceholderPress('Contact')}
+          onPress={handleContactUs}
         />
         <SettingsRow
           icon="bug-outline"
           iconFamily="Ionicons"
           label={t('settings.support.report')}
           isLast
-          onPress={() => handlePlaceholderPress('Report')}
+          onPress={handleReportIssue}
         />
       </SettingsSection>
-
-      {isAuthenticated && (
-        <View style={styles.signOutContainer}>
-          <Button
-            variant="outlined"
-            color="error"
-            fullWidth
-            onPress={handleSignOut}
-            loading={logoutMutation.isPending}
-          >
-            {t('settings.signOut.button')}
-          </Button>
-        </View>
-      )}
 
       <Typography type="caption" color="muted" align="center" style={styles.version}>
         {t('settings.version', { version: APP_VERSION })}
@@ -280,10 +255,6 @@ const styles = StyleSheet.create((theme) => ({
     paddingHorizontal: 16,
     paddingTop: theme.metrics.spacingV.p16,
     paddingBottom: theme.metrics.spacingV.p20,
-  },
-  signOutContainer: {
-    paddingHorizontal: 16,
-    marginBottom: theme.metrics.spacingV.p24,
   },
   version: {
     paddingBottom: theme.metrics.spacingV.p16,

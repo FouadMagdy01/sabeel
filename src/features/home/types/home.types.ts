@@ -14,11 +14,12 @@ export interface StatsData {
   bestStreak: number;
 }
 
-export type AzkarType = 'Morning' | 'Evening' | 'Night';
+export type AzkarType = 'Morning' | 'Evening';
 export type AzkarStatus = 'completed' | 'uncompleted';
 
 export interface AzkarData {
   type: AzkarType;
+  categoryId: 'morning_azkar' | 'evening_azkar';
   status: AzkarStatus;
 }
 

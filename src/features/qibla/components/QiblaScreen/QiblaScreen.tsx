@@ -148,10 +148,7 @@ export function QiblaScreen() {
       <View style={qiblaStyles.content}>
         {/* Fixed Kaaba icon at top of compass area */}
         <View style={qiblaStyles.kaabaContainer}>
-          <Image
-            source={kaabaImage}
-            style={[qiblaStyles.kaabaImage, { tintColor: kaabaColor }]}
-          />
+          <Image source={kaabaImage} style={[qiblaStyles.kaabaImage, { tintColor: kaabaColor }]} />
         </View>
 
         <View style={qiblaStyles.compassContainer}>

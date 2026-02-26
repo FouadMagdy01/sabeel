@@ -29,7 +29,9 @@ export const styles = StyleSheet.create((theme) => ({
     height: '100%',
   },
   label: {
-    fontSize: theme.fonts.size.xs,
+    fontSize: theme.fonts.size.xxs,
     marginTop: 2,
+    textAlign: 'center',
+    width: '100%',
   },
 }));

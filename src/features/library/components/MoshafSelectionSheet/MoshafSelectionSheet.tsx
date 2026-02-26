@@ -2,7 +2,7 @@ import { Icon } from '@/common/components/Icon';
 import { IconButton } from '@/common/components/IconButton';
 import { Typography } from '@/common/components/Typography';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import React, { forwardRef, useCallback, useMemo, useRef } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nManager, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -30,7 +30,6 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
     const insets = useSafeAreaInsets();
 
     const snapPoints = useMemo(() => ['50%', '70%'], []);
-    const pendingAction = useRef<{ type: 'select' | 'play'; moshaf: Moshaf } | null>(null);
 
     const renderBackdrop = useCallback(
       (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
@@ -51,36 +50,24 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
       }
     }, [ref]);
 
-    const handleSheetDismiss = useCallback(() => {
-      const action = pendingAction.current;
-      pendingAction.current = null;
-      if (!action) return;
-
-      if (action.type === 'select') {
-        onSelect(action.moshaf);
-      } else if (action.type === 'play') {
-        onPlay?.(action.moshaf);
-      }
-    }, [onSelect, onPlay]);
-
     const handleSelect = useCallback(
       (moshaf: Moshaf) => {
-        pendingAction.current = { type: 'select', moshaf };
         if (ref && 'current' in ref) {
           ref.current?.dismiss();
         }
+        onSelect(moshaf);
       },
-      [ref]
+      [ref, onSelect]
     );
 
     const handlePlay = useCallback(
       (moshaf: Moshaf) => {
-        pendingAction.current = { type: 'play', moshaf };
         if (ref && 'current' in ref) {
           ref.current?.dismiss();
         }
+        onPlay?.(moshaf);
       },
-      [ref]
+      [ref, onPlay]
     );
 
     return (
@@ -93,7 +80,6 @@ const MoshafSelectionSheet = forwardRef<BottomSheetModal, MoshafSelectionSheetPr
         containerStyle={styles.sheetContainer}
         backgroundStyle={styles.background}
         handleIndicatorStyle={styles.indicator}
-        onDismiss={handleSheetDismiss}
       >
         <View style={styles.header}>
           <View style={styles.headerInfo}>

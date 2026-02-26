@@ -71,7 +71,10 @@
       "Bash(echo Cannot determine font name programmatically:*)",
       "Bash(node:*)",
       "WebFetch(domain:legendapp.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm create:*)",
+      "Bash(rm:*)",
+      "Bash(npm run:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,12 @@
 import React, { useCallback } from 'react';
-import { Platform, Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  I18nManager,
+  Platform,
+  Pressable,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import { Icon } from '@/common/components/Icon';
 import { Typography } from '@/common/components/Typography';
@@ -47,7 +54,12 @@ export function SettingsRow({
       <View style={styles.rightContainer}>
         {rightElement ??
           (onPress && showChevron && (
-            <Icon familyName="Ionicons" iconName="chevron-forward" size={20} variant="muted" />
+            <Icon
+              familyName="Ionicons"
+              iconName={I18nManager.isRTL ? 'chevron-back' : 'chevron-forward'}
+              size={20}
+              variant="muted"
+            />
           ))}
       </View>
     </View>

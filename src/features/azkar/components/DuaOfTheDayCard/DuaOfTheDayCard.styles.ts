@@ -15,8 +15,8 @@ export const styles = StyleSheet.create((theme) => ({
     borderRadius: 12,
   },
   arabicText: {
-    paddingVertical: theme.metrics.spacingV.p8,
-    lineHeight: 36,
+    paddingVertical: theme.metrics.spacingV.p12,
+    lineHeight: 44,
   },
   ayahBadge: {
     alignSelf: 'center',

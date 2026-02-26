@@ -2,15 +2,18 @@ import { CustomTabBar } from '@/common/components/CustomTabBar';
 import { Icon } from '@/common/components/Icon';
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { useUnistyles } from 'react-native-unistyles';
 
 export default function TabLayout() {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
 
   return (
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
+        sceneStyle: { backgroundColor: theme.colors.background.app },
       }}
     >
       <Tabs.Screen
@@ -50,7 +53,7 @@ export default function TabLayout() {
         options={{
           title: t('tabs.library'),
           tabBarIcon: ({ color, size }) => (
-            <Icon familyName="Ionicons" iconName="library-outline" size={size} color={color} />
+            <Icon familyName="Ionicons" iconName="headset-outline" size={size} color={color} />
           ),
         }}
       />

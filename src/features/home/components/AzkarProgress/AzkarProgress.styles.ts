@@ -16,25 +16,32 @@ export const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: theme.metrics.spacing.p8,
   },
-  chipsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.metrics.spacing.p8,
+  verticalList: {
+    gap: theme.metrics.spacingV.p8,
   },
-  chip: {
+  itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.metrics.spacing.p4,
-    paddingHorizontal: theme.metrics.spacing.p12,
-    paddingVertical: theme.metrics.spacingV.p8,
-    borderRadius: 10,
+    paddingHorizontal: theme.metrics.spacing.p16,
+    paddingVertical: theme.metrics.spacingV.p12,
+    borderRadius: 12,
     overflow: 'hidden',
+    minHeight: 56,
   },
-  chipCompleted: {
+  itemCompleted: {
     backgroundColor: theme.colors.state.successBg,
   },
-  chipPending: {
+  itemPending: {
     backgroundColor: theme.colors.background.surfaceAlt,
+  },
+  itemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.metrics.spacing.p12,
+    flex: 1,
+  },
+  textContainer: {
+    flex: 1,
   },
   pressed: {
     opacity: 0.85,

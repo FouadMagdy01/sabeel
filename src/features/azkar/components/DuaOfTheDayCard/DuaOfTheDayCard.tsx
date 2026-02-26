@@ -18,12 +18,19 @@ export function DuaOfTheDayCard({ item }: DuaOfTheDayCardProps) {
     <Card variant="elevated">
       <View style={styles.container}>
         <View style={[styles.topBorder, { backgroundColor: theme.colors.brand.secondary }]} />
-        <View style={[styles.badge, { backgroundColor: theme.colors.brand.secondaryVariant }]}>
+        <View style={[styles.badge, { backgroundColor: `${theme.colors.brand.secondary}1A` }]}>
           <Typography size="xs" weight="semiBold" color="brandSecondary">
             {t('screens.azkar.hub.duaOfTheDay')}
           </Typography>
         </View>
-        <Typography type="heading" size="xl" weight="bold" align="center" style={styles.arabicText}>
+        <Typography
+          type="heading"
+          size="xl"
+          weight="bold"
+          color="primary"
+          align="center"
+          style={styles.arabicText}
+        >
           {item.arabic}
         </Typography>
         {!isArabic && (
@@ -32,7 +39,9 @@ export function DuaOfTheDayCard({ item }: DuaOfTheDayCardProps) {
           </Typography>
         )}
         {item.source.startsWith('Quran ') && (
-          <View style={[styles.ayahBadge, { backgroundColor: theme.colors.brand.secondaryVariant }]}>
+          <View
+            style={[styles.ayahBadge, { backgroundColor: `${theme.colors.brand.secondary}1A` }]}
+          >
             <Typography size="xs" weight="semiBold" color="brandSecondary">
               {t('screens.azkar.session.ayah', {
                 ref: item.source.replace('Quran ', ''),

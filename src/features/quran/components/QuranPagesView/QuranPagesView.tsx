@@ -6,8 +6,25 @@ import {
 } from '@/features/quran/services/bookmarksService';
 import { getPageUri } from '@/features/quran/services/quranDownloadService';
 import { usePlayerStore } from '@/features/quran/stores/playerStore';
-import React, { memo, useCallback, useImperativeHandle, useMemo, useRef, useState, forwardRef } from 'react';
-import { FlatList, I18nManager, useWindowDimensions, View, type ViewToken } from 'react-native';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  forwardRef,
+} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  I18nManager,
+  Platform,
+  useWindowDimensions,
+  View,
+  type ViewToken,
+} from 'react-native';
 
 import { styles } from './QuranPagesView.styles';
 import type { QuranPagesViewProps, QuranPagesViewRef, SelectedAyah } from './QuranPagesView.types';
@@ -15,10 +32,10 @@ import type { QuranPagesViewProps, QuranPagesViewRef, SelectedAyah } from './Qur
 const TOTAL_PAGES = 604;
 const IS_RTL = I18nManager.isRTL;
 
-// Both LTR and RTL use the same reversed data: [604, 603, ..., 1]
-// Page 604 at index 0, page 1 at index 603.
-// In LTR: index 0 is leftmost — Mushaf order correct (higher pages left, lower right).
-// In RTL: Android flips horizontal scroll, but we use contentOffset to bypass initialScrollIndex.
+// Data: [604, 603, ..., 1] — reversed so index 0 = page 604 (leftmost in LTR).
+// LTR: No `inverted`. Index 0 on left, index 603 on right. Mushaf order correct.
+// RTL: Use `inverted` to cancel Android's native RTL flip (RTL flip + inverted scaleX = LTR).
+//      This makes initialScrollIndex work reliably in RTL.
 const PAGE_DATA = Array.from({ length: TOTAL_PAGES }, (_, i) => TOTAL_PAGES - i);
 
 /** Convert a page number (1-604) to a FlatList index in the reversed array */
@@ -96,12 +113,19 @@ const QuranPagesView = forwardRef<QuranPagesViewRef, QuranPagesViewProps>(
   ) => {
     const { width } = useWindowDimensions();
     const listRef = useRef<FlatList<number>>(null);
+    const needsNudge = Platform.OS === 'android' && IS_RTL;
+    const [settled, setSettled] = useState(!needsNudge);
     const [activeSelectionPage, setActiveSelectionPage] = useState<number | null>(null);
     const activeSelectionPageRef = useRef<number | null>(null);
     activeSelectionPageRef.current = activeSelectionPage;
     const currentVisiblePageRef = useRef(initialPage);
 
-    console.log('[QuranPagesView] render initialPage=%d index=%d isRTL=%s', initialPage, pageToIndex(initialPage), IS_RTL);
+    console.warn(
+      '[QuranPagesView] render initialPage=%d index=%d isRTL=%s',
+      initialPage,
+      pageToIndex(initialPage),
+      IS_RTL
+    );
 
     // Track the latest onPageChange callback in a ref to avoid re-creating onViewableItemsChanged
     const onPageChangeRef = useRef(onPageChange);
@@ -120,20 +144,42 @@ const QuranPagesView = forwardRef<QuranPagesViewRef, QuranPagesViewProps>(
     );
 
     // Imperative handle for parent to scroll to a specific page
-    useImperativeHandle(ref, () => ({
-      scrollToPage: (page: number) => {
-        const index = pageToIndex(page);
-        console.log('[QuranPagesView] scrollToPage page=%d index=%d', page, index);
-        listRef.current?.scrollToOffset({ offset: index * width, animated: false });
-      },
-    }), [width]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        scrollToPage: (page: number) => {
+          const index = pageToIndex(page);
+          console.warn('[QuranPagesView] scrollToPage page=%d index=%d', page, index);
+          listRef.current?.scrollToOffset({ offset: index * width, animated: false });
+        },
+      }),
+      [width]
+    );
+
+    // Android RTL workaround: after mount, do a tiny scroll nudge to force
+    // a native layout pass. This simulates a touch, making the correctly-scrolled
+    // content visible. Without this, the FlatList renders index 0 visually despite
+    // being scrolled to the correct offset internally.
+    // The FlatList is hidden (opacity: 0) until the nudge completes to avoid flashing wrong content.
+    useEffect(() => {
+      if (!needsNudge) return;
+      const targetOffset = pageToIndex(initialPage) * width;
+      const timer = requestAnimationFrame(() => {
+        listRef.current?.scrollToOffset({ offset: targetOffset + 1, animated: false });
+        requestAnimationFrame(() => {
+          listRef.current?.scrollToOffset({ offset: targetOffset, animated: false });
+          setSettled(true);
+        });
+      });
+      return () => cancelAnimationFrame(timer);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Primary page detection — uses viewable items
     const onViewableItemsChanged = useRef(
       ({ viewableItems }: { viewableItems: ViewToken<number>[] }) => {
         if (viewableItems.length > 0) {
           const page = viewableItems[0].item;
-          console.log('[QuranPagesView] onViewableItemsChanged page=%d', page);
+          console.warn('[QuranPagesView] onViewableItemsChanged page=%d', page);
           currentVisiblePageRef.current = page;
           onPageChangeRef.current?.(page);
         }
@@ -150,21 +196,15 @@ const QuranPagesView = forwardRef<QuranPagesViewRef, QuranPagesViewProps>(
 
     const onTafseerRef = useRef(onTafseerProp);
     onTafseerRef.current = onTafseerProp;
-    const handleTafseer = useCallback(
-      (ayahs: SelectedAyah[]) => {
-        onTafseerRef.current?.(ayahs);
-      },
-      []
-    );
+    const handleTafseer = useCallback((ayahs: SelectedAyah[]) => {
+      onTafseerRef.current?.(ayahs);
+    }, []);
 
     const onShareRef = useRef(onShareProp);
     onShareRef.current = onShareProp;
-    const handleShare = useCallback(
-      (ayahs: SelectedAyah[]) => {
-        onShareRef.current?.(ayahs);
-      },
-      []
-    );
+    const handleShare = useCallback((ayahs: SelectedAyah[]) => {
+      onShareRef.current?.(ayahs);
+    }, []);
 
     const playPageAyahsRef = useRef(playPageAyahs);
     playPageAyahsRef.current = playPageAyahs;
@@ -173,18 +213,15 @@ const QuranPagesView = forwardRef<QuranPagesViewRef, QuranPagesViewProps>(
     const togglePlayPauseRef = useRef(togglePlayPause);
     togglePlayPauseRef.current = togglePlayPause;
 
-    const handlePlay = useCallback(
-      (ayahs: SelectedAyah[]) => {
-        if (isPlayingRef.current) {
-          void togglePlayPauseRef.current();
-        } else if (ayahs.length > 0) {
-          void playSelectedAyahsRef.current(ayahs);
-        } else {
-          void playPageAyahsRef.current(currentVisiblePageRef.current);
-        }
-      },
-      []
-    );
+    const handlePlay = useCallback((ayahs: SelectedAyah[]) => {
+      if (isPlayingRef.current) {
+        void togglePlayPauseRef.current();
+      } else if (ayahs.length > 0) {
+        void playSelectedAyahsRef.current(ayahs);
+      } else {
+        void playPageAyahsRef.current(currentVisiblePageRef.current);
+      }
+    }, []);
 
     const handleBookmark = useCallback((ayahs: SelectedAyah[]) => {
       for (const ayah of ayahs) {
@@ -223,7 +260,9 @@ const QuranPagesView = forwardRef<QuranPagesViewRef, QuranPagesViewProps>(
             onBookmark={handleBookmark}
             onTap={stableOnTap}
             isPagePlaying={isPlayingRef.current}
-            initialHighlightKeys={item === initialPageRef.current ? initialHighlightKeysRef.current : undefined}
+            initialHighlightKeys={
+              item === initialPageRef.current ? initialHighlightKeysRef.current : undefined
+            }
           />
         );
       },
@@ -250,33 +289,34 @@ const QuranPagesView = forwardRef<QuranPagesViewRef, QuranPagesViewProps>(
 
     const keyExtractor = useCallback((item: number) => String(item), []);
 
-    const initialIndex = pageToIndex(initialPage);
-
-    // In RTL, Android's horizontal FlatList initialScrollIndex is unreliable.
-    // Use contentOffset to set the native scroll position before first paint instead.
-    // In LTR, initialScrollIndex works reliably.
-    const scrollProps = IS_RTL
-      ? { contentOffset: { x: initialIndex * width, y: 0 } }
-      : { initialScrollIndex: initialIndex };
+    const initialScrollIndex = pageToIndex(initialPage);
 
     return (
-      <FlatList
-        ref={listRef}
-        data={PAGE_DATA}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        getItemLayout={getItemLayout}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        style={styles.container}
-        {...scrollProps}
-        viewabilityConfig={VIEWABILITY_CONFIG}
-        onViewableItemsChanged={onViewableItemsChanged}
-        initialNumToRender={IS_RTL ? 3 : 1}
-        maxToRenderPerBatch={2}
-        windowSize={3}
-      />
+      <View style={styles.container}>
+        {!settled && (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
+        <FlatList
+          ref={listRef}
+          data={PAGE_DATA}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          getItemLayout={getItemLayout}
+          horizontal
+          pagingEnabled
+          inverted={IS_RTL}
+          showsHorizontalScrollIndicator={false}
+          style={[styles.container, !settled && styles.hidden]}
+          initialScrollIndex={initialScrollIndex}
+          viewabilityConfig={VIEWABILITY_CONFIG}
+          onViewableItemsChanged={onViewableItemsChanged}
+          initialNumToRender={1}
+          maxToRenderPerBatch={2}
+          windowSize={3}
+        />
+      </View>
     );
   }
 );

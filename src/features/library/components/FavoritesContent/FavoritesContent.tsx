@@ -23,7 +23,11 @@ import {
 import type { FavoriteReciter, FavoriteSura } from '../../types';
 import { styles } from './FavoritesContent.styles';
 
-export const FavoritesContent = () => {
+interface FavoritesContentProps {
+  bottomPadding?: number;
+}
+
+export const FavoritesContent = ({ bottomPadding = 0 }: FavoritesContentProps) => {
   const { t, i18n } = useTranslation();
   const { theme } = useUnistyles();
   const layout = useWindowDimensions();
@@ -240,6 +244,7 @@ export const FavoritesContent = () => {
                 />
               )}
               keyExtractor={(item: FavoriteSura) => String(item.id)}
+              bottomPadding={bottomPadding}
             />
           );
         case 'reciters':
@@ -264,6 +269,7 @@ export const FavoritesContent = () => {
                 />
               )}
               keyExtractor={(item: FavoriteReciter) => String(item.id)}
+              bottomPadding={bottomPadding}
             />
           );
         default:
@@ -284,6 +290,8 @@ export const FavoritesContent = () => {
       handleUnfavoriteReciter,
       isSurahCurrentlyPlaying,
       isReciterCurrentlyPlaying,
+      theme.colors.brand.primary,
+      bottomPadding,
     ]
   );
 

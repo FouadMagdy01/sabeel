@@ -102,7 +102,7 @@ export async function addFavoriteSurah(params: {
       Date.now()
     );
   } catch (error) {
-    console.log('[FavoritesDB] addFavoriteSurah error:', error);
+    console.error('[FavoritesDB] addFavoriteSurah error:', error);
     throw error;
   }
 }
@@ -121,7 +121,7 @@ export async function removeFavoriteSurah(
       surahId
     );
   } catch (error) {
-    console.log('[FavoritesDB] removeFavoriteSurah error:', error);
+    console.error('[FavoritesDB] removeFavoriteSurah error:', error);
     throw error;
   }
 }
@@ -141,7 +141,7 @@ export async function isSurahFavorited(
     );
     return (row?.count ?? 0) > 0;
   } catch (error) {
-    console.log('[FavoritesDB] isSurahFavorited error:', error);
+    console.error('[FavoritesDB] isSurahFavorited error:', error);
     return false;
   }
 }
@@ -177,7 +177,7 @@ export async function getAllFavoriteSurahs(): Promise<FavoriteSura[]> {
       createdAt: row.created_at,
     }));
   } catch (error) {
-    console.log('[FavoritesDB] getAllFavoriteSurahs error:', error);
+    console.error('[FavoritesDB] getAllFavoriteSurahs error:', error);
     return [];
   }
 }
@@ -220,7 +220,7 @@ export async function addFavoriteReciter(params: {
       Date.now()
     );
   } catch (error) {
-    console.log('[FavoritesDB] addFavoriteReciter error:', error);
+    console.error('[FavoritesDB] addFavoriteReciter error:', error);
     throw error;
   }
 }
@@ -234,7 +234,7 @@ export async function removeFavoriteReciter(reciterId: number, moshafId: number)
       moshafId
     );
   } catch (error) {
-    console.log('[FavoritesDB] removeFavoriteReciter error:', error);
+    console.error('[FavoritesDB] removeFavoriteReciter error:', error);
     throw error;
   }
 }
@@ -249,7 +249,7 @@ export async function isReciterFavorited(reciterId: number, moshafId: number): P
     );
     return (row?.count ?? 0) > 0;
   } catch (error) {
-    console.log('[FavoritesDB] isReciterFavorited error:', error);
+    console.error('[FavoritesDB] isReciterFavorited error:', error);
     return false;
   }
 }
@@ -285,7 +285,7 @@ export async function getAllFavoriteReciters(): Promise<FavoriteReciter[]> {
       createdAt: row.created_at,
     }));
   } catch (error) {
-    console.log('[FavoritesDB] getAllFavoriteReciters error:', error);
+    console.error('[FavoritesDB] getAllFavoriteReciters error:', error);
     return [];
   }
 }
@@ -326,7 +326,7 @@ export async function addDownloadedSurah(params: {
       Date.now()
     );
   } catch (error) {
-    console.log('[DownloadsDB] addDownloadedSurah error:', error);
+    console.error('[DownloadsDB] addDownloadedSurah error:', error);
     throw error;
   }
 }
@@ -345,7 +345,7 @@ export async function removeDownloadedSurah(
       surahId
     );
   } catch (error) {
-    console.log('[DownloadsDB] removeDownloadedSurah error:', error);
+    console.error('[DownloadsDB] removeDownloadedSurah error:', error);
     throw error;
   }
 }
@@ -365,7 +365,7 @@ export async function isSurahDownloaded(
     );
     return (row?.count ?? 0) > 0;
   } catch (error) {
-    console.log('[DownloadsDB] isSurahDownloaded error:', error);
+    console.error('[DownloadsDB] isSurahDownloaded error:', error);
     return false;
   }
 }
@@ -405,7 +405,7 @@ export async function getAllDownloadedSurahs(): Promise<DownloadedSura[]> {
       createdAt: row.created_at,
     }));
   } catch (error) {
-    console.log('[DownloadsDB] getAllDownloadedSurahs error:', error);
+    console.error('[DownloadsDB] getAllDownloadedSurahs error:', error);
     return [];
   }
 }
@@ -452,7 +452,7 @@ export async function getDownloadedSurahsByReciter(
       createdAt: row.created_at,
     }));
   } catch (error) {
-    console.log('[DownloadsDB] getDownloadedSurahsByReciter error:', error);
+    console.error('[DownloadsDB] getDownloadedSurahsByReciter error:', error);
     return [];
   }
 }
@@ -469,7 +469,7 @@ export async function deleteAllDownloadsForReciter(
       moshafId
     );
   } catch (error) {
-    console.log('[DownloadsDB] deleteAllDownloadsForReciter error:', error);
+    console.error('[DownloadsDB] deleteAllDownloadsForReciter error:', error);
     throw error;
   }
 }
@@ -504,7 +504,7 @@ export async function getDownloadedSurahPath(
 
     return row.file_path;
   } catch (error) {
-    console.log('[DownloadsDB] getDownloadedSurahPath error:', error);
+    console.error('[DownloadsDB] getDownloadedSurahPath error:', error);
     return null;
   }
 }

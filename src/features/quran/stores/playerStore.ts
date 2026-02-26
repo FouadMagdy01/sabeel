@@ -5,8 +5,14 @@ import { getQuranClient, resolveAudioUrl } from '@/integrations/quranApi';
 import { getItem, setItem } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/utils/storage/constants';
 import { isValidQuranPage, isValidVerseKey } from '@quranjs/api';
-import TrackPlayer, { RepeatMode, type Track as TPTrack } from 'react-native-track-player';
+import TrackPlayer, {
+  RepeatMode,
+  type AddTrack,
+  type Track as TPTrack,
+} from 'react-native-track-player';
 import { create } from 'zustand';
+
+const playerArtwork = require('../../../../assets/images/player_bg.jpg') as number;
 
 export type QuranRepeatMode = 'off' | 'one' | 'all';
 
@@ -21,7 +27,7 @@ type ReciterInfo = {
   name: string;
 };
 
-type Track = { id: string; url: string; title: string; artist: string };
+type Track = { id: string; url: string; title: string; artist: string; artwork: number | string };
 
 export type PlayerSource = 'quran' | 'library';
 
@@ -164,7 +170,7 @@ function findPreviousUniqueIndex(queue: TPTrack[], currentIndex: number): number
 async function loadAndPlayTracks(tracks: Track[], state: PlayerState) {
   const expanded = expandTracksForRepeat(tracks, state.repeatMode, state.repeatCount);
 
-  console.log('[PlayerStore] loadAndPlayTracks', {
+  console.warn('[PlayerStore] loadAndPlayTracks', {
     trackCount: tracks.length,
     expandedCount: expanded.length,
     repeatMode: state.repeatMode,
@@ -175,13 +181,13 @@ async function loadAndPlayTracks(tracks: Track[], state: PlayerState) {
   });
 
   await TrackPlayer.reset();
-  console.log('[PlayerStore] TrackPlayer.reset() done');
-  await TrackPlayer.add(expanded);
-  console.log('[PlayerStore] TrackPlayer.add() done');
+  console.warn('[PlayerStore] TrackPlayer.reset() done');
+  await TrackPlayer.add(expanded as AddTrack[]);
+  console.warn('[PlayerStore] TrackPlayer.add() done');
   await TrackPlayer.setRepeatMode(RepeatMode.Off);
   await TrackPlayer.setRate(state.playbackSpeed);
   await TrackPlayer.play();
-  console.log('[PlayerStore] TrackPlayer.play() done');
+  console.warn('[PlayerStore] TrackPlayer.play() done');
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
@@ -244,6 +250,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
           url: resolveAudioUrl(audioFile.url),
           title: getLocalizedTrackTitle(sura, ayah),
           artist: state.reciterName,
+          artwork: playerArtwork,
         });
       }
 
@@ -303,6 +310,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
           url: resolveAudioUrl(audioFile.url),
           title: getLocalizedTrackTitle(sura, ayah),
           artist: state.reciterName,
+          artwork: playerArtwork,
         });
       }
 
@@ -354,6 +362,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         url: resolveAudioUrl(audioFile.url),
         title: getLocalizedTrackTitle(sura, ayah),
         artist: state.reciterName,
+        artwork: playerArtwork,
       };
 
       await loadAndPlayTracks([track], state);
@@ -375,7 +384,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
   playSurah: async (surahId, reciterId, moshafId, reciterNameParam, server, surahList) => {
     const state = get();
-    console.log('[PlayerStore] playSurah called', {
+    console.warn('[PlayerStore] playSurah called', {
       surahId,
       reciterId,
       moshafId,
@@ -421,11 +430,11 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         state.currentLibraryReciterId === reciterId &&
         state.currentMoshafId === moshafId
       ) {
-        console.log('[PlayerStore] same reciter/moshaf — checking queue for surah');
+        console.warn('[PlayerStore] same reciter/moshaf — checking queue for surah');
         const queue = await TrackPlayer.getQueue();
         const trackId = `surah:${String(surahId)}`;
         const queueIndex = queue.findIndex((t) => t.id === trackId);
-        console.log('[PlayerStore] queue search', {
+        console.warn('[PlayerStore] queue search', {
           trackId,
           queueIndex,
           queueLength: queue.length,
@@ -433,7 +442,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         if (queueIndex >= 0) {
           await TrackPlayer.skip(queueIndex);
           await TrackPlayer.play();
-          console.log('[PlayerStore] skipped to existing track in queue at index', queueIndex);
+          console.warn('[PlayerStore] skipped to existing track in queue at index', queueIndex);
           set({
             isLoadingTrack: false,
             isPlaying: true,
@@ -451,7 +460,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
       // Build tracks from startIndex to end
       const remainingSurahs = surahIds.slice(startIndex);
-      console.log(
+      console.warn(
         '[PlayerStore] building tracks from startIndex',
         startIndex,
         'count',
@@ -474,6 +483,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
           url,
           title: surahName ?? String(sid),
           artist: reciterNameParam,
+          artwork: playerArtwork,
         });
       }
 
@@ -483,14 +493,14 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         return;
       }
 
-      console.log(
+      console.warn(
         '[PlayerStore] playSurah — calling loadAndPlayTracks with',
         tracks.length,
         'tracks'
       );
       await loadAndPlayTracks(tracks, state);
 
-      console.log('[PlayerStore] playSurah — setting state after loadAndPlayTracks');
+      console.warn('[PlayerStore] playSurah — setting state after loadAndPlayTracks');
       set({
         isLoadingTrack: false,
         isPlaying: true,
@@ -506,7 +516,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         currentMoshafServer: server,
         reciterName: reciterNameParam,
       });
-      console.log('[PlayerStore] playSurah — done, state set');
+      console.warn('[PlayerStore] playSurah — done, state set');
     } catch (error) {
       console.error('[PlayerStore] playSurah error:', error);
       set({ isLoadingTrack: false });
@@ -515,16 +525,16 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
   togglePlayPause: async () => {
     const state = get();
-    console.log('[PlayerStore] togglePlayPause', {
+    console.warn('[PlayerStore] togglePlayPause', {
       wasPlaying: state.isPlaying,
       playerSource: state.playerSource,
     });
     if (state.isPlaying) {
       await TrackPlayer.pause();
-      console.log('[PlayerStore] paused');
+      console.warn('[PlayerStore] paused');
     } else {
       await TrackPlayer.play();
-      console.log('[PlayerStore] resumed');
+      console.warn('[PlayerStore] resumed');
     }
     set({ isPlaying: !state.isPlaying });
   },
@@ -563,7 +573,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 
   stop: async () => {
-    console.log('[PlayerStore] stop called');
+    console.warn('[PlayerStore] stop called');
     await TrackPlayer.reset();
     set({
       isPlaying: false,
@@ -633,7 +643,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 
   setIsPlaying: (playing) => {
-    console.log('[PlayerStore] setIsPlaying', { playing, prev: get().isPlaying });
+    console.warn('[PlayerStore] setIsPlaying', { playing, prev: get().isPlaying });
     set({ isPlaying: playing });
   },
 

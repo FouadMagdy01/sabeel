@@ -79,7 +79,7 @@ export async function downloadAllSurahs(
 
   for (const surahId of surahIds) {
     if (shouldCancel()) {
-      console.log('[DownloadManager] Bulk download cancelled');
+      console.warn('[DownloadManager] Bulk download cancelled');
       return { completed, total };
     }
 
@@ -96,7 +96,7 @@ export async function downloadAllSurahs(
       completed++;
       await onProgress(completed, total, surahId);
     } catch (error) {
-      console.log('[DownloadManager] Failed to download surah', surahId, error);
+      console.warn('[DownloadManager] Failed to download surah', surahId, error);
       // Continue with next surah on individual failure
     }
   }
@@ -113,7 +113,7 @@ export async function deleteSurah(
     const filePath = getLocalSurahPath(reciterId, moshafId, surahId);
     await FileSystem.deleteAsync(filePath, { idempotent: true });
   } catch (error) {
-    console.log('[DownloadManager] deleteSurah error:', error);
+    console.warn('[DownloadManager] deleteSurah error:', error);
   }
 }
 
@@ -122,6 +122,6 @@ export async function deleteAllForReciter(reciterId: number, moshafId: number): 
     const dir = getReciterDir(reciterId, moshafId);
     await FileSystem.deleteAsync(dir, { idempotent: true });
   } catch (error) {
-    console.log('[DownloadManager] deleteAllForReciter error:', error);
+    console.warn('[DownloadManager] deleteAllForReciter error:', error);
   }
 }

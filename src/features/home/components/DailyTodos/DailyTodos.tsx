@@ -2,7 +2,7 @@ import { Typography } from '@/common/components/Typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import type { AzkarData, PrayerData, RandomActData } from '../../types';
+import type { AzkarData, PrayerData, PrayerName, RandomActData } from '../../types';
 import { AzkarProgress } from '../AzkarProgress';
 import { PrayersProgress } from '../PrayersProgress';
 import { RandomActsGrid } from '../RandomActsGrid';
@@ -10,6 +10,7 @@ import { styles } from './DailyTodos.styles';
 
 interface DailyTodosProps {
   prayers: PrayerData[];
+  completedPrayers: PrayerName[];
   azkar: AzkarData[];
   randomActs: RandomActData[];
   onPrayerPress: (prayer: PrayerData) => void;
@@ -19,6 +20,7 @@ interface DailyTodosProps {
 
 export function DailyTodos({
   prayers,
+  completedPrayers,
   azkar,
   randomActs,
   onPrayerPress,
@@ -32,7 +34,11 @@ export function DailyTodos({
       <Typography type="overline" style={styles.sectionHeader}>
         {t('screens.home.dailyTodos.sectionTitle')}
       </Typography>
-      <PrayersProgress prayers={prayers} onPrayerPress={onPrayerPress} />
+      <PrayersProgress
+        prayers={prayers}
+        completedPrayers={completedPrayers}
+        onPrayerPress={onPrayerPress}
+      />
       <AzkarProgress azkar={azkar} onAzkarPress={onAzkarPress} />
       <RandomActsGrid acts={randomActs} onActPress={onActPress} />
     </View>

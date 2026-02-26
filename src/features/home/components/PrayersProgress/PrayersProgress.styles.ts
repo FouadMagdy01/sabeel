@@ -65,4 +65,10 @@ export const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.border.default,
     backgroundColor: theme.colors.background.surfaceAlt,
   },
+  disabledCircle: {
+    opacity: 0.5,
+  },
+  allCompletedText: {
+    marginTop: theme.metrics.spacingV.p12,
+  },
 }));

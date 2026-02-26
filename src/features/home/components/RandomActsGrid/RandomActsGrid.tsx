@@ -24,12 +24,6 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
   const progress = completedCount / acts.length;
   const percentage = Math.round(progress * 100);
 
-  // Order acts: completed first, then unlocked, then locked
-  const completedActs = acts.filter((a) => a.status === 'completed');
-  const unlockedActs = acts.filter((a) => a.status === 'unlocked');
-  const lockedActs = acts.filter((a) => a.status === 'locked');
-  const orderedActs = [...completedActs, ...unlockedActs, ...lockedActs];
-
   const isIOS = Platform.OS === 'ios';
 
   const renderActCard = (act: RandomActData): React.JSX.Element => {
@@ -94,7 +88,7 @@ export function RandomActsGrid({ acts, onActPress }: RandomActsGridProps) {
         </View>
       </View>
 
-      <View style={styles.verticalList}>{orderedActs.map(renderActCard)}</View>
+      <View style={styles.verticalList}>{acts.map(renderActCard)}</View>
     </Card>
   );
 }

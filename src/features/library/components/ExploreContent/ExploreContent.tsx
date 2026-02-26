@@ -121,7 +121,7 @@ const ExploreContent: React.FC<ExploreContentProps> = ({ bottomPadding = 0 }) =>
     (reciter: Reciter, moshaf: Moshaf) => {
       const surahIds = moshaf.surah_list.split(',').map(Number);
       const firstSurahId = surahIds[0];
-      console.log('[ExploreContent] playMoshaf called', {
+      console.warn('[ExploreContent] playMoshaf called', {
         reciterId: reciter.id,
         moshafId: moshaf.id,
         firstSurahId,
@@ -151,7 +151,7 @@ const ExploreContent: React.FC<ExploreContentProps> = ({ bottomPadding = 0 }) =>
     (reciterId: number): boolean => {
       const result =
         isPlayerVisible && playerSource === 'library' && currentLibraryReciterId === reciterId;
-      console.log('[ExploreContent] isReciterCurrent', {
+      console.warn('[ExploreContent] isReciterCurrent', {
         reciterId,
         playerSource,
         currentLibraryReciterId,
@@ -172,7 +172,7 @@ const ExploreContent: React.FC<ExploreContentProps> = ({ bottomPadding = 0 }) =>
 
   const handlePlayReciter = useCallback(
     (reciter: Reciter) => {
-      console.log('[ExploreContent] handlePlayReciter', {
+      console.warn('[ExploreContent] handlePlayReciter', {
         reciterId: reciter.id,
         reciterName: reciter.name,
         moshafCount: reciter.moshaf.length,
@@ -180,17 +180,17 @@ const ExploreContent: React.FC<ExploreContentProps> = ({ bottomPadding = 0 }) =>
 
       // For multi-moshaf reciters, always show the sheet (even if current)
       if (reciter.moshaf.length > 1) {
-        console.log('[ExploreContent] multiple moshaf, showing sheet');
+        console.warn('[ExploreContent] multiple moshaf, showing sheet');
         setSelectedReciter(reciter);
         setSheetAction('play');
         moshafSheetRef.current?.present();
       } else if (reciter.moshaf[0]) {
         // Single moshaf — toggle if already current, otherwise start playing
         if (isReciterCurrent(reciter.id)) {
-          console.log('[ExploreContent] single moshaf, reciter is current, toggling play/pause');
+          console.warn('[ExploreContent] single moshaf, reciter is current, toggling play/pause');
           void togglePlayPause();
         } else {
-          console.log('[ExploreContent] single moshaf, calling playMoshaf');
+          console.warn('[ExploreContent] single moshaf, calling playMoshaf');
           playMoshaf(reciter, reciter.moshaf[0]);
         }
       } else {

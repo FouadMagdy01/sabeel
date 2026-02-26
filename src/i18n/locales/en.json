@@ -122,7 +122,7 @@
     "home": "Home",
     "quran": "Quran",
     "prayers": "Prayers",
-    "library": "Library",
+    "library": "Listen",
     "settings": "Settings"
   },
   "prayers": {
@@ -179,7 +179,24 @@
         "azkar": "Azkar",
         "randomActs": "Random Acts",
         "completed": "Completed",
-        "tapToComplete": "Tap to complete"
+        "tapToComplete": "Tap to complete",
+        "allPrayersCompleted": "All prayers completed",
+        "morning": "Morning Azkar",
+        "evening": "Evening Azkar",
+        "randomActsList": {
+          "tasbeeh": "Tasbeeh (100 counts)",
+          "readQuran": "Read 5 pages of Quran",
+          "salawat": "Salawat on the Prophet (100x)",
+          "surahKahf": "Read Surah Al-Kahf",
+          "istighfar": "Istighfar (100 times)",
+          "morningAzkar": "Morning Azkar",
+          "eveningAzkar": "Evening Azkar",
+          "surahMulk": "Read Surah Al-Mulk",
+          "ayatKursi": "Read Ayat Al-Kursi",
+          "sleepAzkar": "Sleep Azkar",
+          "tahleel": "La ilaha illa Allah (100x)",
+          "hawqala": "La hawla wala quwwata illa billah (100x)"
+        }
       },
       "quickAccess": {
         "sectionTitle": "Quick Access",
@@ -190,7 +207,8 @@
         "sunnahBooks": "Sunnah Books"
       },
       "verseOfTheDay": {
-        "label": "Verse of the Day"
+        "label": "Verse of the Day",
+        "reference": "Quran {{ref}}"
       }
     },
     "quran": {
@@ -426,6 +444,87 @@
     },
     "settings": {
       "title": "Settings"
+    },
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: January 2026",
+      "sections": {
+        "dataCollection": {
+          "heading": "Data Collection",
+          "body": "Sabeel is a fully offline application that does not require registration or an account. The only data accessed is your location (for prayer times and Qibla direction) and your app preferences (theme, language). This data is used in the moment and is not collected or stored on any server."
+        },
+        "dataUsage": {
+          "heading": "How We Use Your Data",
+          "body": "Your location is used only to calculate accurate prayer times and Qibla direction in real time. Your preferences are saved locally on your device to remember your settings. We do not transmit, sell, or share any of your data with third parties."
+        },
+        "dataStorage": {
+          "heading": "Data Storage & Security",
+          "body": "All your data stays on your device. Preferences, reading progress, and settings are stored locally using encrypted device storage. No data is sent to or stored on external servers. If you uninstall the app, all local data is removed."
+        },
+        "thirdParty": {
+          "heading": "Third-Party Services",
+          "body": "Sabeel uses prayer time calculation APIs to provide accurate prayer schedules based on your location. These requests are made anonymously and do not include any personal information. No other third-party services are used to process your data."
+        },
+        "contact": {
+          "heading": "Contact Us",
+          "body": "If you have any questions or concerns about our privacy practices, please contact us at fouad.maggdy772@gmail.com. We are committed to protecting your privacy and will respond to inquiries promptly."
+        }
+      }
+    },
+    "termsOfService": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last updated: January 2026",
+      "sections": {
+        "acceptance": {
+          "heading": "Acceptance of Terms",
+          "body": "By downloading, installing, or using Sabeel, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the application."
+        },
+        "useOfApp": {
+          "heading": "Use of the Application",
+          "body": "Sabeel is provided for personal, non-commercial use to assist with Islamic worship practices. You agree to use the app respectfully and in accordance with its intended purpose. You must not misuse the app or attempt to access it through unauthorized means."
+        },
+        "accuracy": {
+          "heading": "Content Accuracy",
+          "body": "While we strive to provide accurate prayer times, Qibla direction, and Islamic content, Sabeel is a digital tool and should be used as a guide. We recommend verifying critical information such as prayer times with your local mosque. The app is not a substitute for scholarly Islamic guidance."
+        },
+        "intellectualProperty": {
+          "heading": "Intellectual Property",
+          "body": "All content, design, and functionality of Sabeel are the intellectual property of the development team. Quranic text and hadith content are from publicly available Islamic sources. You may not reproduce, distribute, or create derivative works from the app without permission."
+        },
+        "liability": {
+          "heading": "Limitation of Liability",
+          "body": "Sabeel is provided \"as is\" without warranties of any kind. We are not liable for any damages arising from the use of the application, including but not limited to inaccuracies in prayer times or Qibla direction. Use of the app is at your own discretion."
+        }
+      }
+    },
+    "about": {
+      "title": "About Sabeel",
+      "appName": "Sabeel",
+      "tagline": "Your companion on the path of faith",
+      "version": "Version {{version}}",
+      "description": "Sabeel is designed to be your daily companion in worship, helping you stay connected to your faith through prayer tracking, Quran reading, azkar, and more. Built with love for the Muslim community.",
+      "features": {
+        "title": "Features",
+        "prayers": "Accurate prayer times & notifications",
+        "quran": "Complete Quran with tafseer & audio",
+        "azkar": "Morning, evening & daily azkar",
+        "tasbeeh": "Digital tasbeeh counter",
+        "qibla": "Qibla compass direction"
+      },
+      "connect": {
+        "title": "Get in Touch",
+        "description": "We'd love to hear from you! Share your feedback, suggestions, or report any issues."
+      }
+    },
+    "contact": {
+      "emailSubject": "Sabeel App - General Inquiry",
+      "emailBody": "Assalamu Alaikum,\n\nI would like to reach out regarding the Sabeel app.\n\n"
+    },
+    "report": {
+      "emailSubject": "Sabeel App - Bug Report",
+      "descriptionLabel": "Bug Description:",
+      "stepsLabel": "Steps to Reproduce:",
+      "deviceLabel": "Device Info:"
     },
     "sunnahBooks": {
       "title": "Sunnah Books",

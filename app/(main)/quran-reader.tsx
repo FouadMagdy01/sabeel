@@ -51,11 +51,16 @@ function ReaderContent() {
   const initialPageRef = useRef(clampPage(params.page));
   const pagesViewRef = useRef<QuranPagesViewRef>(null);
 
-  console.log('[QuranReader] render params.page=%s params.surahId=%s initialPageRef=%d', params.page, params.surahId, initialPageRef.current);
+  console.warn(
+    '[QuranReader] render params.page=%s params.surahId=%s initialPageRef=%d',
+    params.page,
+    params.surahId,
+    initialPageRef.current
+  );
 
   const [currentPage, setCurrentPage] = useState(clampPage(params.page));
   const [currentSurahId, setCurrentSurahId] = useState(clampSurah(params.surahId));
-  const [chromeVisible, setChromeVisible] = useState(true);
+  const [_chromeVisible, setChromeVisible] = useState(true);
 
   // Save last read position to MMKV
   const savedPageRef = useRef<number>(clampPage(params.page));
@@ -64,7 +69,13 @@ function ReaderContent() {
   useEffect(() => {
     const paramPage = clampPage(params.page);
     const paramSurahId = clampSurah(params.surahId);
-    console.log('[QuranReader] params sync effect: paramPage=%d paramSurahId=%d oldInitialPage=%d pagesViewRef=%s', paramPage, paramSurahId, initialPageRef.current, pagesViewRef.current ? 'mounted' : 'null');
+    console.warn(
+      '[QuranReader] params sync effect: paramPage=%d paramSurahId=%d oldInitialPage=%d pagesViewRef=%s',
+      paramPage,
+      paramSurahId,
+      initialPageRef.current,
+      pagesViewRef.current ? 'mounted' : 'null'
+    );
     initialPageRef.current = paramPage;
     setCurrentPage(paramPage);
     setCurrentSurahId(paramSurahId);
@@ -79,9 +90,13 @@ function ReaderContent() {
   const setMiniPlayerHidden = usePlayerStore((s) => s.setMiniPlayerHidden);
 
   useEffect(() => {
-    console.log('[QuranReader] checking pages download status...');
+    console.warn('[QuranReader] checking pages download status...');
     void arePagesReady().then((ready) => {
-      console.log('[QuranReader] arePagesReady=%s, initialPageRef=%d', ready, initialPageRef.current);
+      console.warn(
+        '[QuranReader] arePagesReady=%s, initialPageRef=%d',
+        ready,
+        initialPageRef.current
+      );
       setPagesDownloaded(ready);
       setCheckingPages(false);
     });
@@ -211,7 +226,12 @@ function ReaderContent() {
           assetSource={{ assetId: AYAH_BOUNDS_DB }}
           onError={(err) => console.error('[SQLiteProvider ayah_bounds] Error:', err)}
         >
-          {console.log('[QuranReader] rendering QuranPagesView with initialPage=%d', initialPageRef.current) as undefined}
+          {
+            console.warn(
+              '[QuranReader] rendering QuranPagesView with initialPage=%d',
+              initialPageRef.current
+            ) as undefined
+          }
           <QuranPagesView
             ref={pagesViewRef}
             initialPage={initialPageRef.current}

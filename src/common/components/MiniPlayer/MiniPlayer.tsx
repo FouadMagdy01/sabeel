@@ -82,7 +82,11 @@ export function MiniPlayer() {
 
   return (
     <Animated.View
-      style={[styles.container, animatedStyle, { bottom: bottomOffset }]}
+      style={[
+        styles.container,
+        animatedStyle,
+        { bottom: bottomOffset, shadowColor: theme.colors.overlay.shadow },
+      ]}
       onLayout={(event) => {
         const height = event.nativeEvent.layout.height;
         if (height > 0 && height !== miniPlayerHeight) {

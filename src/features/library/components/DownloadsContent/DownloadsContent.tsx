@@ -22,7 +22,11 @@ import {
 import type { DownloadedReciter, DownloadedSura } from '../../types';
 import { styles } from './DownloadsContent.styles';
 
-export const DownloadsContent = () => {
+interface DownloadsContentProps {
+  bottomPadding?: number;
+}
+
+export const DownloadsContent = ({ bottomPadding = 0 }: DownloadsContentProps) => {
   const { t, i18n } = useTranslation();
   const { theme } = useUnistyles();
   const layout = useWindowDimensions();
@@ -124,7 +128,7 @@ export const DownloadsContent = () => {
         </Typography>
       </View>
     ),
-    [t, styles.emptyContainer]
+    [t]
   );
 
   const routes = useMemo(
@@ -158,6 +162,7 @@ export const DownloadsContent = () => {
                 />
               )}
               keyExtractor={(item: DownloadedSura) => String(item.id)}
+              bottomPadding={bottomPadding}
             />
           );
         case 'reciters':
@@ -183,6 +188,7 @@ export const DownloadsContent = () => {
               keyExtractor={(item: DownloadedReciter) =>
                 `${String(item.reciterId)}:${String(item.moshafId)}`
               }
+              bottomPadding={bottomPadding}
             />
           );
         default:
@@ -200,7 +206,8 @@ export const DownloadsContent = () => {
       handleReciterPress,
       handlePlayReciter,
       handleDeleteReciter,
-      styles.loadingContainer,
+      theme.colors.brand.primary,
+      bottomPadding,
     ]
   );
 

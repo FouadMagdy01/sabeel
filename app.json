@@ -4,49 +4,60 @@
     "slug": "Sabeel",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "sabeel",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "supportsRTL": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.Sabeel",
+      "bundleIdentifier": "com.islamy.sabeel",
+      "icon": {
+        "dark": "./assets/images/ios-dark.png",
+        "light": "./assets/images/ios-light.png"
+      },
       "infoPlist": {
+        "UIBackgroundModes": ["audio"],
         "NSLocationWhenInUseUsageDescription": "Sabeel needs your location to calculate accurate prayer times for your area.",
-        "CFBundleAllowMixedLocalizations": true
-      }
+        "CFBundleAllowMixedLocalizations": true,
+        "NSAppTransportSecurity": {
+          "NSExceptionDomains": {
+            "api.quran-tafseer.com": {
+              "NSExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
+        },
+        "CFBundleLocalizations": ["en", "ar"]
+      },
+      "appleTeamId": "ZRDDD93RS9"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#064E3B",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/foreground.png",
+        "backgroundImage": "./assets/images/bg.png",
+        "monochromeImage": "./assets/images/monochrome.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.Sabeel"
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.sabeel"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "extra": {
-      "supportsRTL": true
-    },
+    "extra": {},
     "plugins": [
       [
         "expo-localization",
         {
           "supportedLocales": {
-            "ios": [
-              "en",
-              "ar"
-            ],
-            "android": [
-              "en",
-              "ar"
-            ]
+            "ios": ["en", "ar"],
+            "android": ["en", "ar"]
           }
         }
       ],
@@ -54,12 +65,12 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#FFFFFF",
+          "backgroundColor": "#F8FAF9",
           "dark": {
-            "image": "./assets/images/splash-icon.png",
+            "image": "./assets/images/splash.png",
             "backgroundColor": "#022C22"
           }
         }
@@ -89,7 +100,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/icon.png",
+          "icon": "./assets/images/foreground.png",
           "sounds": [
             "./assets/sounds/adhan_hafiz_mustafa.mp3",
             "./assets/sounds/adhan_mansour.mp3",
@@ -102,10 +113,7 @@
       [
         "expo-asset",
         {
-          "assets": [
-            "./assets/quran/quran_ayah_bounds.db",
-            "./assets/quran/quran_data.db"
-          ]
+          "assets": ["./assets/quran/quran_ayah_bounds.db", "./assets/quran/quran_data.db"]
         }
       ],
       [
@@ -115,8 +123,7 @@
             "deploymentTarget": "15.5"
           }
         }
-      ],
-      "expo-audio"
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

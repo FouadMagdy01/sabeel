@@ -6,9 +6,10 @@ import { Typography } from '@/common/components/Typography';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList, I18nManager, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
+import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import { useBooks } from '../../hooks';
 import type { SunnahBook } from '../../types';
 import { styles } from './SunnahBooksScreen.styles';
@@ -20,6 +21,7 @@ function getLocalizedBookName(book: SunnahBook, lang: string): string {
 
 export function SunnahBooksScreen() {
   const insets = useSafeAreaInsets();
+  const bottomPadding = useReaderBottomPadding();
   const { theme } = useUnistyles();
   const { t, i18n } = useTranslation();
   const router = useRouter();
@@ -47,12 +49,7 @@ export function SunnahBooksScreen() {
 
   const renderBanner = useCallback(
     () => (
-      <View
-        style={[
-          styles.collectionBanner,
-          { borderColor: `${theme.colors.brand.primary}30` },
-        ]}
-      >
+      <View style={[styles.collectionBanner, { borderColor: `${theme.colors.brand.primary}30` }]}>
         <View
           style={[
             styles.bannerIconContainer,
@@ -115,11 +112,12 @@ export function SunnahBooksScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <IconButton
-          familyName="Feather"
-          iconName="arrow-left"
+          familyName="MaterialIcons"
+          iconName={I18nManager.isRTL ? 'arrow-forward' : 'arrow-back'}
           onPress={() => router.back()}
+          variant="ghost"
           size="medium"
         />
         <Typography
@@ -164,7 +162,7 @@ export function SunnahBooksScreen() {
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           ListHeaderComponent={renderBanner}
-          contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 24 }]}
+          contentContainerStyle={[styles.listContent, { paddingBottom: bottomPadding }]}
           showsVerticalScrollIndicator={false}
         />
       )}

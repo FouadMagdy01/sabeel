@@ -34,4 +34,10 @@ export const STORAGE_KEYS = {
     hapticsEnabled: 'azkar_haptics_enabled',
     completedItems: 'azkar_completed_items',
   },
+  verseOfTheDay: {
+    cached: 'verse_of_the_day_cached',
+  },
+  dailyTodos: {
+    data: 'daily_todos_data',
+  },
 } as const;

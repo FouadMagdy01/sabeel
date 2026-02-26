@@ -16,9 +16,8 @@ export const DUMMY_PRAYERS: PrayerData[] = [
 ];
 
 export const DUMMY_AZKAR: AzkarData[] = [
-  { type: 'Morning', status: 'completed' },
-  { type: 'Evening', status: 'uncompleted' },
-  { type: 'Night', status: 'uncompleted' },
+  { type: 'Morning', categoryId: 'morning_azkar', status: 'completed' },
+  { type: 'Evening', categoryId: 'evening_azkar', status: 'uncompleted' },
 ];
 
 export const DUMMY_RANDOM_ACTS: RandomActData[] = [

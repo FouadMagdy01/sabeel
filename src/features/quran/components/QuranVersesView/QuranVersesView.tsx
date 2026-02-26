@@ -11,7 +11,15 @@ import { getVersesByPage, type Verse } from '@/features/quran/services/quranText
 import { useReaderBottomPadding } from '@/hooks/useBottomPadding';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, I18nManager, ScrollView, Share, View, useWindowDimensions, type ViewToken } from 'react-native';
+import {
+  FlatList,
+  I18nManager,
+  ScrollView,
+  Share,
+  View,
+  useWindowDimensions,
+  type ViewToken,
+} from 'react-native';
 
 import { useSQLiteContext } from 'expo-sqlite';
 

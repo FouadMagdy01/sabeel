@@ -152,7 +152,18 @@ export function QuranPage({
   showToolbarLabels = false,
   initialHighlightKeys,
 }: QuranPageProps) {
-  console.log('[QuranPage] render — page:', page, 'imageUri:', imageUri ? 'set' : 'none', 'isPagePlaying:', isPagePlaying, 'activeSelectionPage:', activeSelectionPage, 'initialHighlightKeys:', initialHighlightKeys?.size ?? 0);
+  console.warn(
+    '[QuranPage] render — page:',
+    page,
+    'imageUri:',
+    imageUri ? 'set' : 'none',
+    'isPagePlaying:',
+    isPagePlaying,
+    'activeSelectionPage:',
+    activeSelectionPage,
+    'initialHighlightKeys:',
+    initialHighlightKeys?.size ?? 0
+  );
   const { width: screenWidth } = useWindowDimensions();
   const { theme } = useUnistyles();
   const { bounds } = useAyahBounds(page);
@@ -169,7 +180,12 @@ export function QuranPage({
   // Clear selection when another page becomes the active selection owner
   useEffect(() => {
     if (activeSelectionPage != null && activeSelectionPage !== page) {
-      console.log('[QuranPage] clearing selection — page:', page, 'activeSelectionPage:', activeSelectionPage);
+      console.warn(
+        '[QuranPage] clearing selection — page:',
+        page,
+        'activeSelectionPage:',
+        activeSelectionPage
+      );
       setSelectedKeys(new Set());
     }
   }, [activeSelectionPage, page]);
@@ -193,7 +209,7 @@ export function QuranPage({
   );
 
   const handlePageTap = useCallback(() => {
-    console.log('[QuranPage] handlePageTap — page:', page);
+    console.warn('[QuranPage] handlePageTap — page:', page);
     setSelectedKeys(new Set());
     onTap?.();
   }, [onTap, page]);
@@ -201,10 +217,24 @@ export function QuranPage({
   const handleLongPressStart = useCallback(
     (x: number, y: number) => {
       const idx = hitTest(bounds, x, y, ratio);
-      console.log('[QuranPage] handleLongPressStart — page:', page, 'x:', x, 'y:', y, 'hitIdx:', idx);
+      console.warn(
+        '[QuranPage] handleLongPressStart — page:',
+        page,
+        'x:',
+        x,
+        'y:',
+        y,
+        'hitIdx:',
+        idx
+      );
       if (idx === -1) return;
       anchorIdxRef.current = idx;
-      console.log('[QuranPage] selection started — sura:', bounds[idx].sura, 'ayah:', bounds[idx].ayah);
+      console.warn(
+        '[QuranPage] selection started — sura:',
+        bounds[idx].sura,
+        'ayah:',
+        bounds[idx].ayah
+      );
       onSelectionStart?.(page);
       const keys = new Set<string>();
       keys.add(`${bounds[idx].sura}:${bounds[idx].ayah}`);
@@ -232,11 +262,11 @@ export function QuranPage({
         idx === -1
           ? collectRange(bounds, anchorIdxRef.current, anchorIdxRef.current)
           : collectRange(bounds, anchorIdxRef.current, idx);
-      console.log('[QuranPage] handleDragEnd — page:', page, 'selectedKeys:', Array.from(keys));
+      console.warn('[QuranPage] handleDragEnd — page:', page, 'selectedKeys:', Array.from(keys));
       anchorIdxRef.current = -1;
       finalizeSelection(keys);
     },
-    [bounds, ratio, finalizeSelection]
+    [bounds, ratio, finalizeSelection, page]
   );
 
   const gesture = useMemo(() => {
@@ -284,7 +314,7 @@ export function QuranPage({
   }, [selectedKeys, hasSelection]);
 
   const handleBookmarkPress = useCallback(() => {
-    console.log('[QuranPage] handleBookmarkPress — page:', page, 'selectedAyahs:', selectedAyahs);
+    console.warn('[QuranPage] handleBookmarkPress — page:', page, 'selectedAyahs:', selectedAyahs);
     onBookmark?.(selectedAyahs);
     // Toggle local state so icon updates immediately
     setSelectionBookmarked((prev) => !prev);
