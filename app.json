@@ -2,14 +2,14 @@
   "expo": {
     "name": "Sabeel",
     "slug": "Sabeel",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "scheme": "sabeel",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "supportsRTL": true,
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.islamy.sabeel",
       "icon": {
         "dark": "./assets/images/ios-dark.png",
@@ -29,9 +29,11 @@
         "CFBundleLocalizations": ["en", "ar"],
         "ITSAppUsesNonExemptEncryption": false
       },
-      "appleTeamId": "ZRDDD93RS9"
+      "appleTeamId": "ZRDDD93RS9",
+      "buildNumber": "5"
     },
     "android": {
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
         "backgroundImage": "./assets/images/bg.png",
@@ -45,7 +47,7 @@
         "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.sabeel"
+      "package": "com.islamy.sabeel"
     },
     "web": {
       "output": "static",
